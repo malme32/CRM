@@ -1,0 +1,54 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:aop = "http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop 
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+        >
+ <mvc:annotation-driven>
+
+    </mvc:annotation-driven>
+      <aop:aspectj-autoproxy/>
+	<context:component-scan base-package="com.crm" />
+	<!-- 	<context:component-scan base-package="com.event" /> -->
+<context:annotation-config/> 
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
+<!-- 	<mvc:resources mapping="/resources1/**" location="/resources/theme1/" />
+ -->	
+ <mvc:interceptors>
+<!--     <bean id="loggerInterceptor" class="com.event.interceptor.LoggerInterceptor"/> -->
+    
+     <mvc:interceptor>
+            <mvc:mapping path="/resources/**"/>
+            <bean
+                    class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+                <property name="cacheSeconds" value="7000000" />
+                <property name="useExpiresHeader" value="true"/>
+                <property name="useCacheControlHeader" value="true"/>
+                <property name="useCacheControlNoStore" value="true"/>
+            </bean>
+        </mvc:interceptor>
+    
+</mvc:interceptors>
+ <!--   <bean id = "loggingAspect" class = "com.phonebook.aspect.LoggingAspect"/>  -->
+   
+ <bean id="multipartResolver"   
+class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>  
+
+</beans>
