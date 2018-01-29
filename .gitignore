@@ -1,2 +1,6 @@
 /build/
 /target/
+/.classpath
+/.gitignore
+/.project
+/pom.xml

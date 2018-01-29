@@ -13,7 +13,7 @@ public class GymController {
 	@RequestMapping(value="/testing", method=RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String getChampionList()
 	{
-		return "XAXA";
+		return "XOXO";
 	}
 	
 }
