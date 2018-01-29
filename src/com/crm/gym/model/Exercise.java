@@ -22,12 +22,12 @@ public class Exercise{
 	private String title;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "exercisecatid", nullable = false)
-	private ExerciseCat exercisecat;
+	@JoinColumn(name = "categoryid")
+	private Category category;
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY,mappedBy="exercise",cascade = CascadeType.ALL)
-	private List<ProgramEntry> programentries;
+	private List<Entry> entries;
 
 	public int getId() {
 		return id;
@@ -45,20 +45,20 @@ public class Exercise{
 		this.title = title;
 	}
 
-	public ExerciseCat getExercisecat() {
-		return exercisecat;
+	public Category getExercisecat() {
+		return category;
 	}
 
-	public void setExercisecat(ExerciseCat exercisecat) {
-		this.exercisecat = exercisecat;
+	public void setExercisecat(Category category) {
+		this.category = category;
 	}
 
-	public List<ProgramEntry> getProgramentries() {
-		return programentries;
+	public List<Entry> getProgramentries() {
+		return entries;
 	}
 
-	public void setProgramentries(List<ProgramEntry> programentries) {
-		this.programentries = programentries;
+	public void setProgramentries(List<Entry> entries) {
+		this.entries = entries;
 	}
 
 	

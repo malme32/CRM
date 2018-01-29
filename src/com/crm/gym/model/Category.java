@@ -8,19 +8,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-@Table(name="exercise_cat")
-public class ExerciseCat{
+@Table(name="category")
+public class Category{
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="title", length=255)
+	@Column(name="title", length=255, unique=true)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String title;
 	
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY,mappedBy="exercisecat",cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY,mappedBy="category",cascade = CascadeType.ALL)
 	private List<Exercise> exercises;
 
 	public int getId() {

@@ -4,28 +4,28 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.crm.gym.model.ExerciseCat;
+import com.crm.gym.model.Category;
 
 
 
-@Repository("exerciseCatDao")
+@Repository("categoryDao")
 
 //@Cacheable(value = "entities", cacheManager = "springCM")
-public class ExerciseCatDaoImpl extends AbstractDao implements ExerciseCatDao{
+public class CategoryDaoImpl extends AbstractDao implements CategoryDao{
 	
 /*    @Autowired
     private SessionFactory sessionFactory;*/
     
 	@Override
-	public ExerciseCat findById(int id) {
+	public Category findById(int id) {
 		// TODO Auto-generated method stub
-		return (ExerciseCat)getSession().get(ExerciseCat.class, id);
+		return (Category)getSession().get(Category.class, id);
 	}
 	
 	@Override
-	public List<ExerciseCat> findAll() {
+	public List<Category> findAll() {
 		   @SuppressWarnings("unchecked")
-		   List<ExerciseCat> list = getSession().createQuery("FROM ExerciseCat").list(); 
+		   List<Category> list = getSession().createQuery("FROM Category").list(); 
 
 		return list;
 	}

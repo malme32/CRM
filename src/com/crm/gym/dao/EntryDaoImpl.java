@@ -4,28 +4,28 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.crm.gym.model.ProgramEntry;
+import com.crm.gym.model.Entry;
 
 
 
-@Repository("programEntryDao")
+@Repository("entryDao")
 
 //@Cacheable(value = "entities", cacheManager = "springCM")
-public class ProgramEntryDaoImpl extends AbstractDao implements ProgramEntryDao{
+public class EntryDaoImpl extends AbstractDao implements EntryDao{
 	
 /*    @Autowired
     private SessionFactory sessionFactory;*/
     
 	@Override
-	public ProgramEntry findById(int id) {
+	public Entry findById(int id) {
 		// TODO Auto-generated method stub
-		return (ProgramEntry)getSession().get(ProgramEntry.class, id);
+		return (Entry)getSession().get(Entry.class, id);
 	}
 	
 	@Override
-	public List<ProgramEntry> findAll() {
+	public List<Entry> findAll() {
 		   @SuppressWarnings("unchecked")
-		   List<ProgramEntry> list = getSession().createQuery("FROM ProgramEntry").list(); 
+		   List<Entry> list = getSession().createQuery("FROM Entry").list(); 
 
 		return list;
 	}

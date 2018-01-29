@@ -35,12 +35,12 @@ public class Program{
 	private Date duration;
 	
 	@ManyToOne
-	@JoinColumn(name = "contactid", nullable = false)
+	@JoinColumn(name = "contactid")
 	private Contact contact;
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY,mappedBy="program",cascade = CascadeType.ALL)
-	private List<ProgramEntry> programentries;
+	private List<Entry> entries;
 
 	public int getId() {
 		return id;
@@ -90,12 +90,12 @@ public class Program{
 		this.contact = contact;
 	}
 
-	public List<ProgramEntry> getProgramentries() {
-		return programentries;
+	public List<Entry> getProgramentries() {
+		return entries;
 	}
 
-	public void setProgramentries(List<ProgramEntry> programentries) {
-		this.programentries = programentries;
+	public void setProgramentries(List<Entry> entries) {
+		this.entries = entries;
 	}
 	
 	

@@ -1,0 +1,295 @@
+/* TABLES */
+
+
+.table_stylish1 table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.table_stylish1 th, td {
+	text-align: left;
+	padding: 3px;
+}
+
+.table_stylish1 tr:nth-child(even) {
+	background-color: #f2f2f2
+}
+
+.table_stylish1 th {
+/* 	background-color: #4CAF50;
+ */	color: white;
+ 	background-color: #9a9a9a;
+ 
+}
+
+/* BUTTONS */
+.button_flat {
+	/* background-color: #4CAF50;  */ /* Green */
+	border: none;
+	color: white;
+	padding: 6px 9px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+/* 	font-size: 16px;
+ */	margin: 2px 1px;
+	cursor: pointer;
+}
+
+
+	
+
+
+.button_flat:hover{
+	background-color: #A9A9A9;
+}
+
+/* INPUTS */
+
+input[type=text], select , textarea{
+    width: 100%;
+    padding: 5px 7px;
+    margin: 3px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=number] {
+    padding: 5px 7px;
+    margin: 3px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width:50px;
+}
+
+
+/* COLORS */
+
+.color_gray{
+	color:gray;
+}
+
+.color_white{
+	color:white;
+}
+
+.background_green {
+	background-color: #458748;
+} /* Blue */
+.background_blue {
+	background-color: #008CBA;
+} /* Blue */
+.background_red {
+	background-color: #cf695a;
+} /* Red */
+.background_gray {
+	background-color: #9a9a9a;
+	
+} 
+.background_black {
+	background-color: #555555;
+} 
+
+.background_dark_yellow {
+	background-color: #9c9930;
+} 
+
+
+
+
+/* FONTS */
+
+.font_size_small
+{
+	font-size:80%
+}
+
+/* WIDTH */
+
+.width_40{
+	
+	width:40%
+}
+
+.width_80{
+	
+	width:80%
+}
+
+.width_100{
+	
+	width:100%
+}
+
+.max_width_80{
+	
+	max-width:80%
+}
+
+.width_very_small{
+	width:50px
+}
+
+/* MARGINS */
+
+.margin_bottom_medium{
+	
+	margin-bottom:30px
+}
+.margin_bottom_big{
+	
+	margin-bottom:50px
+}
+
+.margin_auto{
+	
+	margin:auto
+}
+.margin_left_small{
+	
+	margin-left:10px;
+}
+.margin_left_medium{
+	
+	margin-left:20px;
+}
+/* LISTS */
+.ul_nobullet {
+  list-style-type: none;
+}
+
+.float_left{
+	float:left;
+}
+
+.float_right{
+	float:right;
+}
+
+.div_edit_team{
+	margin:auto;
+	max-width:1000px;
+	width:100%
+	
+}
+.div_edit_team ul{
+padding:0;
+	
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.admin_album{
+	margin:0 0 50px 20px; 
+	border-bottom: 1px solid #C8C8C8;
+	padding-bottom:10px;
+}
+.admin_album img{
+	width:150px;
+	cursor:pointer;
+}
+
+
+
+/* MENU 
+*/
+
+.adminmenu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    cursor:pointer;
+}
+
+.adminmenu li {
+    float: left;
+}
+
+ .adminmenu a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+ 
+/* .active {
+    background-color: white;
+} */
+/* Change the link color to #111 (black) on hover */
+.adminmenu a:hover {
+    background-color: #111;
+     color:#ED645C;
+}
+
+.css_li_menu{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.css_li_menu_active{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+     background-color: #cf695a;
+     color:#ED645C;
+}
+
+
+/* //////
+ GENERAL
+ */
+ 
+ .padding_theme{
+ padding:40px 0 0 0;
+ }
+ 

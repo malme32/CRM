@@ -7,8 +7,8 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name="program_entry")
-public class ProgramEntry{
+@Table(name="entry")
+public class Entry{
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -25,12 +25,12 @@ public class ProgramEntry{
 	private String day;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "programid", nullable = false)
+	@JoinColumn(name = "programid")
 	private Program program;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "exerciseid")
-	private Exercise exersize;
+	private Exercise exercise;
 
 	public int getId() {
 		return id;
@@ -73,11 +73,11 @@ public class ProgramEntry{
 	}
 
 	public Exercise getExersize() {
-		return exersize;
+		return exercise;
 	}
 
 	public void setExersize(Exercise exersize) {
-		this.exersize = exersize;
+		this.exercise = exersize;
 	}
 	
 	
