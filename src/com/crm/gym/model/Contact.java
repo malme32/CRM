@@ -1,26 +1,10 @@
 package com.crm.gym.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-//import javax.persistence.Column;
-//import javax.persistence.Entity;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
 import javax.persistence.*;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.search.annotations.Analyze;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Index;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.Store;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.security.access.annotation.Secured;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,9 +16,88 @@ public class Contact{
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	int id;
+	private int id;
 	
+	@Column(name="phonenumber", length=30)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String phonenumber;
 
+	@Column(name="email", length=255)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String email;
+	
+	@Column(name="address", length=300)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String address;
+	
+	@Column(name="birthdate")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Date birthdate;
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY,mappedBy="contact",cascade = CascadeType.ALL)
+	private List<Userrole> userroles;
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY,mappedBy="contact",cascade = CascadeType.ALL)
+	private List<Program> programs;
 
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPhonenumber() {
+		return phonenumber;
+	}
+
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	public List<Userrole> getUserroles() {
+		return userroles;
+	}
+
+	public void setUserroles(List<Userrole> userroles) {
+		this.userroles = userroles;
+	}
+
+	public List<Program> getPrograms() {
+		return programs;
+	}
+
+	public void setPrograms(List<Program> programs) {
+		this.programs = programs;
+	}
+	
+	
+	
 }
