@@ -49,7 +49,7 @@ pageEncoding="UTF-8"%>
 		<li><a ng-href='#!admincategories'   ng-click="setCurrentMenu('categories')" ng-class="cssLiMenuClass('categories')">ΚΑΤΗΓΟΡΙΕΣ</a></li>
 	
 
-		<li><a  ng-href='#!adminteams' ng-click="setCurrentMenu('exercises')" ng-class="cssLiMenuClass('exercises')">ΑΣΚΗΣΕΙΣ</a></li>
+		<li><a  ng-href='#!adminexercises' ng-click="setCurrentMenu('exercises')" ng-class="cssLiMenuClass('exercises')">ΑΣΚΗΣΕΙΣ</a></li>
 
 			<li>
 					

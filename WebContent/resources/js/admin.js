@@ -8,7 +8,11 @@ appAdmin.config(function($routeProvider) {
         controller: "categoriesController"
 
     })
+    .when("/adminexercises", {
+        templateUrl : "adminexercises",
+        controller: "exercisesController"
 
+    })
 });
 
 /*
@@ -122,8 +126,97 @@ appAdmin.controller("categoriesController",function($scope, $http, $location, $w
 			       alert("Έγινε!")
 				
 			   }, function myError(response) {
-			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.")
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
 			   });
 			 
 		};
+});
+
+appAdmin.controller("exercisesController",function($scope, $http, $location, $window){
+	
+	 $http({
+	       method : "GET",
+	       url : "categories"
+	   }).then(function mySuccess(response) {
+	       $scope.categories = response.data;
+	   }, function myError(response) {
+	   });
+	 
+		$scope.getExercises = function (row) {
+			if(row.exercises&&row.exercises.length>0)
+			{
+					row.exercises=[];
+					return;
+			}
+			 $http({
+			       method : "GET",
+			       url : "categories/"+row.id+"/exercises"
+			   }).then(function mySuccess(response) {
+				   row.exercises = response.data;
+			       if(row.exercises.length==0)
+			    	 {
+				       alert("Αυτή η κατηγορία δεν περιέχει ασκήσεις.");
+			    	 }
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+		}
+		
+		$scope.addExercise = function (category) {
+			 if(!category.newexercise.title)
+				 return;
+			 $http({
+			       method : "POST",
+			       url : "categories/"+category.id+"/exercises",
+			       params:{title:category.newexercise.title}
+			   }).then(function mySuccess(response) {
+				   category.exercises=[];
+				   $scope.getExercises(category);
+				   category.newexercise.title = "";
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.")
+
+			   });
+			 
+		};
+		
+		$scope.editExercise = function (exercise) {
+
+			 $http({
+			       method : "PUT",
+			       url : "exercises",
+			        data: exercise,
+			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
+			   }).then(function mySuccess(response) {
+
+			       alert("Έγινε!")
+				
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+			 
+		};
+		
+		
+		$scope.deleteExercise = function (exercise, category) {
+			 if(!confirm("Είστε σίγουρος;"))
+				 return;
+			 $http({
+			       method : "DELETE",
+			       url : "exercises/"+exercise.id
+			   }).then(function mySuccess(response) {
+
+				   category.exercises=[];
+				   $scope.getExercises(category);
+				
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.")
+
+			   });
+			 
+		};
+		
+
 });

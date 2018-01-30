@@ -25,7 +25,7 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao{
 	@Override
 	public List<Category> findAll() {
 		   @SuppressWarnings("unchecked")
-		   List<Category> list = getSession().createQuery("FROM Category").list(); 
+		   List<Category> list = getSession().createQuery("FROM Category C order by C.title").list(); 
 
 		return list;
 	}

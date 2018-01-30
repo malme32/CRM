@@ -18,8 +18,8 @@ public class Entry{
 	private int set;
 	
 	
-	@Column(name="repeat")
-	private int repeat;
+	@Column(name="repeating")
+	private int repeating;
 	
 	@Column(name="day")
 	private String day;
@@ -48,13 +48,6 @@ public class Entry{
 		this.set = set;
 	}
 
-	public int getRepeat() {
-		return repeat;
-	}
-
-	public void setRepeat(int repeat) {
-		this.repeat = repeat;
-	}
 
 	public String getDay() {
 		return day;
@@ -72,12 +65,22 @@ public class Entry{
 		this.program = program;
 	}
 
-	public Exercise getExersize() {
+
+
+	public int getRepeating() {
+		return repeating;
+	}
+
+	public void setRepeating(int repeating) {
+		this.repeating = repeating;
+	}
+
+	public Exercise getExercise() {
 		return exercise;
 	}
 
-	public void setExersize(Exercise exersize) {
-		this.exercise = exersize;
+	public void setExercise(Exercise exercise) {
+		this.exercise = exercise;
 	}
 	
 	

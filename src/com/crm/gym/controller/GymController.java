@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.crm.gym.model.Category;
+import com.crm.gym.model.Exercise;
 import com.crm.gym.service.GeneralDaoService;
 import com.crm.gym.service.GymCrmService;
 
@@ -33,6 +34,13 @@ public class GymController {
 		return gymCrmService.getAllExerciseCategories();
 	}
 	
+	@RequestMapping(value="/categories/{categoryid}/exercises", method=RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Exercise> getExercises(@PathVariable Integer categoryid)
+	{
+		return gymCrmService.getExercises(categoryid);
+	}
+	
+	
 /////////////////////////////////////////////////////////////////
 /////////////////////////POST/////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,6 +49,14 @@ public class GymController {
 	public @ResponseBody void addCategory(@ModelAttribute Category category)
 	{
 		generalDaoService.persist(category);
+		return;
+	}
+	
+	
+	@RequestMapping(value="/categories/{categoryid}/exercises", method=RequestMethod.POST, produces = "application/json")
+	public @ResponseBody void addExercise(@ModelAttribute Exercise exercise,@PathVariable Integer categoryid)
+	{
+		gymCrmService.addExercise(exercise, categoryid);
 		return;
 	}
 	
@@ -57,6 +73,14 @@ public class GymController {
 		return;
 	}
 	
+	@RequestMapping(value="/exercises", method=RequestMethod.PUT, produces = "application/json")
+	public @ResponseBody void editExercise(@RequestBody Exercise exercise)
+	{
+		
+		gymCrmService.editExercise(exercise);
+		return;
+	}
+	
 /////////////////////////////////////////////////////////////////
 /////////////////////////DELETE/////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -68,5 +92,12 @@ public class GymController {
 		return;
 	}
 	
+	@RequestMapping(value="/exercises/{exerciseid}", method=RequestMethod.DELETE, produces = "application/json")
+	public @ResponseBody void deleteExercise(@PathVariable int exerciseid)
+	{
+		System.out.println("DELETINGTITLE: "+gymCrmService.findExerciseById(exerciseid).getTitle());
+		generalDaoService.delete(gymCrmService.findExerciseById(exerciseid));
+		return;
+	}
 	
 }

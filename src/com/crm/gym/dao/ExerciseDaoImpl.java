@@ -25,7 +25,7 @@ public class ExerciseDaoImpl extends AbstractDao implements ExerciseDao{
 	@Override
 	public List<Exercise> findAll() {
 		   @SuppressWarnings("unchecked")
-		   List<Exercise> list = getSession().createQuery("FROM Exercise").list(); 
+		   List<Exercise> list = getSession().createQuery("FROM Exercise E order by E.title").list(); 
 
 		return list;
 	}

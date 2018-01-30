@@ -17,7 +17,7 @@ public class Exercise{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="title", length=255)
+	@Column(name="title", length=255, unique=true)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String title;
 	
@@ -25,9 +25,9 @@ public class Exercise{
 	@JoinColumn(name = "categoryid")
 	private Category category;
 
-	@JsonIgnore
+/*	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY,mappedBy="exercise",cascade = CascadeType.ALL)
-	private List<Entry> entries;
+	private List<Entry> entries;*/
 
 	public int getId() {
 		return id;
@@ -45,20 +45,22 @@ public class Exercise{
 		this.title = title;
 	}
 
-	public Category getExercisecat() {
-		return category;
-	}
 
-	public void setExercisecat(Category category) {
-		this.category = category;
-	}
-
-	public List<Entry> getProgramentries() {
+/*
+	public List<Entry> getEntries() {
 		return entries;
 	}
 
-	public void setProgramentries(List<Entry> entries) {
+	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
+	}
+*/
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	

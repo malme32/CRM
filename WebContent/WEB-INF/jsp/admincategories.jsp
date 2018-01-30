@@ -28,7 +28,7 @@ pageEncoding="UTF-8"%>
 			<td><button  title='Προσθήκη' class='button_flat background_green float_right' ng-click="addCategory(newrow)">&#10010;</button> 
 			</td>
 			</tr>
-			<tr ng-repeat="row in categories | filter:mysearch" >
+			<tr ng-repeat="row in categories  | filter:mysearch" >
 				<td><input type="text" ng-model="row.title"></td>
 				<td>
 				<button  title='Διαγραφή' class='button_flat background_red float_right'  ng-click="deleteCategory(row)">&#10006;</button>
