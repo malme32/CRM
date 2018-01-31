@@ -3,7 +3,10 @@ package com.crm.gym.service;
 import java.util.List;
 
 import com.crm.gym.model.Category;
+import com.crm.gym.model.Contact;
+import com.crm.gym.model.Entry;
 import com.crm.gym.model.Exercise;
+import com.crm.gym.model.Program;
 
 public interface GymCrmService {
 
@@ -18,6 +21,24 @@ public interface GymCrmService {
 	void addExercise(Exercise exercise, Integer categoryid);
 
 	void editExercise(Exercise exercise);
+
+	List<Program> getPrograms(Integer contactid);
+
+	List<Contact> getContacts();
+
+	List<Entry> getEntries(Integer programid);
+
+	void addProgram(Program program, Integer contactid);
+
+	void addEntry(Entry entry, Integer exerciseid, Integer programid);
+
+	Program findProgramById(int programid);
+
+	Contact findContactById(int contactid);
+
+	Entry findEntryById(int entryid);
+
+	void editProgram(Program program);
 
 
 

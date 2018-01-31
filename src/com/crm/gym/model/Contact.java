@@ -17,7 +17,19 @@ public class Contact{
 	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	
+
+	@Column(name="name", length=255)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Column(name="phonenumber", length=30)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String phonenumber;

@@ -52,6 +52,7 @@ pageEncoding="UTF-8"%>
 		<li><a  ng-href='#!adminexercises' ng-click="setCurrentMenu('exercises')" ng-class="cssLiMenuClass('exercises')">ΑΣΚΗΣΕΙΣ</a></li>
 
 			<li>
+						<li><a  ng-href='#!adminprograms' ng-click="setCurrentMenu('programs')" ng-class="cssLiMenuClass('programs')">ΠΡΟΓΡΑΜΜΑΤΑ</a></li>
 					
 					<c:url value="/logout" var="logoutUrl" /> <form id="logout" action="${logoutUrl}" method="post" >
 					  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

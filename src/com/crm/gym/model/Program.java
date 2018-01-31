@@ -18,6 +18,10 @@ public class Program{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
+	@Column(name="title", length=200)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String title;
+	
 	@Column(name="comment", length=500)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String comment;
@@ -90,13 +94,20 @@ public class Program{
 		this.contact = contact;
 	}
 
-	public List<Entry> getProgramentries() {
+	public List<Entry> getEntries() {
 		return entries;
 	}
 
-	public void setProgramentries(List<Entry> entries) {
+	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
 	}
-	
-	
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 }

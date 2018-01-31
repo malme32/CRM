@@ -4,6 +4,8 @@ package com.crm.gym.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 
 @Entity
@@ -14,21 +16,22 @@ public class Entry{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="set")
-	private int set;
+	@Column(name="sets")
+	private int sets;
 	
 	
-	@Column(name="repeating")
-	private int repeating;
+	@Column(name="repeats")
+	private int repeats;
 	
 	@Column(name="day")
 	private String day;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@ManyToOne
 	@JoinColumn(name = "programid")
 	private Program program;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "exerciseid")
 	private Exercise exercise;
 
@@ -40,13 +43,6 @@ public class Entry{
 		this.id = id;
 	}
 
-	public int getSet() {
-		return set;
-	}
-
-	public void setSet(int set) {
-		this.set = set;
-	}
 
 
 	public String getDay() {
@@ -66,21 +62,28 @@ public class Entry{
 	}
 
 
-
-	public int getRepeating() {
-		return repeating;
-	}
-
-	public void setRepeating(int repeating) {
-		this.repeating = repeating;
-	}
-
 	public Exercise getExercise() {
 		return exercise;
 	}
 
 	public void setExercise(Exercise exercise) {
 		this.exercise = exercise;
+	}
+
+	public int getSets() {
+		return sets;
+	}
+
+	public void setSets(int sets) {
+		this.sets = sets;
+	}
+
+	public int getRepeats() {
+		return repeats;
+	}
+
+	public void setRepeats(int repeats) {
+		this.repeats = repeats;
 	}
 	
 	

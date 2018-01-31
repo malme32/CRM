@@ -21,13 +21,13 @@ public class Exercise{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String title;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "categoryid")
 	private Category category;
 
-/*	@JsonIgnore
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY,mappedBy="exercise",cascade = CascadeType.ALL)
-	private List<Entry> entries;*/
+	private List<Entry> entries;
 
 	public int getId() {
 		return id;
@@ -46,21 +46,21 @@ public class Exercise{
 	}
 
 
-/*
-	public List<Entry> getEntries() {
-		return entries;
-	}
 
-	public void setEntries(List<Entry> entries) {
-		this.entries = entries;
-	}
-*/
 	public Category getCategory() {
 		return category;
 	}
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public List<Entry> getEntries() {
+		return entries;
+	}
+
+	public void setEntries(List<Entry> entries) {
+		this.entries = entries;
 	}
 
 	

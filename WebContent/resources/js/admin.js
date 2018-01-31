@@ -13,6 +13,11 @@ appAdmin.config(function($routeProvider) {
         controller: "exercisesController"
 
     })
+    .when("/adminprograms", {
+        templateUrl : "adminprograms",
+        controller: "programsController"
+
+    })
 });
 
 /*
@@ -219,4 +224,141 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 		};
 		
 
+});
+
+appAdmin.controller("programsController",function($scope, $http, $location, $window){
+	
+	
+	 $http({
+	       method : "GET",
+	       url : "categories"
+	   }).then(function mySuccess(response) {
+	       $scope.categories = response.data;
+	   }, function myError(response) {
+	   });
+	 
+	 
+	 $http({
+	       method : "GET",
+	       url : "contacts"
+	   }).then(function mySuccess(response) {
+
+	       $scope.contacts = response.data;
+
+		
+	   }, function myError(response) {
+	 
+	       //$scope.result = response.statusText;
+
+	   });
+	 
+		$scope.getPrograms = function (contact) {
+			 $http({
+			       method : "GET",
+			       url : "contacts/"+contact.id+"/programs"
+			   }).then(function mySuccess(response) {
+				   $scope.programs = response.data;
+			    	for(k=0;k<$scope.programs.length;k++)
+		    		{
+				    	 if($scope.programs[k].datestart)
+				    		 $scope.programs[k].tmpdatestart=new Date($scope.programs[k].datestart);
+				    	 if($scope.programs[k].dateend)
+				    		 $scope.programs[k].tmpdateend=new Date($scope.programs[k].dateend);
+		    		}
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+		}
+		
+		$scope.addProgram = function (program, contact) {
+			 $http({
+			       method : "POST",
+			       url : "contacts/"+contact.id+"/programs",
+			       params:{title:program.title}
+			   }).then(function mySuccess(response) {
+				   $scope.getPrograms(contact);
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+		}
+		
+		$scope.showProgram = function (program) {
+
+				   $scope.selectedProgram = program;
+				   $scope.getEntries(program);
+		}
+		
+		$scope.editProgram = function (program) {
+			if(program.tmpdatestart)
+				program.datestart=program.tmpdatestart;
+			if(program.tmpdateend)
+				program.dateend=program.tmpdateend;
+			 $http({
+			       method : "PUT",
+			       url : "programs",
+			        data: program,
+			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
+			   }).then(function mySuccess(response) {
+
+			       alert("Έγινε!")
+				
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+			 
+		};
+		
+		$scope.getExercises = function (category) {
+/*			if(row.exercises&&row.exercises.length>0)
+			{
+					row.exercises=[];
+					return;
+			}*/
+			 $http({
+			       method : "GET",
+			       url : "categories/"+category.id+"/exercises"
+			   }).then(function mySuccess(response) {
+				   $scope.exercises = response.data;
+			/*       if(row.exercises.length==0)
+			    	 {
+				       alert("Αυτή η κατηγορία δεν περιέχει ασκήσεις.");
+			    	 }*/
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+		}
+		
+		
+		$scope.addEntry = function (entry, program, exercise) {
+
+		      
+			 $http({
+			       method : "POST",
+			       url : "programs/"+program.id+"/entries",
+			       params:{exerciseid:exercise.id, day:entry.day, sets:entry.sets, repeats:entry.repeats}
+			   }).then(function mySuccess(response) {
+			   
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+
+			   });
+			 
+		};
+		
+		$scope.getEntries = function (program) {
+
+			 $http({
+			       method : "GET",
+			       url : "programs/"+program.id+"/entries"
+			   }).then(function mySuccess(response) {
+				   $scope.selectedProgram.entries=response.data;
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+
+			   });
+			 
+		};
+		
 });

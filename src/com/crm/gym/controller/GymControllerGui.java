@@ -24,5 +24,9 @@ private GymCrmService gymCrmService;*/
 	public ModelAndView adminExercises(){
 		return new ModelAndView("adminexercises","","");
 	}
-	
+
+	@RequestMapping(value="/adminprograms", method=RequestMethod.GET)
+	public ModelAndView adminPrograms(){
+		return new ModelAndView("adminprograms","","");
+	}
 }

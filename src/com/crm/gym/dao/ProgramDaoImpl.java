@@ -25,7 +25,7 @@ public class ProgramDaoImpl extends AbstractDao implements ProgramDao{
 	@Override
 	public List<Program> findAll() {
 		   @SuppressWarnings("unchecked")
-		   List<Program> list = getSession().createQuery("FROM Program").list(); 
+		   List<Program> list = getSession().createQuery("FROM Program P order by P.title").list(); 
 
 		return list;
 	}

@@ -10,10 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.crm.gym.model.Category;
+import com.crm.gym.model.Contact;
+import com.crm.gym.model.Entry;
 import com.crm.gym.model.Exercise;
+import com.crm.gym.model.Program;
 import com.crm.gym.service.GeneralDaoService;
 import com.crm.gym.service.GymCrmService;
 
@@ -39,7 +43,25 @@ public class GymController {
 	{
 		return gymCrmService.getExercises(categoryid);
 	}
+
+	@RequestMapping(value="/contacts/{contactid}/programs", method=RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Program> getPrograms(@PathVariable Integer contactid)
+	{
+		return gymCrmService.getPrograms(contactid);
+	}
 	
+
+	@RequestMapping(value="/contacts", method=RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Contact> getContacts()
+	{
+		return gymCrmService.getContacts();
+	}
+	
+	@RequestMapping(value="/programs/{programid}/entries", method=RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Entry> getEntries(@PathVariable Integer programid)
+	{
+		return gymCrmService.getEntries(programid);
+	}
 	
 /////////////////////////////////////////////////////////////////
 /////////////////////////POST/////////////////////////////////
@@ -60,6 +82,19 @@ public class GymController {
 		return;
 	}
 	
+	@RequestMapping(value="/contacts/{contactid}/programs", method=RequestMethod.POST, produces = "application/json")
+	public @ResponseBody void addProgram(@ModelAttribute Program program,@PathVariable Integer contactid)
+	{
+		gymCrmService.addProgram(program, contactid);
+		return;
+	}
+	
+	@RequestMapping(value="/programs/{programid}/entries", method=RequestMethod.POST, produces = "application/json")
+	public @ResponseBody void addEntry(@ModelAttribute Entry entry,@PathVariable Integer programid, @RequestParam Integer exerciseid)
+	{
+		gymCrmService.addEntry(entry,exerciseid, programid);
+		return;
+	}
 	
 /////////////////////////////////////////////////////////////////
 /////////////////////////PUT/////////////////////////////////
@@ -81,6 +116,14 @@ public class GymController {
 		return;
 	}
 	
+	@RequestMapping(value="/programs", method=RequestMethod.PUT, produces = "application/json")
+	public @ResponseBody void editProgram(@RequestBody Program program)
+	{
+		
+		gymCrmService.editProgram(program);
+		return;
+	}
+	
 /////////////////////////////////////////////////////////////////
 /////////////////////////DELETE/////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -95,9 +138,30 @@ public class GymController {
 	@RequestMapping(value="/exercises/{exerciseid}", method=RequestMethod.DELETE, produces = "application/json")
 	public @ResponseBody void deleteExercise(@PathVariable int exerciseid)
 	{
-		System.out.println("DELETINGTITLE: "+gymCrmService.findExerciseById(exerciseid).getTitle());
+		//System.out.println("DELETINGTITLE: "+gymCrmService.findExerciseById(exerciseid).getTitle());
 		generalDaoService.delete(gymCrmService.findExerciseById(exerciseid));
 		return;
 	}
-	
+
+	@RequestMapping(value="/programs/{programid}", method=RequestMethod.DELETE, produces = "application/json")
+	public @ResponseBody void deleteProgram(@PathVariable int programid)
+	{
+		//System.out.println("DELETINGTITLE: "+gymCrmService.findExerciseById(exerciseid).getTitle());
+		generalDaoService.delete(gymCrmService.findProgramById(programid));
+		return;
+	}
+	@RequestMapping(value="/contacts/{contactid}", method=RequestMethod.DELETE, produces = "application/json")
+	public @ResponseBody void deleteContact(@PathVariable int contactid)
+	{
+		//System.out.println("DELETINGTITLE: "+gymCrmService.findExerciseById(exerciseid).getTitle());
+		generalDaoService.delete(gymCrmService.findContactById(contactid));
+		return;
+	}
+	@RequestMapping(value="/entries/{entryid}", method=RequestMethod.DELETE, produces = "application/json")
+	public @ResponseBody void deleteEntry(@PathVariable int entryid)
+	{
+		//System.out.println("DELETINGTITLE: "+gymCrmService.findExerciseById(exerciseid).getTitle());
+		generalDaoService.delete(gymCrmService.findEntryById(entryid));
+		return;
+	}
 }

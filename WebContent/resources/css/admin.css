@@ -22,6 +22,33 @@
  
 }
 
+.edit_data_table {
+	border-collapse: collapse;
+	width: 100%;
+
+}
+
+.edit_data_table th, td {
+	text-align: left;
+	padding: 3px;
+}
+
+
+.edit_data_table tr {
+	height:80px;
+}
+
+
+.edit_data_table th {
+/* 	background-color: #4CAF50;
+ */	color: white;
+ 	background-color: #9a9a9a;
+ 
+}
+
+
+
+
 /* BUTTONS */
 .button_flat {
 	/* background-color: #4CAF50;  */ /* Green */
