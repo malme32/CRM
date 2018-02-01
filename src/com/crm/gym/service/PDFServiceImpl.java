@@ -9,16 +9,22 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import org.xhtmlrenderer.resource.XMLResource;
 
 import com.crm.gym.model.Contact;
+import com.crm.gym.model.Entry;
 import com.crm.gym.model.Program;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -28,10 +34,13 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 
 
 @Service("pDFService")
@@ -143,34 +152,162 @@ public class PDFServiceImpl implements PDFService {
 			    verticalAlignCell.setBorder(0);
 			    table.addCell(verticalAlignCell);
 			}
+	private PdfPCell getCell(String text, int alignment, Font font) {
+	    PdfPCell cell = new PdfPCell(new Phrase(text,font));
+	    //cell.setPadding(0);
+	    cell.setHorizontalAlignment(alignment);
+	    cell.setBorder(PdfPCell.NO_BORDER);
+	    return cell;
+	}
+
+	private List<Entry> getDayCategoryEntries(Program program,String day, String category){
+		
+		List<Entry> entries =new ArrayList<Entry>();
+		for(Entry entry:program.getEntries())
+		{
+			if(entry.getDay().equals(day)&&entry.getExercise().getCategory().getTitle().equals(category))
+				entries.add(entry);
+		}
+		return entries;
+	}
+	private List<String> getDayCategories(Program program,String day){
+		
+		List<String> cat =new ArrayList<String>();
+		for(Entry entry:program.getEntries())
+		{
+			if(day.equals(entry.getDay()))
+				if(!cat.contains(entry.getExercise().getCategory().getTitle()))
+					cat.add(entry.getExercise().getCategory().getTitle());
+		}
+		return cat;
+	}
 	
-	
+	private List<String> getDays(Program program){
+		
+		List<String> days =new ArrayList<String>();
+		for(Entry entry:program.getEntries())
+		{
+			if(!days.contains(entry.getDay()))
+				days.add(entry.getDay());
+		}
+		return days;
+	}
 	@Override
 	public void createProgram(Contact contact, Program program) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
+		Hibernate.initialize(program.getEntries());
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream("c://PDF-XhtmlRendered1.pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream("c://tmp/PDF-XhtmlRendered1.pdf"));
 			 
 			document.open();
-			Font font = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
-			Chunk chunk = new Chunk(contact.getName()+"\n", font);
-			 
-			document.add(chunk);
-			chunk = new Chunk(program.getDatestart().toString(), font);
-			document.add(chunk);
-			
-			PdfPTable table = new PdfPTable(3);
+				BaseFont fonty = BaseFont.createFont("c://tmp/ClearSans-Light.ttf", BaseFont.IDENTITY_H,       BaseFont.NOT_EMBEDDED);
+				Font times = new Font(fonty, 12, Font.NORMAL);
+				Font daysFont = new Font(fonty, 16, Font.BOLD);
+				daysFont.setColor(BaseColor.WHITE);
+				Font categFont = new Font(fonty, 14, Font.BOLD);
+				Font nameFont = new Font(fonty, 12, Font.ITALIC);
+				Font setFont = new Font(fonty, 11, Font.ITALIC);
+				Font commentFont = new Font(fonty, 12, Font.UNDERLINE);
+			//Font font = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.RED);
+
+		   // Paragraph name=new Paragraph(contact.getName(),times);
+		  //  document.add(p);
+		    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		    String startDate = df.format(program.getDatestart()).toString();
+		    String endDate = df.format(program.getDateend()).toString();
+		   // document.add( Chunk.NEWLINE );
+		 /*   p=new Paragraph(startDate+" - "+endDate,times);
+		    document.add(p);    */
+	        /*// add a couple of blank lines
+	        document.add( Chunk.NEWLINE );
+	        document.add( Chunk.NEWLINE );*/
+
+/*			chunk = new Chunk(program.getDatestart().toString(), times);
+			document.add(chunk);*/
+		    
+		    PdfPTable table = new PdfPTable(3);
+		    table.setWidthPercentage(100);
+		    table.addCell(getCell(contact.getName(), PdfPCell.ALIGN_LEFT,nameFont));
+		    table.addCell(getCell("", PdfPCell.ALIGN_CENTER,nameFont));
+		    table.addCell(getCell(startDate+" - "+endDate, PdfPCell.ALIGN_RIGHT,nameFont));
+		    document.add(table);
+		    LineSeparator objectName = new LineSeparator();              
+		    document.add(objectName);
+		    document.add(new Paragraph("\n\n"));
+	
+			for(String day:getDays(program))
+			{
+		/*		 Chunk c = new Chunk(day, daysFont);
+				 c.setBackground(BaseColor.RED);
+				 Paragraph par=new Paragraph(c);
+				 par.setAlignment(Element.ALIGN_CENTER);
+				 document.add(par);*/
+				 
+				    PdfPTable tablex = new PdfPTable(1);
+				    tablex.setWidthPercentage(90);
+				    PdfPCell pdfCell= getCell(day, PdfPCell.ALIGN_CENTER,daysFont);
+				    pdfCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+				    pdfCell.setFixedHeight(22);
+				    tablex.addCell(pdfCell);
+				    document.add(tablex);
+					for(String cat:getDayCategories(program,day))
+					{
+						 	/*Paragraph cater=new Paragraph(cat,categFont);
+						 	cater.setAlignment(Element.ALIGN_LEFT);
+						 	document.add(cater);*/
+
+					    	//document.add( Chunk.NEWLINE );
+							 PdfPTable table0 = new PdfPTable(2);
+							 table0.setWidthPercentage(90);
+							 table0.addCell(getCell(cat, PdfPCell.ALIGN_LEFT,categFont));
+							// table1.addCell(getCell("Σετ "+entry.getSets(), PdfPCell.ALIGN_CENTER,times));
+							 table0.addCell(getCell("", PdfPCell.ALIGN_RIGHT,categFont));
+							 document.add(table0);
+							for(Entry entry:getDayCategoryEntries(program,day,cat))
+							{
+								
+								 PdfPTable table1 = new PdfPTable(2);
+								 table1.setWidthPercentage(90);
+								 table1.addCell(getCell(entry.getExercise().getTitle(), PdfPCell.ALIGN_LEFT,times));
+								// table1.addCell(getCell("Σετ "+entry.getSets(), PdfPCell.ALIGN_CENTER,times));
+								 table1.addCell(getCell("Σετ "+entry.getSets()+"/Επαν "+entry.getRepeats(), PdfPCell.ALIGN_RIGHT,setFont));
+								 document.add(table1);
+								 
+							
+							}
+					}
+					document.add(new Paragraph("\n"));
+				 
+				 
+			}
+		    
+		    
+
+		    
+	/*		table = new PdfPTable(3);
 			//table.getDefaultCell().setBorder(0);
 			addTableHeader(table);
 			addRows(table);
 			addCustomRows(table);
 			 
-			document.add(table);
+			document.add(table);*/
+			if(program.getComment()!=null&&!program.getComment().equals(""))
+			{
 
-			chunk = new Chunk(program.getComment(), font);
-			document.add(chunk);
+				 Paragraph parat=new Paragraph("ΠΑΡΑΤΗΡΗΣΕΙΣ",commentFont);
+				 parat.setAlignment(Element.ALIGN_CENTER);
+				 document.add(parat);/*
+				 LineSeparator objectName1 = new LineSeparator();              
+				 document.add(objectName1);*/
+				 Paragraph comment=new Paragraph(program.getComment(),times);
+				 comment.setAlignment(Element.ALIGN_CENTER);
+				 document.add(comment);
+
+			}
+		/*	Chunk chunk = new Chunk(program.getComment(), times);
+			document.add(chunk);*/
 			
 			document.close();
 		} catch (Exception e) {
