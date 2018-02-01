@@ -37,12 +37,16 @@ public class GynCrmServiceImpl implements GymCrmService {
 
 	@Autowired 
 	EntryDao entryDao;
+
+	@Autowired 
+	PDFService pDFService;
 	
 	@Autowired private GeneralDaoService generalDaoService;
 	
 	@Override
 	public List<Category> getAllExerciseCategories() {
 		// TODO Auto-generated method stub
+		pDFService.createPDFIText();
 		return categoryDao.findAll();
 	}
 	@Override
@@ -144,6 +148,24 @@ public class GynCrmServiceImpl implements GymCrmService {
 		program1.setDateend(program.getDateend());
 		program1.setTitle(program.getTitle());
 		generalDaoService.update(program1);
+	}
+	@Override
+	public void editEntry(Entry entry) {
+		// TODO Auto-generated method stub
+		Entry entry1 = this.findEntryById(entry.getId());
+		entry1.setDay(entry.getDay());
+		entry1.setRepeats(entry.getRepeats());
+		entry1.setSets(entry.getSets());
+		generalDaoService.update(entry1);
+	}
+	@Override
+	public void createProgram(Integer contactid, Integer programid) {
+		// TODO Auto-generated method stub
+
+		Program program = programDao.findById(programid);
+		Contact contact = contactDao.findById(contactid);
+		
+		pDFService.createProgram(contact, program);
 	}
 
 }

@@ -40,6 +40,10 @@ public interface GymCrmService {
 
 	void editProgram(Program program);
 
+	void editEntry(Entry entry);
+
+	void createProgram(Integer contactid, Integer programid);
+
 
 
 	

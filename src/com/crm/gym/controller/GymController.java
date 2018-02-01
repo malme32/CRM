@@ -95,6 +95,14 @@ public class GymController {
 		gymCrmService.addEntry(entry,exerciseid, programid);
 		return;
 	}
+
+	@RequestMapping(value="/contacts/{contactid}/actions", method=RequestMethod.POST, produces = "application/json")
+	public @ResponseBody void contactAction( @RequestParam String action,@PathVariable Integer contactid,@RequestParam(required=false) Integer programid)
+	{
+		if(action.equals("create_program"))
+			gymCrmService.createProgram(contactid,programid);
+		return;
+	}
 	
 /////////////////////////////////////////////////////////////////
 /////////////////////////PUT/////////////////////////////////
@@ -121,6 +129,14 @@ public class GymController {
 	{
 		
 		gymCrmService.editProgram(program);
+		return;
+	}
+	
+	@RequestMapping(value="/entries", method=RequestMethod.PUT, produces = "application/json")
+	public @ResponseBody void editEntry(@RequestBody Entry entry)
+	{
+		
+		gymCrmService.editEntry(entry);
 		return;
 	}
 	

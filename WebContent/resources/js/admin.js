@@ -289,6 +289,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		}
 		
 		$scope.editProgram = function (program) {
+			$scope.result1=program;
 			if(program.tmpdatestart)
 				program.datestart=program.tmpdatestart;
 			if(program.tmpdateend)
@@ -337,7 +338,14 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			       url : "programs/"+program.id+"/entries",
 			       params:{exerciseid:exercise.id, day:entry.day, sets:entry.sets, repeats:entry.repeats}
 			   }).then(function mySuccess(response) {
-			   
+
+				   $scope.showProgram(program);
+			/*	   $scope.newEntry.day = "";
+*//*
+				   $scope.selectedCategory = "";*/
+				   $scope.selectedExercise = "";
+				   $scope.newEntry.sets = "";
+				   $scope.newEntry.repeats = "";
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -353,6 +361,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			       url : "programs/"+program.id+"/entries"
 			   }).then(function mySuccess(response) {
 				   $scope.selectedProgram.entries=response.data;
+				
+				   $scope.programDays= $scope.getDays($scope.selectedProgram.entries);
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -360,5 +370,189 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   });
 			 
 		};
+		
+		$scope.editEntry = function (entry) {
+			 $http({
+			       method : "PUT",
+			       url : "entries",
+			        data: entry,
+			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
+			   }).then(function mySuccess(response) {
+
+			       alert("Έγινε!")
+				
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+			 
+		};
+		
+		
+		$scope.deleteEntry = function (entry,program) {
+			 if(!confirm("Είστε σίγουρος;"))
+				 return;
+			 $http({
+			       method : "DELETE",
+			       url : "entries/"+entry.id
+			   }).then(function mySuccess(response) {
+
+				   
+				   $scope.showProgram(program);
+				
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.")
+
+			   });
+			 
+		};
+		
+
+		$scope.getDays = function (entries) {
+			var days = [];
+			for(i=0;i<entries.length;i++)
+			{
+				var found=false;
+				var obj = {
+						   name: entries[i].day, categories:[], entries:[]};
+				
+				for(k=0;k<days.length;k++)
+				{
+					if(days[k].name==obj.name)
+					{
+
+						found=true;
+						break;
+					}
+				}
+				if(!found)
+				{
+					obj.categories = $scope.getDayCategories(entries,obj);
+					//$scope.result = obj;
+					
+					days.push(obj);
+				}
+			}
+			return days;
+			
+		}
+		
+		$scope.getDayCategories  =function(entries, day){
+			var categories = [];
+		
+			for(p=0;p<entries.length;p++)
+			{
+				if(entries[p].day==day.name)
+				{
+					var found=false;
+				/*	var obj = {
+							   category: entries[i].category};*/
+					
+					for(t=0;t<categories.length;t++)
+					{
+						if(categories[t].id==entries[p].exercise.category.id)
+						{
+							found=true;
+							break;
+						}
+					}
+					if(!found)
+						{	
+							entries[p].exercise.category.entries=$scope.getDayCategoryEntries(entries, day, entries[p].exercise.category);
+							
+							categories.push(entries[p].exercise.category);
+						
+							
+						}
+					
+				}
+
+			}
+			return categories;
+		}
+		
+		$scope.getDayCategoryEntries  =function(entries, day,category){
+			var tmpentries = [];
+			for(s=0;s<entries.length;s++)
+			{
+				if(entries[s].day==day.name&&entries[s].exercise.category.id==category.id)
+				{
+					var found=false;
+				/*	var obj = {
+							   category: entries[i].category};*/
+/*					
+					for(l=0;l<tmpentries.length;l++)
+					{alert(4);
+						if(tmpentries[l].id==entries[s].id)
+						{alert(5);
+							found=true;
+							break;
+						}
+					}alert(6);
+					if(!found)*/
+						tmpentries.push(entries[s]);
+					
+				}
+
+			}
+			$scope.result1=tmpentries;
+			return tmpentries;
+		}	
+		$scope.createPdf  =function(contact, program){
+			 $http({
+			       method : "POST",
+			       url : "contacts/"+contact.id+"/actions",
+			       params:{action:"create_program",programid:program.id}
+			   }).then(function mySuccess(response) {
+
+
+			       alert("Έγινε!");
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+
+			   });
+		}
+		
+	
+		/*$scope.dayShown = function (index,entry,entries) {
+			for(i=0;i<entries.length;i++)
+			{
+				if(entry.day==entries[i].day)
+				{
+					if(index!=i)
+						return false;
+					else return true;
+				}
+			}
+			return false;
+		}
+		
+
+		$scope.categoryShown = function (index,entry,entries) {
+			var dayindex=0;
+			for(i=0;i<entries.length;i++)
+			{
+				if(entry.day==entries[i].day)
+				{
+					dayindex=index;
+					break;
+				}
+			}
+		
+			
+			
+			for(i=0;i<entries.length;i++)
+			{
+				if(entry.category==entries[i].category&&index>=index)
+				{
+					if(index!=i)
+						return false;
+					else return true;
+				}
+			}
+			return false;
+		}
+		*/
 		
 });
