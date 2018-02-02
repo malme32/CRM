@@ -17,11 +17,11 @@ public class Entry{
 	private int id;
 	
 	@Column(name="sets")
-	private int sets;
+	private Integer sets;
 	
 	
 	@Column(name="repeats")
-	private int repeats;
+	private Integer repeats;
 	
 	@Column(name="day")
 	private String day;
@@ -46,7 +46,9 @@ public class Entry{
 
 
 	public String getDay() {
-		return day;
+		if(day==null)
+			return "";
+		else return day;
 	}
 
 	public void setDay(String day) {
@@ -70,21 +72,27 @@ public class Entry{
 		this.exercise = exercise;
 	}
 
-	public int getSets() {
-		return sets;
+	public Integer getSets() {
+		if(sets==null)
+			return 0;
+		else return sets;
 	}
 
-	public void setSets(int sets) {
+	public void setSets(Integer sets) {
 		this.sets = sets;
 	}
 
-	public int getRepeats() {
-		return repeats;
+	public Integer getRepeats() {
+		if(repeats==null)
+			return 0;
+		else return repeats;
 	}
 
-	public void setRepeats(int repeats) {
+	public void setRepeats(Integer repeats) {
 		this.repeats = repeats;
 	}
+
+
 	
 	
 }

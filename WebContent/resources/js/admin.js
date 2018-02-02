@@ -18,6 +18,11 @@ appAdmin.config(function($routeProvider) {
         controller: "programsController"
 
     })
+    .when("/adminusers", {
+        templateUrl : "adminusers",
+        controller: "usersController"
+
+    })
 });
 
 /*
@@ -253,6 +258,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 	   });
 	 
 		$scope.getPrograms = function (contact) {
+			 $scope.selectedProgram =null;
+			 $scope.programDays = null;
 			 $http({
 			       method : "GET",
 			       url : "contacts/"+contact.id+"/programs"
@@ -343,9 +350,9 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			/*	   $scope.newEntry.day = "";
 *//*
 				   $scope.selectedCategory = "";*/
-				   $scope.selectedExercise = "";
+				   $scope.selectedExercise = "";/*
 				   $scope.newEntry.sets = "";
-				   $scope.newEntry.repeats = "";
+				   $scope.newEntry.repeats = "";*/
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -554,5 +561,92 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			return false;
 		}
 		*/
+		
+});
+
+appAdmin.controller("usersController",function($scope, $http, $location, $window,$route){
+	
+	 $http({
+	       method : "GET",
+	       url : "contacts"
+	   }).then(function mySuccess(response) {
+
+	       $scope.contacts = response.data;
+	    	for(k=0;k<$scope.contacts.length;k++)
+    		{
+		    	 if($scope.contacts[k].birthdate)
+		    		 $scope.contacts[k].tmpbirthdate=new Date($scope.contacts[k].birthdate);
+		    	
+    		}
+		
+	   }, function myError(response) {
+	 
+	       //$scope.result = response.statusText;
+
+	   });
+
+		$scope.addContact = function (contact) {
+			 if(!contact.name)
+				 return;
+			 $http({
+			       method : "POST",
+			       url : "contacts",
+			        data: contact,
+			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
+			   }).then(function mySuccess(response) {
+
+			       $route.reload();
+				
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.")
+
+			   });
+			 
+		};
+	
+		$scope.deleteContact = function (contact) {
+			 if(!confirm("Είστε σίγουρος;"))
+				 return;
+			 $http({
+			       method : "DELETE",
+			       url : "contacts/"+contact.id
+			   }).then(function mySuccess(response) {
+
+			       $route.reload();
+				
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+
+			   });
+			 
+		};
+		
+		$scope.editContact = function (contact) {
+		
+			if(contact.tmpbirthdate)
+				contact.birthdate=contact.tmpbirthdate;
+			 $http({
+			       method : "PUT",
+			       url : "contacts",
+			        data: contact,
+			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
+			   }).then(function mySuccess(response) {
+
+			       alert("Έγινε!")
+				
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+			 
+		};
+
+		$scope.showContact = function (contact) {
+			$scope.selectedContact=contact;
+			$scope.addingcontact=false;
+			
+		};
+		
 		
 });

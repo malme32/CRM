@@ -17,7 +17,7 @@ public class Exercise{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="title", length=255, unique=true)
+	@Column(name="title", length=255)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String title;
 	

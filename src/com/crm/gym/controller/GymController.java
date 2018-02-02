@@ -104,6 +104,13 @@ public class GymController {
 		return;
 	}
 	
+	@RequestMapping(value="/contacts", method=RequestMethod.POST, produces = "application/json")
+	public @ResponseBody void addContact(@RequestBody Contact contact)
+	{
+		generalDaoService.persist(contact);
+		return;
+	}
+	
 /////////////////////////////////////////////////////////////////
 /////////////////////////PUT/////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -139,6 +146,15 @@ public class GymController {
 		gymCrmService.editEntry(entry);
 		return;
 	}
+	
+	@RequestMapping(value="/contacts", method=RequestMethod.PUT, produces = "application/json")
+	public @ResponseBody void editContact(@RequestBody Contact contact)
+	{
+		
+		gymCrmService.editContact(contact);
+		return;
+	}
+	
 	
 /////////////////////////////////////////////////////////////////
 /////////////////////////DELETE/////////////////////////////////

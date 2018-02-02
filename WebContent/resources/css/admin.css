@@ -1,6 +1,8 @@
 /* TABLES */
 
-
+/* body{
+	background-color:white
+} */
 .table_stylish1 table {
 	border-collapse: collapse;
 	width: 100%;
@@ -53,6 +55,7 @@
 .button_flat {
 	/* background-color: #4CAF50;  */ /* Green */
 	border: none;
+	position:relative;
 	color: white;
 	padding: 6px 9px;
 	text-align: center;
@@ -73,7 +76,7 @@
 
 /* INPUTS */
 
-input[type=text], select , textarea{
+input[type=text], input[type=email],select , textarea{
     width: 100%;
     padding: 5px 7px;
     margin: 3px 0;
@@ -200,7 +203,7 @@ input[type=number] {
 .div_edit_team{
 	margin:auto;
 	max-width:1000px;
-	width:100%
+	width:100%;
 	
 }
 .div_edit_team ul{
@@ -328,3 +331,17 @@ padding:0;
  
   .float_rigth{
  float:right}
+ 
+ .box_shadow_medium_gray{
+ box-shadow: 5px 8px 10px #888888;
+ background-color:#E8E8E8; padding:8px; 
+ }
+ 
+ .text_underline{
+ text-decoration: underline;
+ }
+ 
+ .font_italic{
+ font-style: italic;}
+ 
+ .margin_botton_large{margin-bottom:80px}

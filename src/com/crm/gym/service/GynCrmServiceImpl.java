@@ -167,5 +167,17 @@ public class GynCrmServiceImpl implements GymCrmService {
 		
 		pDFService.createProgram(contact, program);
 	}
+	@Override
+	public void editContact(Contact contact) {
+		// TODO Auto-generated method stub
+
+		Contact contact1 = contactDao.findById(contact.getId());
+		contact1.setAddress(contact.getAddress());
+		contact1.setBirthdate(contact.getBirthdate());
+		contact1.setEmail(contact.getEmail());
+		contact1.setName(contact.getName());
+		contact1.setPhonenumber(contact.getPhonenumber());
+		generalDaoService.update(contact1);
+	}
 
 }

@@ -11,7 +11,7 @@ pageEncoding="UTF-8"%>
 	 <input ng-model='mysearch' type="text" class="form-control" placeholder="Αναζητηστε εδώ...">
 	<i class="fa fa-search"></i></div>
 	</div>
- {{result1}}
+<!--  {{result1}} -->
 <!--{{selectedProgram.entries.days}} -->
 	<div class='div_edit_team padding_theme'>
 		<select ng-model="selectedContact" ng-change="getPrograms(selectedContact)" ng-options="contact.name for contact in contacts | orderBy:'name' |  filter:mysearch">
@@ -24,7 +24,7 @@ pageEncoding="UTF-8"%>
 
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selectedContact">
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selectedContact" >
 			<table>
 				<tr>
 					<th>ΠΡΟΓΡΑΜΜΑΤΑ</th>
@@ -54,11 +54,13 @@ pageEncoding="UTF-8"%>
 
 
 
+<h1 ng-show='selectedProgram' style='text-align:center'>ΠΡΟΓΡΑΜΜΑ: {{selectedProgram.title}}</h1>
 
-<div class='table_stylish1 div_edit_team padding_theme ' ng-show='selectedProgram'>
-<h1 style='text-align:center'>ΠΡΟΓΡΑΜΜΑ: {{selectedProgram.title}}</h1>
-<button  title='Προσθήκη' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,selectedProgram)">PDF</button> 
+<div class=' div_edit_team padding_theme box_shadow_medium_gray' ng-show='selectedProgram'>
+
+
 <h2>Εισαγωγή νέας άσκησης</h2>
+<div class='table_stylish1'>
 		<table>
 			<tr>
 				<th>ΗΜΕΡΑ</th>
@@ -68,7 +70,7 @@ pageEncoding="UTF-8"%>
 				<th></th>
 			</tr>
 			
-			<tr>
+			<tr style='background-color:#E8E8E8; '>
 			
 			<td style="max-width:25%;">
 					<select  ng-model="newEntry.day">
@@ -84,7 +86,7 @@ pageEncoding="UTF-8"%>
 				</td>
 			
 			
-				<td style="max-width:25%;">
+				<td style="max-width:25%;" >
 					<select  ng-model="selectedCategory" ng-change="getExercises(selectedCategory)" ng-options="category.title for category in categories | orderBy:'title'">
 						<option value="">---Κατηγορία---</option>
 					</select>
@@ -109,17 +111,18 @@ pageEncoding="UTF-8"%>
 		
 			
 		</table>
+		
 		</div>
 		
+		</div>
 		
-		
-		
-		<div class='table_stylish1 div_edit_team padding_theme ' ng-show='selectedProgram'>
-		
+	</div>
+		<div class='table_stylish1 div_edit_team padding_theme ' ng-show='programDays.length'>
+<h2>Πρόγραμμα:</h2>
 		<div ng-repeat='day in programDays | orderBy:"name"'>
-		<h2 style='text-align:center'>{{day.name}}</h2>
+		<h2 class='text_underline' style='text-align:center'>{{day.name}}</h2>
 			<div ng-repeat='category in day.categories| orderBy:"title"'>
-			<h3>{{category.title}}</h3>
+			<h3 class='font_italic'>{{category.title}}</h3>
 	
 
 		
@@ -171,9 +174,13 @@ pageEncoding="UTF-8"%>
 		</div>
 		
 		</div>
-		
-			<div class='div_edit_team padding_theme ' ng-show="selectedProgram">
-					<h2 style='text-align:center'>ΓΕΝΙΚΑ</h2>
+		<br>
+			<br>
+			
+			<div class='div_edit_team box_shadow_medium_gray' ng-show="selectedProgram" >
+			
+			<!-- <hr> -->
+					<h2>Γενικές Ρυθμίσεις</h2>
 			<table class="edit_data_table">
 		<!-- 	<tr>
 					<th></th> 
@@ -183,7 +190,7 @@ pageEncoding="UTF-8"%>
 					<td>Τίτλος:<input type="text" ng-model="selectedProgram.title" placeholder="Το ονομα εδω.."></td>
 				</tr>
 				<tr>
-					<td>Σχόλια:<textarea ng-model="selectedProgram.comment" placeholder="Τα σχολια εδω..">{{selectedProgram.comment}}</textarea></td>
+					<td>Παρατηρήσεις:<textarea ng-model="selectedProgram.comment" placeholder="Τα σχολια εδω..">{{selectedProgram.comment}}</textarea></td>
 				</tr>
 				<tr>
 					<td >
@@ -197,6 +204,8 @@ pageEncoding="UTF-8"%>
 				</tr>
 				<tr>
 				<td>
+				<button  title='Δημιουργία PDF file' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,selectedProgram)">PDF</button> 
+				
 					<button title='Αποθήκευση' class='button_flat background_dark_yellow float_right' ng-click="editProgram(selectedProgram)">Αποθήκευση</button> 
 				</td>
 				</tr>
@@ -206,5 +215,6 @@ pageEncoding="UTF-8"%>
 			</table>
 	</div>
 
-
+	<br>
+			<br>
 </section>

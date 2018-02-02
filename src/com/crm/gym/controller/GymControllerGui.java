@@ -29,4 +29,10 @@ private GymCrmService gymCrmService;*/
 	public ModelAndView adminPrograms(){
 		return new ModelAndView("adminprograms","","");
 	}
+	
+
+	@RequestMapping(value="/adminusers", method=RequestMethod.GET)
+	public ModelAndView adminUsers(){
+		return new ModelAndView("adminusers","","");
+	}
 }

@@ -12,6 +12,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import org.xhtmlrenderer.resource.XMLResource;
 
+import com.crm.gym.model.Category;
 import com.crm.gym.model.Contact;
 import com.crm.gym.model.Entry;
 import com.crm.gym.model.Program;
@@ -160,25 +162,26 @@ public class PDFServiceImpl implements PDFService {
 	    return cell;
 	}
 
-	private List<Entry> getDayCategoryEntries(Program program,String day, String category){
+	private List<Entry> getDayCategoryEntries(Program program,String day, Category category){
 		
 		List<Entry> entries =new ArrayList<Entry>();
 		for(Entry entry:program.getEntries())
 		{
-			if(entry.getDay().equals(day)&&entry.getExercise().getCategory().getTitle().equals(category))
+			if(entry.getDay().equals(day)&&entry.getExercise().getCategory().getId()==category.getId())
 				entries.add(entry);
 		}
 		return entries;
 	}
-	private List<String> getDayCategories(Program program,String day){
+	private List<Category> getDayCategories(Program program,String day){
 		
-		List<String> cat =new ArrayList<String>();
+		List<Category> cat =new ArrayList<Category>();
 		for(Entry entry:program.getEntries())
 		{
 			if(day.equals(entry.getDay()))
-				if(!cat.contains(entry.getExercise().getCategory().getTitle()))
-					cat.add(entry.getExercise().getCategory().getTitle());
+				if(!cat.contains(entry.getExercise().getCategory()))
+					cat.add(entry.getExercise().getCategory());
 		}
+		//Collections.sort(cat);
 		return cat;
 	}
 	
@@ -190,6 +193,7 @@ public class PDFServiceImpl implements PDFService {
 			if(!days.contains(entry.getDay()))
 				days.add(entry.getDay());
 		}
+		Collections.sort(days);
 		return days;
 	}
 	@Override
@@ -203,13 +207,13 @@ public class PDFServiceImpl implements PDFService {
 			 
 			document.open();
 				BaseFont fonty = BaseFont.createFont("c://tmp/ClearSans-Light.ttf", BaseFont.IDENTITY_H,       BaseFont.NOT_EMBEDDED);
-				Font times = new Font(fonty, 12, Font.NORMAL);
-				Font daysFont = new Font(fonty, 16, Font.BOLD);
+				Font times = new Font(fonty, 9, Font.NORMAL);
+				Font daysFont = new Font(fonty, 12, Font.BOLD);
 				daysFont.setColor(BaseColor.WHITE);
-				Font categFont = new Font(fonty, 14, Font.BOLD);
-				Font nameFont = new Font(fonty, 12, Font.ITALIC);
-				Font setFont = new Font(fonty, 11, Font.ITALIC);
-				Font commentFont = new Font(fonty, 12, Font.UNDERLINE);
+				Font categFont = new Font(fonty, 9, Font.BOLD);
+				Font nameFont = new Font(fonty, 9, Font.ITALIC);
+				Font setFont = new Font(fonty, 8, Font.ITALIC);
+				Font commentFont = new Font(fonty, 9, Font.UNDERLINE);
 			//Font font = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.RED);
 
 		   // Paragraph name=new Paragraph(contact.getName(),times);
@@ -235,33 +239,36 @@ public class PDFServiceImpl implements PDFService {
 		    document.add(table);
 		    LineSeparator objectName = new LineSeparator();              
 		    document.add(objectName);
-		    document.add(new Paragraph("\n\n"));
+		    document.add(new Paragraph("\n"));
 	
 			for(String day:getDays(program))
 			{
-		/*		 Chunk c = new Chunk(day, daysFont);
-				 c.setBackground(BaseColor.RED);
-				 Paragraph par=new Paragraph(c);
-				 par.setAlignment(Element.ALIGN_CENTER);
-				 document.add(par);*/
-				 
-				    PdfPTable tablex = new PdfPTable(1);
-				    tablex.setWidthPercentage(90);
-				    PdfPCell pdfCell= getCell(day, PdfPCell.ALIGN_CENTER,daysFont);
-				    pdfCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-				    pdfCell.setFixedHeight(22);
-				    tablex.addCell(pdfCell);
-				    document.add(tablex);
-					for(String cat:getDayCategories(program,day))
+				// Chunk c = new Chunk(day, daysFont);
+			//	 c.setBackground(BaseColor.RED);
+				// Paragraph par=new Paragraph(c);
+				// par.setAlignment(Element.ALIGN_CENTER);
+				// document.add(par);
+					 if(!day.equals(""))
+					 {
+	
+						    PdfPTable tablex = new PdfPTable(1);
+						    tablex.setWidthPercentage(90);
+						    PdfPCell pdfCell= getCell(day, PdfPCell.ALIGN_CENTER,daysFont);
+						    pdfCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+						    pdfCell.setFixedHeight(16);
+						    tablex.addCell(pdfCell);
+						    document.add(tablex);
+					 }
+					for(Category cat:getDayCategories(program,day))
 					{
-						 	/*Paragraph cater=new Paragraph(cat,categFont);
-						 	cater.setAlignment(Element.ALIGN_LEFT);
-						 	document.add(cater);*/
+						 	//Paragraph cater=new Paragraph(cat,categFont);
+						 	//cater.setAlignment(Element.ALIGN_LEFT);
+						 	//document.add(cater);
 
 					    	//document.add( Chunk.NEWLINE );
 							 PdfPTable table0 = new PdfPTable(2);
 							 table0.setWidthPercentage(90);
-							 table0.addCell(getCell(cat, PdfPCell.ALIGN_LEFT,categFont));
+							 table0.addCell(getCell(cat.getTitle().toUpperCase(), PdfPCell.ALIGN_LEFT,categFont));
 							// table1.addCell(getCell("Σετ "+entry.getSets(), PdfPCell.ALIGN_CENTER,times));
 							 table0.addCell(getCell("", PdfPCell.ALIGN_RIGHT,categFont));
 							 document.add(table0);
@@ -272,7 +279,18 @@ public class PDFServiceImpl implements PDFService {
 								 table1.setWidthPercentage(90);
 								 table1.addCell(getCell(entry.getExercise().getTitle(), PdfPCell.ALIGN_LEFT,times));
 								// table1.addCell(getCell("Σετ "+entry.getSets(), PdfPCell.ALIGN_CENTER,times));
-								 table1.addCell(getCell("Σετ "+entry.getSets()+"/Επαν "+entry.getRepeats(), PdfPCell.ALIGN_RIGHT,setFont));
+								 String sets="";
+								 String repeats = "";
+								 if(entry.getSets()!=0)
+									 sets = "Σετ "+entry.getSets();
+
+								 if(entry.getRepeats()!=0)
+								 {
+									 repeats = "Επαν "+entry.getRepeats();
+									 if(!sets.equals(""))
+										 repeats = "/"+repeats;
+								 }
+								 table1.addCell(getCell(sets+repeats, PdfPCell.ALIGN_RIGHT,setFont));
 								 document.add(table1);
 								 
 							

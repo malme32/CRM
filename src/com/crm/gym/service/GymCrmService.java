@@ -44,6 +44,8 @@ public interface GymCrmService {
 
 	void createProgram(Integer contactid, Integer programid);
 
+	void editContact(Contact contact);
+
 
 
 	
