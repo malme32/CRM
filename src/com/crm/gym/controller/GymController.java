@@ -3,6 +3,8 @@ package com.crm.gym.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +22,8 @@ import com.crm.gym.model.Exercise;
 import com.crm.gym.model.Program;
 import com.crm.gym.service.GeneralDaoService;
 import com.crm.gym.service.GymCrmService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Controller
 public class GymController {
@@ -95,13 +99,18 @@ public class GymController {
 		gymCrmService.addEntry(entry,exerciseid, programid);
 		return;
 	}
-
+	@JsonIgnore
 	@RequestMapping(value="/contacts/{contactid}/actions", method=RequestMethod.POST, produces = "application/json")
-	public @ResponseBody void contactAction( @RequestParam String action,@PathVariable Integer contactid,@RequestParam(required=false) Integer programid)
+	public @ResponseBody void contactAction(HttpSession session, @RequestParam String action,@PathVariable Integer contactid,@RequestParam(required=false) Integer programid)
 	{
+		String ret = "";
+		 String realPath=session.getServletContext().getRealPath("/");  
 		if(action.equals("create_program"))
-			gymCrmService.createProgram(contactid,programid);
-		return;
+			ret = gymCrmService.createProgram(contactid,programid,realPath);
+		if(action.equals("copy_program"))
+			gymCrmService.copyProgram(contactid,programid);
+		System.out.println("PDF LINK: "+ ret);
+		return ;
 	}
 	
 	@RequestMapping(value="/contacts", method=RequestMethod.POST, produces = "application/json")
@@ -138,9 +147,10 @@ public class GymController {
 		gymCrmService.editProgram(program);
 		return;
 	}
+
 	
 	@RequestMapping(value="/entries", method=RequestMethod.PUT, produces = "application/json")
-	public @ResponseBody void editEntry(@RequestBody Entry entry)
+	public @ResponseBody void editEntry(@ModelAttribute Entry entry)
 	{
 		
 		gymCrmService.editEntry(entry);

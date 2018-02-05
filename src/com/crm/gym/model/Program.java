@@ -46,6 +46,9 @@ public class Program{
 	@OneToMany(fetch = FetchType.LAZY,mappedBy="program",cascade = CascadeType.ALL)
 	private List<Entry> entries;
 
+	
+
+
 	public int getId() {
 		return id;
 	}
@@ -108,6 +111,12 @@ public class Program{
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	@Override
+	public String toString() {
+		return "Program [id=" + id + ", title=" + title + ", comment=" + comment + ", datestart=" + datestart
+				+ ", dateend=" + dateend + ", duration=" + duration + ", contact=" + contact + "]";
 	}
 
 }

@@ -29,7 +29,7 @@ pageEncoding="UTF-8"%>
 				<tr>
 					<th>ΠΡΟΓΡΑΜΜΑΤΑ</th>
 					<th></th>
-				</tr>
+				</tr> 
 				
 				<tr >
 					<td><input type="text" ng-model="newprogram.title" placeholder="Το νέο πρόγραμμα εδω.."></td>
@@ -204,6 +204,9 @@ pageEncoding="UTF-8"%>
 				</tr>
 				<tr>
 				<td>
+				<button  title='Αντιγραφή προγράμματος' class='button_flat background_black float_right' ng-click="openCopyProgramModal()">Αντιγραφή</button> 
+				
+				
 				<button  title='Δημιουργία PDF file' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,selectedProgram)">PDF</button> 
 				
 					<button title='Αποθήκευση' class='button_flat background_dark_yellow float_right' ng-click="editProgram(selectedProgram)">Αποθήκευση</button> 
@@ -217,4 +220,38 @@ pageEncoding="UTF-8"%>
 
 	<br>
 			<br>
+			
+			
+			<div id="copyProgramModal" class="modal">
+
+			  <!-- Modal content -->
+			  <div class="modal-content">
+			    <span  ng-click='closeCopyProgramModal()' class="close">&times;</span>
+			  
+				<div class='div_edit_team'> 
+				Επιλέξτε πελάτη για την αντιγραφή προγράμματος "{{selectedProgram.title}}" από "{{selectedContact.name}}":
+				 <div class='search-field'>
+				 <input ng-model='mysearch1' type="text" class="form-control" placeholder="Αναζητηστε εδώ...">
+				<i class="fa fa-search"></i></div>
+				</div>
+			<!--  {{result1}} -->
+			<!--{{selectedProgram.entries.days}} -->
+				<div class='div_edit_team'>
+					<select ng-model="selectedContact1" ng-options="contact.name for contact in contacts | orderBy:'name' |  filter:mysearch1">
+					<option value="">---Πελάτης---</option>
+					</select>
+				<button  title='Αντιγραφή' class='button_flat background_black float_right' ng-click="copyProgram(selectedContact1,selectedProgram)">Αντιγραφή</button> 
+					
+				</div>
+<br/>
+<br/>
+
+				
+				</div>
+ 
+
+ 			 </div>
+
+{{result1}}
+			
 </section>

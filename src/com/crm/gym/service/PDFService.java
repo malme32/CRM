@@ -8,5 +8,5 @@ public interface PDFService {
 	
 		void createPDF();
 
-		void createProgram(Contact contact, Program program);
+		String createProgram(Contact contact, Program program, String realPath);
 }	

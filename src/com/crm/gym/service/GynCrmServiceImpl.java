@@ -159,13 +159,13 @@ public class GynCrmServiceImpl implements GymCrmService {
 		generalDaoService.update(entry1);
 	}
 	@Override
-	public void createProgram(Integer contactid, Integer programid) {
+	public String createProgram(Integer contactid, Integer programid, String realPath) {
 		// TODO Auto-generated method stub
 
 		Program program = programDao.findById(programid);
 		Contact contact = contactDao.findById(contactid);
 		
-		pDFService.createProgram(contact, program);
+		return pDFService.createProgram(contact, program, realPath);
 	}
 	@Override
 	public void editContact(Contact contact) {
@@ -178,6 +178,39 @@ public class GynCrmServiceImpl implements GymCrmService {
 		contact1.setName(contact.getName());
 		contact1.setPhonenumber(contact.getPhonenumber());
 		generalDaoService.update(contact1);
+	}
+	@Override
+	public void copyProgram(Integer contactid,Integer programid ) {
+		// TODO Auto-generated method stub
+
+		Contact contact = contactDao.findById(contactid);
+		Program program = programDao.findById(programid);
+
+		System.out.println("PROGRAM TO COPY: "+program.toString());
+		Program program1 = new Program();
+		program1.setContact(contact);
+		program1.setDatestart(program.getDatestart());
+		program1.setDateend(program.getDateend());
+		program1.setComment(program.getComment());
+		program1.setTitle(program.getTitle());
+		System.out.println("SETTING COPY COMMENT: "+program.getComment());
+		generalDaoService.persist(program1);
+		Hibernate.initialize(program.getEntries());
+		for(Entry entry:program.getEntries())
+		{
+			Entry entry1 = new Entry();
+			entry1.setDay(entry.getDay());
+			entry1.setExercise(entry.getExercise());
+			entry1.setProgram(program1);
+			entry1.setRepeats(entry.getRepeats());
+			entry1.setSets(entry.getSets());
+			generalDaoService.persist(entry1);
+		}
+
+	
+		
+
+		return;
 	}
 
 }

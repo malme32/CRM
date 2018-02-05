@@ -231,7 +231,7 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 
 });
 
-appAdmin.controller("programsController",function($scope, $http, $location, $window){
+appAdmin.controller("programsController",function($scope, $http, $location, $window, $route){
 	
 	
 	 $http({
@@ -296,7 +296,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		}
 		
 		$scope.editProgram = function (program) {
-			$scope.result1=program;
+			
 			if(program.tmpdatestart)
 				program.datestart=program.tmpdatestart;
 			if(program.tmpdateend)
@@ -360,6 +360,23 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   });
 			 
 		};
+		$scope.deleteProgram = function (program) {
+			 if(!confirm("Είστε σίγουρος;"))
+				 return;
+			 $http({
+			       method : "DELETE",
+			       url : "programs/"+program.id
+			   }).then(function mySuccess(response) {
+
+			       $scope.getPrograms($scope.selectedContact);
+				
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+
+			   });
+			 
+		};
 		
 		$scope.getEntries = function (program) {
 
@@ -367,9 +384,9 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			       method : "GET",
 			       url : "programs/"+program.id+"/entries"
 			   }).then(function mySuccess(response) {
-				   $scope.selectedProgram.entries=response.data;
+				 //  $scope.selectedProgram.entries=response.data;
 				
-				   $scope.programDays= $scope.getDays($scope.selectedProgram.entries);
+				   $scope.programDays= $scope.getDays(response.data);
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -379,11 +396,12 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		};
 		
 		$scope.editEntry = function (entry) {
+	/*		$scope.result1=entry.exercise;
+			alert(entry.exercise.id);*/
 			 $http({
 			       method : "PUT",
 			       url : "entries",
-			        data: entry,
-			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
+			        params:{repeats:entry.repeats, sets:entry.sets,day:entry.day,id:entry.id}
 			   }).then(function mySuccess(response) {
 
 			       alert("Έγινε!")
@@ -497,12 +515,12 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 						}
 					}alert(6);
 					if(!found)*/
+					//entries[s].exercise.category=null;
 						tmpentries.push(entries[s]);
 					
 				}
 
 			}
-			$scope.result1=tmpentries;
 			return tmpentries;
 		}	
 		$scope.createPdf  =function(contact, program){
@@ -512,7 +530,29 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			       params:{action:"create_program",programid:program.id}
 			   }).then(function mySuccess(response) {
 
+				   var getUrl = window.location;
+				   var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+				   //$window.open(baseUrl+'/resources/pdf/program.pdf', '_blank');
+				   window.location.href=baseUrl+'/files/pdf/program.pdf';
+			      // alert(baseUrl);
+				  // http://localhost:8084/CRM/resources/pdf/PDF-XhtmlRendered1.pdf
+			   }, function myError(response) {
 
+				   
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+
+			   });
+		}
+		
+		$scope.copyProgram  =function(contact, program){
+			/*$scope.openCopyProgramModal();*/
+			 $http({
+			       method : "POST",
+			       url : "contacts/"+contact.id+"/actions",
+			       params:{action:"copy_program",programid:program.id}
+			   }).then(function mySuccess(response) {
+
+				   $scope.closeCopyProgramModal();
 			       alert("Έγινε!");
 			   }, function myError(response) {
 			 
@@ -521,7 +561,25 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   });
 		}
 		
-	
+		
+		
+		  
+		  $scope.openCopyProgramModal = function (){
+
+		
+			  var modal = document.getElementById('copyProgramModal');
+
+		      modal.style.display = "block";
+			  
+			  
+		  }  
+		  $scope.closeCopyProgramModal = function (){
+			  
+			  var modal = document.getElementById('copyProgramModal');
+			  modal.style.display = "none";
+			  
+		  }  
+		
 		/*$scope.dayShown = function (index,entry,entries) {
 			for(i=0;i<entries.length;i++)
 			{

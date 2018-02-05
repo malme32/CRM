@@ -42,11 +42,11 @@ public interface GymCrmService {
 
 	void editEntry(Entry entry);
 
-	void createProgram(Integer contactid, Integer programid);
+	String createProgram(Integer contactid, Integer programid, String realPath);
 
 	void editContact(Contact contact);
 
-
+	void copyProgram(Integer contactid,Integer programid);
 
 	
 }

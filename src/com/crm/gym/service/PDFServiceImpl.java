@@ -197,13 +197,13 @@ public class PDFServiceImpl implements PDFService {
 		return days;
 	}
 	@Override
-	public void createProgram(Contact contact, Program program) {
+	public String createProgram(Contact contact, Program program, String realPath) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
 		Hibernate.initialize(program.getEntries());
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream("c://tmp/PDF-XhtmlRendered1.pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream(realPath+"/files/pdf/program.pdf"));
 			 
 			document.open();
 				BaseFont fonty = BaseFont.createFont("c://tmp/ClearSans-Light.ttf", BaseFont.IDENTITY_H,       BaseFont.NOT_EMBEDDED);
@@ -219,8 +219,13 @@ public class PDFServiceImpl implements PDFService {
 		   // Paragraph name=new Paragraph(contact.getName(),times);
 		  //  document.add(p);
 		    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		    String startDate = df.format(program.getDatestart()).toString();
-		    String endDate = df.format(program.getDateend()).toString();
+		    String startDate = "";
+		    String endDate ="";
+		    if(program.getDatestart()!=null)
+		    	startDate = df.format(program.getDatestart()).toString();
+		    if(program.getDateend()!=null)
+		    	endDate = df.format(program.getDateend()).toString();
+		    
 		   // document.add( Chunk.NEWLINE );
 		 /*   p=new Paragraph(startDate+" - "+endDate,times);
 		    document.add(p);    */
@@ -235,7 +240,16 @@ public class PDFServiceImpl implements PDFService {
 		    table.setWidthPercentage(100);
 		    table.addCell(getCell(contact.getName(), PdfPCell.ALIGN_LEFT,nameFont));
 		    table.addCell(getCell("", PdfPCell.ALIGN_CENTER,nameFont));
-		    table.addCell(getCell(startDate+" - "+endDate, PdfPCell.ALIGN_RIGHT,nameFont));
+		    String dateStr = "";
+		    //dateStr = startDate;
+		    if(!startDate.equals("")&&!endDate.equals(""))
+		    	dateStr=startDate+" - "+endDate;
+		    else
+		    	if(!startDate.equals(""))
+		    		dateStr=startDate;
+		    	else	if(!endDate.equals(""))
+		    		dateStr=endDate;
+		    table.addCell(getCell(dateStr, PdfPCell.ALIGN_RIGHT,nameFont));
 		    document.add(table);
 		    LineSeparator objectName = new LineSeparator();              
 		    document.add(objectName);
@@ -332,6 +346,7 @@ public class PDFServiceImpl implements PDFService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return "/files/pdf/program.pdf"; 
 	}
 	
 

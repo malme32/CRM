@@ -28,6 +28,8 @@
 	</bean>
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+		<mvc:resources mapping="/files/**" location="/files/" />
+	
 	
 <!-- 	<mvc:resources mapping="/resources1/**" location="/resources/theme1/" />
  -->	
