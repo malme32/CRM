@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import javax.transaction.Transactional;
 
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -49,6 +50,8 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 @Transactional
 public class PDFServiceImpl implements PDFService {
 
+
+	
 	@Override
 	public void createPDF() {
 		// TODO Auto-generated method stub
@@ -346,6 +349,10 @@ public class PDFServiceImpl implements PDFService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+
+		
 		return "/files/pdf/program.pdf"; 
 	}
 	

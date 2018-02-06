@@ -46,15 +46,19 @@ pageEncoding="UTF-8"%>
 <button ng-click="cssLiMenuClass('categories')">test</button> -->
 <div class='adminmenu'>
 	<ul>
+	
+		<li><a  ng-href='#!adminprograms' ng-click="setCurrentMenu('programs')" ng-class="cssLiMenuClass('programs')">ΠΡΟΓΡΑΜΜΑΤΑ</a></li>
+	
+		<li><a  ng-href='#!adminusers' ng-click="setCurrentMenu('users')" ng-class="cssLiMenuClass('users')">ΠΕΛΑΤΕΣ</a></li>
+	
+		<li><a  ng-href='#!adminexercises' ng-click="setCurrentMenu('exercises')" ng-class="cssLiMenuClass('exercises')">ΑΣΚΗΣΕΙΣ</a></li>
+	
 		<li><a ng-href='#!admincategories'   ng-click="setCurrentMenu('categories')" ng-class="cssLiMenuClass('categories')">ΚΑΤΗΓΟΡΙΕΣ</a></li>
 	
 
-		<li><a  ng-href='#!adminexercises' ng-click="setCurrentMenu('exercises')" ng-class="cssLiMenuClass('exercises')">ΑΣΚΗΣΕΙΣ</a></li>
 	
 	
 			
-						<li><a  ng-href='#!adminprograms' ng-click="setCurrentMenu('programs')" ng-class="cssLiMenuClass('programs')">ΠΡΟΓΡΑΜΜΑΤΑ</a></li>
-							<li><a  ng-href='#!adminusers' ng-click="setCurrentMenu('users')" ng-class="cssLiMenuClass('users')">ΠΕΛΑΤΕΣ</a></li>
 						
 					<li>
 					<c:url value="/logout" var="logoutUrl" /> <form id="logout" action="${logoutUrl}" method="post" >

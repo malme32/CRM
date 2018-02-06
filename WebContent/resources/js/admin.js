@@ -61,8 +61,8 @@ appAdmin.controller("adminController",function($scope, $http, $location, $window
 			}
 		};
 
-		$scope.currentmenu = "categories";
-		$location.path('admincategories'); 
+		$scope.currentmenu = "programs";
+		$location.path('adminprograms'); 
 
 });
 
@@ -233,6 +233,11 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 
 appAdmin.controller("programsController",function($scope, $http, $location, $window, $route){
 	
+	
+	$scope.$on('$viewContentLoaded', function() {
+	    //call it here
+		$scope.selectedProgram=null;
+	});
 	
 	 $http({
 	       method : "GET",
@@ -533,7 +538,9 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				   var getUrl = window.location;
 				   var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 				   //$window.open(baseUrl+'/resources/pdf/program.pdf', '_blank');
-				   window.location.href=baseUrl+'/files/pdf/program.pdf';
+				   //window.location.href=baseUrl+'/files/pdf/program.pdf';
+				   $scope.pdf_path=baseUrl+'/files/pdf/program.pdf';
+				   $scope.openDownloadPdfModal();
 			      // alert(baseUrl);
 				  // http://localhost:8084/CRM/resources/pdf/PDF-XhtmlRendered1.pdf
 			   }, function myError(response) {
@@ -543,6 +550,33 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 
 			   });
 		}
+		
+		
+		$scope.sendEmail  =function(contact, program){
+
+			 if(!confirm("Είστε σίγουρος;"))
+				 return;
+			 $http({
+			       method : "POST",
+			       url : "contacts/"+contact.id+"/actions",
+			       params:{action:"send_program_email",programid:program.id}
+			   }).then(function mySuccess(response) {
+
+				   var getUrl = window.location;
+				   var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+				   //$window.open(baseUrl+'/resources/pdf/program.pdf', '_blank');
+				 //  window.location.href=baseUrl+'/files/pdf/program.pdf';
+			      // alert(baseUrl);
+				  // http://localhost:8084/CRM/resources/pdf/PDF-XhtmlRendered1.pdf	   
+			       alert("Το E-Mail στάλθηκε στον πελάτη "+ contact.name+"!");
+			   }, function myError(response) {
+
+				   
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+
+			   });
+		}
+		
 		
 		$scope.copyProgram  =function(contact, program){
 			/*$scope.openCopyProgramModal();*/
@@ -580,6 +614,24 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			  
 		  }  
 		
+		  
+		  
+		  $scope.openDownloadPdfModal = function (){
+
+		
+			  var modal = document.getElementById('downloadPDFModal');
+
+		      modal.style.display = "block";
+			  
+			  
+		  }  
+		  $scope.closeDownloadPdfModal = function (){
+			  
+			  var modal = document.getElementById('downloadPDFModal');
+			  modal.style.display = "none";
+			  
+		  }  
+		  
 		/*$scope.dayShown = function (index,entry,entries) {
 			for(i=0;i<entries.length;i++)
 			{

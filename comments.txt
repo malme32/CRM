@@ -1,1 +1,3 @@
 fix name in program. -> contact name +  date
+
+fix issue in IE. selectedProgram takes initial value

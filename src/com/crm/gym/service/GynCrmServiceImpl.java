@@ -42,7 +42,7 @@ public class GynCrmServiceImpl implements GymCrmService {
 	PDFService pDFService;
 	
 	@Autowired private GeneralDaoService generalDaoService;
-	
+	@Autowired MailService mailService;
 	@Override
 	public List<Category> getAllExerciseCategories() {
 		// TODO Auto-generated method stub
@@ -159,13 +159,26 @@ public class GynCrmServiceImpl implements GymCrmService {
 		generalDaoService.update(entry1);
 	}
 	@Override
-	public String createProgram(Integer contactid, Integer programid, String realPath) {
+	public String createProgram(Integer contactid, Integer programid, String realPath, boolean sendMail) {
 		// TODO Auto-generated method stub
 
 		Program program = programDao.findById(programid);
 		Contact contact = contactDao.findById(contactid);
-		
-		return pDFService.createProgram(contact, program, realPath);
+		String ret = pDFService.createProgram(contact, program, realPath);
+		if(sendMail)
+		{
+			String toAddr = "andreas.skapetis@gmail.com";
+			String fromAddr = "andreas@test.com";
+	 
+			// email subject
+			String subject = " Ατομικό πρόγραμμα Ασκήσεων";
+	 
+			// email body
+			String body = contact.getName()+" - Ατομικό πρόγραμμα Ασκήσεων";
+			mailService.sendMailExt(toAddr, fromAddr, subject, body,realPath+ret);
+			
+		}
+		return ret;
 	}
 	@Override
 	public void editContact(Contact contact) {
@@ -211,6 +224,11 @@ public class GynCrmServiceImpl implements GymCrmService {
 		
 
 		return;
+	}
+	@Override
+	public Contact findByUserName(String username) {
+		// TODO Auto-generated method stub
+		return contactDao.findByUsername(username);
 	}
 
 }

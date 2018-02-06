@@ -10,6 +10,8 @@ public interface ContactDao{
 
 	public List<Contact> findAll();
 
+	public Contact findByUsername(String username);
+
 
 
 

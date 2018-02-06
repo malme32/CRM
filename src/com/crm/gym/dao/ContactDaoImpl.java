@@ -30,6 +30,21 @@ public class ContactDaoImpl extends AbstractDao implements ContactDao{
 		return list;
 	}
 
+	@Override
+	public Contact findByUsername(String username) {
+
+        
+ 	   
+    	//Transaction tx = session.beginTransaction();
+    	
+   		
+		return  (Contact) getSession().createQuery("from Contact where username  = '"+username+"'").list().get(0);
+           //tx.commit();
+    /*    //session.close();  
+        Contact tmpcontact = (Contact) results.get(0);
+        return (Contact) results.get(0);*/
+	}
+
 
 	
 

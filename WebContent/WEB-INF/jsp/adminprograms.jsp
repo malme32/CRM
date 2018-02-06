@@ -204,8 +204,13 @@ pageEncoding="UTF-8"%>
 				</tr>
 				<tr>
 				<td>
+				
+		
+				
+				
 				<button  title='Αντιγραφή προγράμματος' class='button_flat background_black float_right' ng-click="openCopyProgramModal()">Αντιγραφή</button> 
 				
+								<button  title='Δημιουργία PDF file' class='button_flat background_red float_right' ng-click="sendEmail(selectedContact,selectedProgram)">E-Mail</button> 
 				
 				<button  title='Δημιουργία PDF file' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,selectedProgram)">PDF</button> 
 				
@@ -252,6 +257,27 @@ pageEncoding="UTF-8"%>
 
  			 </div>
 
-{{result1}}
+
+			<div id="downloadPDFModal" class="modal">
+
+			  <!-- Modal content -->
+			  <div class="modal-content">
+			    <span  ng-click='closeDownloadPdfModal()' class="close">&times;</span>
+			  
+
+		<a id ='pdf_download_button' ng-href="{{pdf_path}}" download>
+  					<h2 style='text-align:center'>Download Pdf</h2>
+			</a>
+		
+<br/>
+<br/>
+
+				
+				</div>
+ 
+
+ 			 </div>
+
+<!-- {{result1}} -->
 			
 </section>
