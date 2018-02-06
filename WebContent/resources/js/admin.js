@@ -539,7 +539,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				   var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 				   //$window.open(baseUrl+'/resources/pdf/program.pdf', '_blank');
 				   //window.location.href=baseUrl+'/files/pdf/program.pdf';
-				   $scope.pdf_path=baseUrl+'/files/pdf/program.pdf';
+				   $scope.pdf_path=baseUrl+'/files/pdf/Go-Go Gym Program.pdf';
 				   $scope.openDownloadPdfModal();
 			      // alert(baseUrl);
 				  // http://localhost:8084/CRM/resources/pdf/PDF-XhtmlRendered1.pdf

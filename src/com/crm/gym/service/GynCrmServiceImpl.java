@@ -46,7 +46,7 @@ public class GynCrmServiceImpl implements GymCrmService {
 	@Override
 	public List<Category> getAllExerciseCategories() {
 		// TODO Auto-generated method stub
-		pDFService.createPDFIText();
+		/*pDFService.createPDFIText();*/
 		return categoryDao.findAll();
 	}
 	@Override
@@ -167,14 +167,14 @@ public class GynCrmServiceImpl implements GymCrmService {
 		String ret = pDFService.createProgram(contact, program, realPath);
 		if(sendMail)
 		{
-			String toAddr = "andreas.skapetis@gmail.com";
-			String fromAddr = "andreas@test.com";
+			String toAddr = contact.getEmail();
+			String fromAddr = "service@gogogym.gr";
 	 
 			// email subject
-			String subject = " Ατομικό πρόγραμμα Ασκήσεων";
+			String subject = "Go-Go Gym Programma Askisewn";
 	 
 			// email body
-			String body = contact.getName()+" - Ατομικό πρόγραμμα Ασκήσεων";
+			String body = "Go-Go Gym Programma Askisewn";
 			mailService.sendMailExt(toAddr, fromAddr, subject, body,realPath+ret);
 			
 		}

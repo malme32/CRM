@@ -29,8 +29,8 @@ public class MailService {
 	public void sendMailExt(String toAddress, String fromAddress, String subject, String msgBody, String filePath) {
 
 	       MimeMessage message = mailSender.createMimeMessage();
-
 	       try{
+		       message.setContent(message, "text/plain; charset=UTF-8");
 	        MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
 	        helper.setFrom(fromAddress);

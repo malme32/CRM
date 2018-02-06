@@ -5,10 +5,15 @@ pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <spring:url value="/resources/theme1" var="resources" />
 
-<section class='font_size_small'>
+
+<div class="main_nav">
+Δημιουργία Προγράμματος
+</div>
+
+<section class='font_size_small side_nav'>
 	<div class='div_edit_team padding_theme'> 
 	 <div class='search-field'>
-	 <input ng-model='mysearch' type="text" class="form-control" placeholder="Αναζητηστε εδώ...">
+	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε πελάτη εδώ...">
 	<i class="fa fa-search"></i></div>
 	</div>
 <!--  {{result1}} -->
@@ -32,7 +37,7 @@ pageEncoding="UTF-8"%>
 				</tr> 
 				
 				<tr >
-					<td><input type="text" ng-model="newprogram.title" placeholder="Το νέο πρόγραμμα εδω.."></td>
+					<td><input type="text" ng-model="newprogram.title" placeholder="Το όνομα του νέου προγράμματος εδω.."></td>
 					
 				
 				<td><button  title='Προσθήκη' class='button_flat background_green float_right' ng-click="addProgram(newprogram,selectedContact)">&#10010;</button> 
@@ -53,13 +58,13 @@ pageEncoding="UTF-8"%>
 	</div>
 
 
-
-<h1 ng-show='selectedProgram' style='text-align:center'>ΠΡΟΓΡΑΜΜΑ: {{selectedProgram.title}}</h1>
+<br/><br/><br/>
+<h1 ng-show='selectedProgram' style='text-align:center'>ΕΠΕΞΕΡΓΑΣΙΑ ΠΡΟΓΡΑΜΜΑΤΟΣ: {{selectedProgram.title}}</h1>
 
 <div class=' div_edit_team padding_theme box_shadow_medium_gray' ng-show='selectedProgram'>
 
 
-<h2>Εισαγωγή νέας άσκησης</h2>
+<h2>Προσθήκη άσκησης</h2>
 <div class='table_stylish1'>
 		<table>
 			<tr>
@@ -118,7 +123,7 @@ pageEncoding="UTF-8"%>
 		
 	</div>
 		<div class='table_stylish1 div_edit_team padding_theme ' ng-show='programDays.length'>
-<h2>Πρόγραμμα:</h2>
+<!-- <h2>Πρόγραμμα:</h2> -->
 		<div ng-repeat='day in programDays | orderBy:"name"'>
 		<h2 class='text_underline' style='text-align:center'>{{day.name}}</h2>
 			<div ng-repeat='category in day.categories| orderBy:"title"'>

@@ -49,8 +49,23 @@
 }
 
 
+/* INPUTS */
 
 
+.search_input{
+	
+	    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('../images/search.png');
+    background-size: 20px 20px;
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+}
 /* BUTTONS */
 .button_flat {
 	/* background-color: #4CAF50;  */ /* Green */
@@ -64,7 +79,8 @@
 /* 	font-size: 16px;
  */	margin: 2px 1px;
 	cursor: pointer;
-}
+	 box-shadow: 2px 2px 2px #888888;
+	}
 
 
 	
@@ -84,6 +100,8 @@ input[type=text], input[type=email],select , textarea{
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    
+    
 }
 
 input[type=number] {
@@ -265,7 +283,9 @@ padding:0;
 
 /* MENU 
 */
-
+.adminmenu{
+	 box-shadow: 2px 2px 2px #888888;
+}
 .adminmenu ul {
     list-style-type: none;
     margin: 0;
@@ -336,6 +356,9 @@ padding:0;
  box-shadow: 5px 8px 10px #888888;
  background-color:#E8E8E8; padding:8px; 
  }
+  .shadow_ligth_red{
+ box-shadow: 5px 4px 3px #cf695a;
+  }
  
  .text_underline{
  text-decoration: underline;
@@ -345,3 +368,27 @@ padding:0;
  font-style: italic;}
  
  .margin_botton_large{margin-bottom:80px}
+ 
+/*  MAIN NAV BAR */
+
+.main_nav{
+	position:fixed;
+	width:200px;
+	height:100%;/* 
+	background-color:#d3d3d3; */
+	background-color:white;
+	padding: 20px 10px 50px 10px;/* 
+	border-right:1px solid gray; */
+	 box-shadow: 2px 2px 2px #888888;
+	 overflow: auto;
+	/* color:white; */
+	
+}
+.side_nav{
+	position:fixed;
+	width:calc(100% - 200px);
+	left:200px;
+	height:100%;
+	overflow: auto;/* 
+	background-color:#d3d3d3; */
+}

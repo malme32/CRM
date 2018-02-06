@@ -37,9 +37,11 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -51,7 +53,7 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 public class PDFServiceImpl implements PDFService {
 
 
-	
+
 	@Override
 	public void createPDF() {
 		// TODO Auto-generated method stub
@@ -203,10 +205,12 @@ public class PDFServiceImpl implements PDFService {
 	public String createProgram(Contact contact, Program program, String realPath) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
+
+	    String IMAGE = realPath+"/resources/images/gogogym.png";
 		Hibernate.initialize(program.getEntries());
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(realPath+"/files/pdf/program.pdf"));
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(realPath+"/files/pdf/Go-Go Gym Program.pdf"));
 			 
 			document.open();
 				BaseFont fonty = BaseFont.createFont(realPath+"/resources/fonts/ClearSans-Light.ttf", BaseFont.IDENTITY_H,       BaseFont.NOT_EMBEDDED);
@@ -214,11 +218,21 @@ public class PDFServiceImpl implements PDFService {
 				Font daysFont = new Font(fonty, 12, Font.BOLD);
 				daysFont.setColor(BaseColor.WHITE);
 				Font categFont = new Font(fonty, 9, Font.BOLD);
-				Font nameFont = new Font(fonty, 9, Font.ITALIC);
+				Font nameFont = new Font(fonty, 11, Font.ITALIC);
+				Font dateFont = new Font(fonty, 9, Font.ITALIC);
 				Font setFont = new Font(fonty, 8, Font.ITALIC);
-				Font commentFont = new Font(fonty, 9, Font.UNDERLINE);
+				Font commentFont = new Font(fonty, 10, Font.UNDERLINE);
+				Font commentTextFont = new Font(fonty, 10, Font.NORMAL);
 			//Font font = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.RED);
 
+				
+		        PdfContentByte canvas = writer.getDirectContentUnder();
+		        Image image = Image.getInstance(IMAGE);
+		        //image.scaleAbsolute(PageSize.A4.rotate());
+		        image.setAbsolutePosition((PageSize.A4.getWidth()-PageSize.A4.getWidth()/2)-50, PageSize.A4.getHeight()-45);
+		        image.scaleAbsolute(100, 40	);
+		        canvas.addImage(image);
+				
 		   // Paragraph name=new Paragraph(contact.getName(),times);
 		  //  document.add(p);
 		    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -252,7 +266,7 @@ public class PDFServiceImpl implements PDFService {
 		    		dateStr=startDate;
 		    	else	if(!endDate.equals(""))
 		    		dateStr=endDate;
-		    table.addCell(getCell(dateStr, PdfPCell.ALIGN_RIGHT,nameFont));
+		    table.addCell(getCell(dateStr, PdfPCell.ALIGN_RIGHT,dateFont));
 		    document.add(table);
 		    LineSeparator objectName = new LineSeparator();              
 		    document.add(objectName);
@@ -336,7 +350,7 @@ public class PDFServiceImpl implements PDFService {
 				 document.add(parat);/*
 				 LineSeparator objectName1 = new LineSeparator();              
 				 document.add(objectName1);*/
-				 Paragraph comment=new Paragraph(program.getComment(),times);
+				 Paragraph comment=new Paragraph(program.getComment(),commentTextFont);
 				 comment.setAlignment(Element.ALIGN_CENTER);
 				 document.add(comment);
 
@@ -353,7 +367,7 @@ public class PDFServiceImpl implements PDFService {
 		
 
 		
-		return "/files/pdf/program.pdf"; 
+		return "/files/pdf/Go-Go Gym Program.pdf"; 
 	}
 	
 

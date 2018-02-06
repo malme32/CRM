@@ -4,13 +4,13 @@ pageEncoding="UTF-8"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <spring:url value="/resources/theme1" var="resources" />
-
+<section  class="margin_botton_large">
 <div class='font_size_small'>
-<div class='div_edit_team padding_theme'> 
- <div class='search-field'>
- <input ng-model='mysearch' type="text" class="form-control" placeholder="Αναζητηστε εδώ...">
-<i class="fa fa-search"></i></div>
-</div>
+	<div class='div_edit_team padding_theme'> 
+	 <div class='search-field'>
+	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε εδώ...">
+	<i class="fa fa-search"></i></div>
+	</div>
 
 
 <div class='div_edit_team padding_theme'>
@@ -43,3 +43,4 @@ pageEncoding="UTF-8"%>
 	</div>
 </div>
 </div>
+</section>
