@@ -206,7 +206,7 @@ public class PDFServiceImpl implements PDFService {
 			PdfWriter.getInstance(document, new FileOutputStream(realPath+"/files/pdf/program.pdf"));
 			 
 			document.open();
-				BaseFont fonty = BaseFont.createFont("c://tmp/ClearSans-Light.ttf", BaseFont.IDENTITY_H,       BaseFont.NOT_EMBEDDED);
+				BaseFont fonty = BaseFont.createFont(realPath+"/resources/fonts/ClearSans-Light.ttf", BaseFont.IDENTITY_H,       BaseFont.NOT_EMBEDDED);
 				Font times = new Font(fonty, 9, Font.NORMAL);
 				Font daysFont = new Font(fonty, 12, Font.BOLD);
 				daysFont.setColor(BaseColor.WHITE);
