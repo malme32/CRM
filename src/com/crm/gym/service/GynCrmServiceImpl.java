@@ -205,7 +205,7 @@ public class GynCrmServiceImpl implements GymCrmService {
 		program1.setDatestart(program.getDatestart());
 		program1.setDateend(program.getDateend());
 		program1.setComment(program.getComment());
-		program1.setTitle(program.getTitle());
+		program1.setTitle("Αντίγραφο από "+program.getTitle());
 		System.out.println("SETTING COPY COMMENT: "+program.getComment());
 		generalDaoService.persist(program1);
 		Hibernate.initialize(program.getEntries());

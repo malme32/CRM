@@ -19,23 +19,18 @@ public class Program{
 	private int id;
 	
 	@Column(name="title", length=200)
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String title;
 	
 	@Column(name="comment", length=500)
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String comment;
 
 	@Column(name="datestart")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Date datestart;
 
 	@Column(name="dateend")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Date dateend;
 
 	@Column(name="duration")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Date duration;
 	
 	@ManyToOne
@@ -46,8 +41,9 @@ public class Program{
 	@OneToMany(fetch = FetchType.LAZY,mappedBy="program",cascade = CascadeType.ALL)
 	private List<Entry> entries;
 
-	
 
+	@Column(name="history")
+	private Boolean history;
 
 	public int getId() {
 		return id;
@@ -111,6 +107,14 @@ public class Program{
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Boolean getHistory() {
+		return history;
+	}
+
+	public void setHistory(Boolean history) {
+		this.history = history;
 	}
 
 	@Override

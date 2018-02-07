@@ -25,13 +25,11 @@ appAdmin.config(function($routeProvider) {
     })
 });
 
-/*
 
-appMain.run(function($rootScope, $window, $http, $timeout) {
-	
+
+appAdmin.run(function($rootScope, $window, $http, $timeout) {
 	
 
-	
     $rootScope.$on("$locationChangeStart", function(event, next, current) {   	
     });
     
@@ -39,7 +37,7 @@ appMain.run(function($rootScope, $window, $http, $timeout) {
 
 });
 
-*/
+
 
 appAdmin.controller("adminController",function($scope, $http, $location, $window){
 	
@@ -262,6 +260,25 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 
 	   });
 	 
+	 
+	 ////Get standard programs
+	 $http({
+	       method : "GET",
+	       url : "contacts/"+19+"/programs" //admin
+	   }).then(function mySuccess(response) {
+		   $scope.standardPrograms = response.data;
+	    	for(k=0;k<$scope.standardPrograms.length;k++)
+  		{
+		    	 if($scope.standardPrograms[k].datestart)
+		    		 $scope.standardPrograms[k].tmpdatestart=new Date($scope.standardPrograms[k].datestart);
+		    	 if($scope.standardPrograms[k].dateend)
+		    		 $scope.standardPrograms[k].tmpdateend=new Date($scope.standardPrograms[k].dateend);
+  		}
+	   }, function myError(response) {
+	      // alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+	   });
+	 ////////////////////
+	 
 		$scope.getPrograms = function (contact) {
 			 $scope.selectedProgram =null;
 			 $scope.programDays = null;
@@ -282,13 +299,35 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   });
 		}
 		
+		$scope.getOtherPrograms = function (contact) {
+			// $scope.selectedProgram =null;
+			 //$scope.programDays = null;
+			 $http({
+			       method : "GET",
+			       url : "contacts/"+contact.id+"/programs"
+			   }).then(function mySuccess(response) {
+				   $scope.otherPrograms = response.data;
+/*			    	for(k=0;k<$scope.programs.length;k++)
+		    		{
+				    	 if($scope.programs[k].datestart)
+				    		 $scope.programs[k].tmpdatestart=new Date($scope.programs[k].datestart);
+				    	 if($scope.programs[k].dateend)
+				    		 $scope.programs[k].tmpdateend=new Date($scope.programs[k].dateend);
+		    		}*/
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+		}
+		
+		
 		$scope.addProgram = function (program, contact) {
 			 $http({
 			       method : "POST",
 			       url : "contacts/"+contact.id+"/programs",
 			       params:{title:program.title}
 			   }).then(function mySuccess(response) {
-				   $scope.getPrograms(contact);
+				  $scope.getPrograms(contact);
+				   $scope.showProgram(response.data);
 			   }, function myError(response) {
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
 			   });
@@ -576,8 +615,20 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 
 			   });
 		}
+		$scope.selectedPanel = function(state){
+			
+			if($scope.selState==state)
+				return "background_red";
+			else
+				return "";
+			
+		}
 		
-		
+		$scope.contactSelected = function(contact){
+			$scope.selectedContact= contact;
+			$scope.getPrograms(contact);
+			
+		}
 		$scope.copyProgram  =function(contact, program){
 			/*$scope.openCopyProgramModal();*/
 			 $http({
@@ -585,8 +636,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			       url : "contacts/"+contact.id+"/actions",
 			       params:{action:"copy_program",programid:program.id}
 			   }).then(function mySuccess(response) {
-
-				   $scope.closeCopyProgramModal();
+				   $scope.getPrograms(contact);
+				   //$scope.closeCopyProgramModal();
 			       alert("Έγινε!");
 			   }, function myError(response) {
 			 
@@ -595,6 +646,23 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   });
 		}
 		
+		$scope.copyProgramFromOther  =function(contact, program){
+			/*$scope.openCopyProgramModal();*/
+			 $http({
+			       method : "POST",
+			       url : "contacts/"+contact.id+"/actions",
+			       params:{action:"copy_program",programid:program.id}
+			   }).then(function mySuccess(response) {
+				   //$scope.getOtherPrograms(contact);
+				   $scope.getPrograms($scope.selectedContact);
+				   //$scope.closeCopyProgramModal();
+			       alert("Έγινε!");
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+
+			   });
+		}
 		
 		
 		  
@@ -672,6 +740,26 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		}
 		*/
 		
+		  
+			///////ACCORDION////
+			
+			var acc = document.getElementsByClassName("accordion");
+			var i;
+
+			for (i = 0; i < acc.length; i++) {
+			  acc[i].addEventListener("click", function() {
+			    this.classList.toggle("active");
+			    var panel = this.nextElementSibling;
+			    if (panel.style.maxHeight){
+			      panel.style.maxHeight = null;
+			    } else {
+			      panel.style.maxHeight = panel.scrollHeight + "px";
+			    } 
+			  });
+			}
+
+			////////
+		  
 });
 
 appAdmin.controller("usersController",function($scope, $http, $location, $window,$route){

@@ -96,10 +96,10 @@ public class GymController {
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value="/contacts/{contactid}/programs", method=RequestMethod.POST, produces = "application/json")
-	public @ResponseBody void addProgram(@ModelAttribute Program program,@PathVariable Integer contactid)
+	public @ResponseBody Program addProgram(@ModelAttribute Program program,@PathVariable Integer contactid)
 	{
 		gymCrmService.addProgram(program, contactid);
-		return;
+		return program;
 	}
 
 	@Secured("ROLE_ADMIN")
