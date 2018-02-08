@@ -230,8 +230,31 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 });
 
 appAdmin.controller("programsController",function($scope, $http, $location, $window, $route){
+	$scope.adminContact={id:19,name:"Go-Go Gym"};
 	
 	
+	
+	$scope.initMenuPrograms = function(state)
+	{
+		
+		$scope.selectedContact=$scope.selectedContactBack;
+		$scope.selState=state;
+		$scope.selectedProgram=null;
+		$scope.programDays=null;
+		$scope.selectedContact1=null;
+	}
+	
+	$scope.initMenuStandardPrograms = function(state)
+	{
+		
+		$scope.selState=state;
+		
+		$scope.selectedContact=$scope.adminContact; 
+		$scope.getPrograms($scope.adminContact); 
+		$scope.selectedProgram=null; 
+		$scope.programDays=null;
+		$scope.selectedContact1=null;
+	}
 	$scope.$on('$viewContentLoaded', function() {
 	    //call it here
 		$scope.selectedProgram=null;
@@ -262,21 +285,24 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 	 
 	 
 	 ////Get standard programs
-	 $http({
-	       method : "GET",
-	       url : "contacts/"+19+"/programs" //admin
-	   }).then(function mySuccess(response) {
-		   $scope.standardPrograms = response.data;
-	    	for(k=0;k<$scope.standardPrograms.length;k++)
-  		{
-		    	 if($scope.standardPrograms[k].datestart)
-		    		 $scope.standardPrograms[k].tmpdatestart=new Date($scope.standardPrograms[k].datestart);
-		    	 if($scope.standardPrograms[k].dateend)
-		    		 $scope.standardPrograms[k].tmpdateend=new Date($scope.standardPrograms[k].dateend);
-  		}
-	   }, function myError(response) {
-	      // alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
-	   });
+		$scope.getStandardPrograms = function () {
+		 $http({
+		       method : "GET",
+		       url : "contacts/"+$scope.adminContact.id+"/programs" //admin
+		   }).then(function mySuccess(response) {
+			   $scope.standardPrograms = response.data;
+		    	for(k=0;k<$scope.standardPrograms.length;k++)
+	  		{
+			    	 if($scope.standardPrograms[k].datestart)
+			    		 $scope.standardPrograms[k].tmpdatestart=new Date($scope.standardPrograms[k].datestart);
+			    	 if($scope.standardPrograms[k].dateend)
+			    		 $scope.standardPrograms[k].tmpdateend=new Date($scope.standardPrograms[k].dateend);
+	  		}
+		   }, function myError(response) {
+		      // alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+		   });
+		}
+		$scope.getStandardPrograms();
 	 ////////////////////
 	 
 		$scope.getPrograms = function (contact) {
@@ -320,13 +346,17 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		}
 		
 		
-		$scope.addProgram = function (program, contact) {
+		$scope.addProgram = function (program, contactid) {
 			 $http({
 			       method : "POST",
-			       url : "contacts/"+contact.id+"/programs",
+			       url : "contacts/"+contactid+"/programs",
 			       params:{title:program.title}
 			   }).then(function mySuccess(response) {
-				  $scope.getPrograms(contact);
+				//   if(contactid!=19)
+					   $scope.getPrograms(contact);
+				  // else
+					 //  $scope.getStandardPrograms();
+					//  / 
 				   $scope.showProgram(response.data);
 			   }, function myError(response) {
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -567,10 +597,10 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			}
 			return tmpentries;
 		}	
-		$scope.createPdf  =function(contact, program){
+		$scope.createPdf  =function(contactid, program){
 			 $http({
 			       method : "POST",
-			       url : "contacts/"+contact.id+"/actions",
+			       url : "contacts/"+contactid+"/actions",
 			       params:{action:"create_program",programid:program.id}
 			   }).then(function mySuccess(response) {
 
@@ -627,6 +657,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		$scope.contactSelected = function(contact){
 			$scope.selectedContact= contact;
 			$scope.getPrograms(contact);
+			$scope.selectedContactBack=$scope.selectedContact;
 			
 		}
 		$scope.copyProgram  =function(contact, program){
@@ -638,6 +669,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   }).then(function mySuccess(response) {
 				   $scope.getPrograms(contact);
 				   //$scope.closeCopyProgramModal();
+				   
 			       alert("Έγινε!");
 			   }, function myError(response) {
 			 

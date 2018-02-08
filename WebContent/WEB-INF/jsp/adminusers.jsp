@@ -5,7 +5,38 @@ pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <spring:url value="/resources/theme1" var="resources" />
 
-<section class='font_size_small' class="margin_botton_large">
+
+<div class="main_nav">
+
+<h2>Επιλογές Προγραμμάτων</h2>
+<p></p>
+<button class="accordion">Δημιουργία πελάτη</button>
+<div class="panel">
+  <p ng-class='selectedPanel("AddNewCustomer")' ng-click="initMenuCustomers('AddNewCustomer'); ">Νέος</p>
+  <p ng-class='selectedPanel("ShowAllCustomers")' ng-click="initMenuCustomers('ShowAllCustomers'); ">Λίστα πελατών</p>
+</div>
+
+<button class="accordion">Πρότυπα</button>
+<div class="panel">
+ <!--  <p ng-class='selectedPanel("AddNewStandard")' ng-click="selState='AddNewStandard';selectedProgram=null;selectedContact=null; programDays=null;selectedContact1=null">Νέο</p>
+  <p ng-class='selectedPanel("ShowStandardPrograms")' ng-click="selState='ShowStandardPrograms';selectedProgram=null;selectedContact=null; programDays=null;selectedContact1=null">Επεξεργασία προτύπων</p> -->
+ <p ng-class='selectedPanel("AddNewProgramST")' ng-click="initMenuStandardPrograms('AddNewProgramST');  ">Νέο</p>
+  <p ng-class='selectedPanel("NewFromHistoryST")' ng-click="initMenuStandardPrograms('NewFromHistoryST'); ">Αντιγραφή από άλλο πρότυπο</p>
+  <p ng-class='selectedPanel("NewFromOtherCustomerST")' ng-click="initMenuStandardPrograms('NewFromOtherCustomerST');  ">Αντιγραφή απο πελάτη</p>
+  <p ng-class='selectedPanel("ShowAllProgramsST")' ng-click="initMenuStandardPrograms('ShowAllProgramsST');  ">Επεξεργασία πρότυπων</p>
+  <p ng-class='selectedPanel("ShowActionsST")' ng-click="initMenuStandardPrograms('ShowActionsST');  ">Ενέργειες</p>
+  
+
+</div>
+
+<button class="accordion">Ιστορικό</button>
+<div class="panel">
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+</div>
+
+</div>
+
+<section class='font_size_small side_nav' class="margin_botton_large">
 	<div class='div_edit_team padding_theme'> 
 	 <div class='search-field'>
 	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε εδώ...">

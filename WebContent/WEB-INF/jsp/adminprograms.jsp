@@ -12,17 +12,25 @@ pageEncoding="UTF-8"%>
 <p></p>
 <button class="accordion">Δημιουργία προγράμματος</button>
 <div class="panel">
-  <p ng-class='selectedPanel("AddNewProgram")' ng-click="selState='AddNewProgram';selectedProgram=null; programDays=null;selectedContact1=null">Νέο Πρόγραμμα</p>
-  <p ng-class='selectedPanel("NewFromStandard")' ng-click="selState='NewFromStandard';selectedProgram=null; programDays=null;selectedContact1=null">Αντιγραφή απο πρότυπο</p>
-  <p ng-class='selectedPanel("NewFromHistory")' ng-click="selState='NewFromHistory';selectedProgram=null; programDays=null;selectedContact1=null">Αντιγραφή από ιστορικό</p>
-  <p ng-class='selectedPanel("NewFromOtherCustomer")' ng-click="selState='NewFromOtherCustomer';selectedProgram=null; programDays=null;">Αντιγραφή απο άλλο πελάτη</p>
-  <p ng-class='selectedPanel("ShowAllPrograms")' ng-click="selState='ShowAllPrograms';selectedProgram=null; programDays=null;selectedContact1=null">Επεξεργασία προγραμμάτων</p>
-  <p ng-class='selectedPanel("ShowActions")' ng-click="selState='ShowActions';selectedProgram=null; programDays=null;selectedContact1=null">Ενέργειες</p>
+  <p ng-class='selectedPanel("AddNewProgram")' ng-click="initMenuPrograms('AddNewProgram'); ">Νέο</p>
+  <p ng-class='selectedPanel("NewFromStandard")' ng-click="initMenuPrograms('NewFromStandard'); ">Αντιγραφή απο πρότυπο</p>
+  <p ng-class='selectedPanel("NewFromHistory")' ng-click="initMenuPrograms('NewFromHistory'); ">Αντιγραφή από ιστορικό</p>
+  <p ng-class='selectedPanel("NewFromOtherCustomer")' ng-click="initMenuPrograms('NewFromOtherCustomer'); ">Αντιγραφή απο άλλο πελάτη</p>
+  <p ng-class='selectedPanel("ShowAllPrograms")' ng-click="initMenuPrograms('ShowAllPrograms'); ">Επεξεργασία προγραμμάτων</p>
+  <p ng-class='selectedPanel("ShowActions")' ng-click="initMenuPrograms('ShowActions');">Ενέργειες</p>
 </div>
 
 <button class="accordion">Πρότυπα</button>
 <div class="panel">
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+ <!--  <p ng-class='selectedPanel("AddNewStandard")' ng-click="selState='AddNewStandard';selectedProgram=null;selectedContact=null; programDays=null;selectedContact1=null">Νέο</p>
+  <p ng-class='selectedPanel("ShowStandardPrograms")' ng-click="selState='ShowStandardPrograms';selectedProgram=null;selectedContact=null; programDays=null;selectedContact1=null">Επεξεργασία προτύπων</p> -->
+ <p ng-class='selectedPanel("AddNewProgramST")' ng-click="initMenuStandardPrograms('AddNewProgramST');  ">Νέο</p>
+  <p ng-class='selectedPanel("NewFromHistoryST")' ng-click="initMenuStandardPrograms('NewFromHistoryST'); ">Αντιγραφή από άλλο πρότυπο</p>
+  <p ng-class='selectedPanel("NewFromOtherCustomerST")' ng-click="initMenuStandardPrograms('NewFromOtherCustomerST');  ">Αντιγραφή απο πελάτη</p>
+  <p ng-class='selectedPanel("ShowAllProgramsST")' ng-click="initMenuStandardPrograms('ShowAllProgramsST');  ">Επεξεργασία πρότυπων</p>
+  <p ng-class='selectedPanel("ShowActionsST")' ng-click="initMenuStandardPrograms('ShowActionsST');  ">Ενέργειες</p>
+  
+
 </div>
 
 <button class="accordion">Ιστορικό</button>
@@ -33,8 +41,8 @@ pageEncoding="UTF-8"%>
 </div>
 
 <section class='font_size_small side_nav'>
-<div class='selectedContact' ng-show='selectedContact' style=''>Πελάτης: {{selectedContact.name}}
-<span ng-click='selState=null; programDays=null; selectedProgram=null; selectedContact=null;selectedContact1=null; programDays=null; mysearch="";showAllContacts=false'>&#10006;</span>
+<div class='selectedContact' ng-show='selectedContact' style=''><b ng-show="selectedContact.id!=adminContact.id">Πελάτης:</b> {{selectedContact.name}}
+<span ng-click='selState=null; programDays=null; selectedProgram=null; selectedContact=null;selectedContactBack=null;selectedContact1=null; programDays=null; mysearch="";showAllContacts=false'>&#10006;</span>
 </div>
 <div ng-show="(selState)&&!selectedContact">
 
@@ -86,7 +94,7 @@ pageEncoding="UTF-8"%>
 </div>
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState=='NewFromStandard'&&selectedContact" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('NewFromStandard')&&selectedContact" >
 	<h1>Επιλέξτε πρότυπο πρόγραμμα για αντιγραφή</h1>
 			<table>
 				<tr>
@@ -115,14 +123,14 @@ pageEncoding="UTF-8"%>
 				
 			</table>
 	</div>
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState=='NewFromOtherCustomer'&&selectedContact&&!selectedContact1" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('NewFromOtherCustomer')&&selectedContact&&!selectedContact1" >
 	<h1>Επιλέξτε άλλο πελάτη για να αντιγράψετε κάποιο πρόγραμμα</h1>
 		<button  title='Επιλογή πελάτη' class='button_flat background_black ' ng-click="openCopyProgramModal()">Επιλογή άλλου Πελάτη</button> 
 			
 	</div>
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState=='NewFromOtherCustomer'&&selectedContact&&selectedContact1" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('NewFromOtherCustomer')&&selectedContact&&selectedContact1" >
 	<h1>Επιλέξτε πρόγραμμα απο τον πελάτη "{{selectedContact1.name}}" για αντιγραφή</h1>
 			<table>
 				<tr>
@@ -152,7 +160,7 @@ pageEncoding="UTF-8"%>
 			</table>
 	</div>
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState=='NewFromHistory'&&selectedContact" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('NewFromHistory')&&selectedContact" >
 	<h1>Επιλέξτε πρόγραμμα απο το ιστορικό για αντιγραφή</h1>
 			<table>
 				<tr>
@@ -182,7 +190,7 @@ pageEncoding="UTF-8"%>
 			</table>
 	</div>
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState=='AddNewProgram'&&selectedContact&&!selectedProgram" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('AddNewProgram')&&selectedContact&&!selectedProgram" >
 		<h1>Εισάγετε το όνομα του νέου προγράμματος</h1>
 			<table>
 				<tr>
@@ -194,7 +202,7 @@ pageEncoding="UTF-8"%>
 					<td><input type="text" ng-model="newprogram.title" placeholder="Το όνομα του νέου προγράμματος εδω.."></td>
 					
 				
-				<td><button  title='Προσθήκη' class='button_flat background_green float_right' ng-click="addProgram(newprogram,selectedContact)">&#10010;</button> 
+				<td><button  title='Προσθήκη' class='button_flat background_green float_right' ng-click="addProgram(newprogram,selectedContact.id)">&#10010;</button> 
 				</td>
 				</tr> 
 <!-- 				<tr class='cursor_pointer' ng-repeat="program in programs  | filter:mysearch" >
@@ -212,7 +220,7 @@ pageEncoding="UTF-8"%>
 	</div>
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState=='ShowAllPrograms'&&selectedContact&&!selectedProgram" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('ShowAllPrograms')&&selectedContact&&!selectedProgram" >
 		<h1>Επεξεργασία προγραμμάτων</h1>
 			<table>
 				<tr>
@@ -253,7 +261,7 @@ pageEncoding="UTF-8"%>
 
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState=='ShowActions'&&selectedContact&&!selectedProgram" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('ShowActions')&&selectedContact&&!selectedProgram" >
 		<h1>Ενέργειες</h1>
 			<table>
 				<tr>
@@ -277,7 +285,7 @@ pageEncoding="UTF-8"%>
 					
 					<button  title='Στείλε E-Mail στον πελάτη με αυτό το πρόγραμμα' class='button_flat background_red float_right' ng-click="sendEmail(selectedContact,program)">Στείλε E-Mail</button> 
 				
-					<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,program)">Download PDF</button> 
+					<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(selectedContact.id,program)">Download PDF</button> 
 <!-- 					<button  title='Διαγραφή προγράμματος' class='button_flat background_red float_right'  ng-click="deleteProgram(program)">&#10006;</button>
 					<button title='Επεξεργάσία προγραμματος' class='button_flat background_dark_yellow float_right' ng-click="showProgram(program)">Επεξεργάσία</button>  -->
 				
@@ -514,7 +522,55 @@ pageEncoding="UTF-8"%>
  
 
  			 </div>
+								<!-- ΠΡΟΤΥΠΑ -->
+								<!-- ////////
+								//////// -->
+<!-- 
+<div class='div_edit_team padding_theme table_stylish1' ng-show="selState=='ShowStandardPrograms'" >
+	<h1>Επεξεργασία πρότυπων προγραμματων</h1>
+			<table>
+				<tr>
+					<th>ΠΡΟΤΥΠΑ ΠΡΟΓΡΑΜΜΑΤΑ</th>
+					<th></th>
+				</tr> 
+				
+				<tr >
+					<td><input type="text" ng-model="newprogram.title" placeholder="Το όνομα του νέου προγράμματος εδω.."></td>
+					
+				
+				<td><button  title='Προσθήκη' class='button_flat background_green float_right' ng-click="addProgram(newprogram,selectedContact)">&#10010;</button> 
+				</td>
+				</tr>
+				<tr class='' ng-repeat="program in standardPrograms " >
+					<td >{{program.title}}</td>
+					<td>
+					<button  title='Διαγραφή προγράμματος' class='button_flat background_red float_right'  ng-click="deleteProgram(program)">&#10006;</button>
+					<button title='Επεξεργάσία προγραμματος' class='button_flat background_dark_yellow float_right' ng-click="showProgram(program)">Επεξεργάσία</button> 					
+					<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(19,program)">Download PDF</button> 
+				</td>
+				</tr>
+				
+				
+				
+			</table>
+	</div>
+	
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState=='AddNewStandard'&&!selectedProgram" >
+		<h1>Εισάγετε το όνομα του νέου πρότυπου προγράμματος</h1>
+			<table>
+				<tr>
+					<th>NEO ΠΡΟΤΥΠΟ ΠΡΟΓΡΑΜΜΑ</th>
+					<th></th>
+				</tr> 
+	 			<tr >
+					<td><input type="text" ng-model="newprogram.title" placeholder="Το όνομα του νέου πρότυπου προγράμματος εδω.."></td>
+					
+				
+				<td><button  title='Προσθήκη' class='button_flat background_green float_right' ng-click="addProgram(newprogram,19)">&#10010;</button> 
+				</td>
+				</tr> 
 
-<!-- {{result1}} -->
-			
+				
+			</table>
+	</div>	 -->
 </section>
