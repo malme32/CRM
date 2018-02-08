@@ -8,48 +8,45 @@ pageEncoding="UTF-8"%>
 
 <div class="main_nav">
 
-<h2>Επιλογές Προγραμμάτων</h2>
+<h2>Επιλογές Πελατών</h2>
 <p></p>
-<button class="accordion">Δημιουργία πελάτη</button>
+<button class="accordion">Πελάτες</button>
 <div class="panel">
   <p ng-class='selectedPanel("AddNewCustomer")' ng-click="initMenuCustomers('AddNewCustomer'); ">Νέος</p>
-  <p ng-class='selectedPanel("ShowAllCustomers")' ng-click="initMenuCustomers('ShowAllCustomers'); ">Λίστα πελατών</p>
+  <p ng-class='selectedPanel("ShowAllCustomers")' ng-click="initMenuCustomers('ShowAllCustomers'); ">Λίστα πελατών & επεξεργασία</p>
 </div>
 
-<button class="accordion">Πρότυπα</button>
-<div class="panel">
- <!--  <p ng-class='selectedPanel("AddNewStandard")' ng-click="selState='AddNewStandard';selectedProgram=null;selectedContact=null; programDays=null;selectedContact1=null">Νέο</p>
-  <p ng-class='selectedPanel("ShowStandardPrograms")' ng-click="selState='ShowStandardPrograms';selectedProgram=null;selectedContact=null; programDays=null;selectedContact1=null">Επεξεργασία προτύπων</p> -->
- <p ng-class='selectedPanel("AddNewProgramST")' ng-click="initMenuStandardPrograms('AddNewProgramST');  ">Νέο</p>
-  <p ng-class='selectedPanel("NewFromHistoryST")' ng-click="initMenuStandardPrograms('NewFromHistoryST'); ">Αντιγραφή από άλλο πρότυπο</p>
-  <p ng-class='selectedPanel("NewFromOtherCustomerST")' ng-click="initMenuStandardPrograms('NewFromOtherCustomerST');  ">Αντιγραφή απο πελάτη</p>
-  <p ng-class='selectedPanel("ShowAllProgramsST")' ng-click="initMenuStandardPrograms('ShowAllProgramsST');  ">Επεξεργασία πρότυπων</p>
-  <p ng-class='selectedPanel("ShowActionsST")' ng-click="initMenuStandardPrograms('ShowActionsST');  ">Ενέργειες</p>
-  
-
-</div>
-
-<button class="accordion">Ιστορικό</button>
-<div class="panel">
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-</div>
 
 </div>
 
 <section class='font_size_small side_nav' class="margin_botton_large">
-	<div class='div_edit_team padding_theme'> 
+<!-- 	<div class='div_edit_team padding_theme'> 
 	 <div class='search-field'>
 	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε εδώ...">
 	<i class="fa fa-search"></i></div>
 	</div>
-<!--  {{result1}} -->
-<!--{{selectedProgram.entries.days}} -->
+
 	<div class='div_edit_team padding_theme'>
 		<select ng-change="addingcontact=false" ng-model="selectedContact" ng-change="getContact(selectedContact)" ng-options="contact.name for contact in contacts | orderBy:'name' |  filter:mysearch">
 		<option value="">---Πελάτης---</option>
 		</select>
 	</div>
+ -->
 
+
+<div ng-show="selState.includes('ShowAllCustomers')&&!selectedContact">
+
+	<div class='div_edit_team padding_theme'> 
+		<h1>Επιλέξτε πελάτη</h1>
+	 <div class='search-field'>
+	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε πελάτη εδώ...">
+	<i class="fa fa-search"></i></div>
+	<!-- <button ng-hide='showAllContacts' title='' class='button_flat background_black float_right' ng-click='mysearch=""; showAllContacts=true'>Εμφάνιση ολων των πελατών</button> 
+		<button ng-show='showAllContacts' title='' class='button_flat background_black float_right' ng-click='showAllContacts=false'>Απόκρυψη ολων των πελατών</button>  -->
+	
+	</div>
+	
+</div>
 
 <br/>
 
@@ -97,7 +94,7 @@ pageEncoding="UTF-8"%>
 	</div>
 	
 	
-			<div class='div_edit_team box_shadow_medium_gray' ng-show="addingcontact" >
+			<div class='div_edit_team box_shadow_medium_gray' ng-show="selState.includes('AddNewCustomer')" >
 			
 			<!-- <hr> -->
 					<h2>Εισαγωγή νέου πελάτη</h2>
@@ -137,35 +134,39 @@ pageEncoding="UTF-8"%>
 	</div>
 	
 	
-<div class='div_edit_team padding_theme' >			
+<!-- <div class='div_edit_team padding_theme' >			
 <button ng-hide="addingcontact" title='Προσθήκη πελάτη' class='button_flat background_green' ng-click="addingcontact=true; selectedContact=false">Εισαγωγή νέου πελάτη</button>
 <button ng-hide='showallcontacts' title='Εμφάνιση όλων των πελατών' class='button_flat background_black' ng-click="showallcontacts=true">Εμφάνιση όλων</button>
 <button ng-show='showallcontacts' title='Απόκρυψη όλων των πελατών' class='button_flat background_black' ng-click="showallcontacts=false">Απόκρυψη όλων</button>
 
  </div>
-
-
- 
+ -->
 
  
-<div class='div_edit_team padding_theme' ng-show='showallcontacts'>
+
+ 
+<div class='div_edit_team padding_theme' ng-show='selState.includes("ShowAllCustomers")'>
 <div class='table_stylish1'>
 		<table>
 			<tr>
 				<th>ΟΝΟΜΑ</th>
 				<th>E-MAIL</th>
 				<th>ΤΗΛ</th>
+				<th>ΗΜ. ΓΕΝΝΗΣΗΣ</th>
+				<th>ΔΙΕΥΘΥΝΣΗ</th>
 				<th></th>
 			</tr>
 			
 		
-			<tr ng-repeat="contact in contacts  | filter:mysearch" >
+			<tr ng-repeat="contact in contacts  |orderBy:'name' | filter:mysearch" >
 				<td>{{contact.name}}</td>
 				<td>{{contact.email}}</td>
 				<td>{{contact.phonenumber}}</td>
+				<td>{{contact.birthdate}}</td>
+				<td>{{contact.address}}</td>
 				<td>
 			
-					<button title='Εμφάνιση' class='button_flat background_black float_right' ng-click="showContact(contact)">&#9881;</button> 
+					<button title='Επεξεργασία' class='button_flat background_dark_yellow float_right' ng-click="showContact(contact)">Επεξ.</button> 
 			
 			</td>
 			</tr>

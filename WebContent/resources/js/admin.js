@@ -796,6 +796,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 
 appAdmin.controller("usersController",function($scope, $http, $location, $window,$route){
 	
+	
+
 	 $http({
 	       method : "GET",
 	       url : "contacts"
@@ -877,6 +879,38 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 			$scope.addingcontact=false;
 			
 		};
+		$scope.initMenuCustomers = function(state)
+		{
+			$scope.selState=state;
+			$scope.selectedContact=null;
+		}
+		$scope.selectedPanel = function(state){
+			
+			if($scope.selState==state)
+				return "background_red";
+			else
+				return "";
+			
+		}
 		
 		
+		///////ACCORDION////
+		
+		var acc = document.getElementsByClassName("accordion");
+		var i;
+
+		for (i = 0; i < acc.length; i++) {
+		  acc[i].addEventListener("click", function() {
+		    this.classList.toggle("active");
+		    var panel = this.nextElementSibling;
+		    if (panel.style.maxHeight){
+		      panel.style.maxHeight = null;
+		    } else {
+		      panel.style.maxHeight = panel.scrollHeight + "px";
+		    } 
+		  });
+		}
+
+		////////
+	  
 });

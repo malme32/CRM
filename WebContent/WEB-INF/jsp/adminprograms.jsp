@@ -33,15 +33,11 @@ pageEncoding="UTF-8"%>
 
 </div>
 
-<button class="accordion">Ιστορικό</button>
-<div class="panel">
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-</div>
 
 </div>
 
 <section class='font_size_small side_nav'>
-<div class='selectedContact' ng-show='selectedContact' style=''><b ng-show="selectedContact.id!=adminContact.id">Πελάτης:</b> {{selectedContact.name}}
+<div class='selectedContact' ng-show="selectedContact&&(selectedContact.id!=adminContact.id)" style=''><b >Πελάτης:</b> {{selectedContact.name}}
 <span ng-click='selState=null; programDays=null; selectedProgram=null; selectedContact=null;selectedContactBack=null;selectedContact1=null; programDays=null; mysearch="";showAllContacts=false'>&#10006;</span>
 </div>
 <div ng-show="(selState)&&!selectedContact">
