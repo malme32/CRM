@@ -147,6 +147,7 @@ public class GynCrmServiceImpl implements GymCrmService {
 		program1.setDatestart(program.getDatestart());
 		program1.setDateend(program.getDateend());
 		program1.setTitle(program.getTitle());
+		program1.setHistory(program.getHistory());
 		generalDaoService.update(program1);
 	}
 	@Override
@@ -229,6 +230,16 @@ public class GynCrmServiceImpl implements GymCrmService {
 	public Contact findByUserName(String username) {
 		// TODO Auto-generated method stub
 		return contactDao.findByUsername(username);
+	}
+	@Override
+	public List<Program> getAllPrograms() {
+		// TODO Auto-generated method stub
+		return programDao.findAll();
+	}
+	@Override
+	public List<Program> getAllExpiringPrograms() {
+		// TODO Auto-generated method stub
+		return programDao.getAllExpiringPrograms();
 	}
 
 }

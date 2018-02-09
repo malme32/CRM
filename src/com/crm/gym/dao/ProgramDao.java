@@ -10,6 +10,8 @@ public interface ProgramDao{
 
 	public List<Program> findAll();
 
+	public List<Program> getAllExpiringPrograms();
+
 
 
 

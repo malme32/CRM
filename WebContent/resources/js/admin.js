@@ -302,7 +302,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		      // alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
 		   });
 		}
-		$scope.getStandardPrograms();
+		
 	 ////////////////////
 	 
 		$scope.getPrograms = function (contact) {
@@ -325,6 +325,44 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   });
 		}
 		
+		$scope.getExpiringPrograms = function () {
+			 $scope.selectedProgram =null;
+			 $scope.programDays = null;
+			 $http({
+			       method : "GET",
+			       url : "programs?expiringsoon"
+			   }).then(function mySuccess(response) {
+				   $scope.allPrograms = response.data;
+			    	for(k=0;k<$scope.allPrograms.length;k++)
+		    		{
+				    	 if($scope.allPrograms[k].datestart)
+				    		 $scope.allPrograms[k].tmpdatestart=new Date($scope.allPrograms[k].datestart);
+				    	 if($scope.allPrograms[k].dateend)
+				    		 $scope.allPrograms[k].tmpdateend=new Date($scope.allPrograms[k].dateend);
+		    		}
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+		}
+		$scope.getAllPrograms = function () {
+			 $scope.selectedProgram =null;
+			 $scope.programDays = null;
+			 $http({
+			       method : "GET",
+			       url : "programs"
+			   }).then(function mySuccess(response) {
+				   $scope.allPrograms = response.data;
+			    	for(k=0;k<$scope.allPrograms.length;k++)
+		    		{
+				    	 if($scope.allPrograms[k].datestart)
+				    		 $scope.allPrograms[k].tmpdatestart=new Date($scope.allPrograms[k].datestart);
+				    	 if($scope.allPrograms[k].dateend)
+				    		 $scope.allPrograms[k].tmpdateend=new Date($scope.allPrograms[k].dateend);
+		    		}
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+		}
 		$scope.getOtherPrograms = function (contact) {
 			// $scope.selectedProgram =null;
 			 //$scope.programDays = null;
@@ -346,10 +384,10 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		}
 		
 		
-		$scope.addProgram = function (program, contactid) {
+		$scope.addProgram = function (program, contact) {
 			 $http({
 			       method : "POST",
-			       url : "contacts/"+contactid+"/programs",
+			       url : "contacts/"+contact.id+"/programs",
 			       params:{title:program.title}
 			   }).then(function mySuccess(response) {
 				//   if(contactid!=19)
@@ -369,7 +407,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				   $scope.getEntries(program);
 		}
 		
-		$scope.editProgram = function (program) {
+		$scope.editProgram = function (program, addtohistory) {
 			
 			if(program.tmpdatestart)
 				program.datestart=program.tmpdatestart;
@@ -381,8 +419,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			        data: program,
 			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
 			   }).then(function mySuccess(response) {
-
-			       alert("Έγινε!")
+				   if(!addtohistory)
+					   alert("Έγινε!")
 				
 			   }, function myError(response) {
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -434,15 +472,19 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   });
 			 
 		};
-		$scope.deleteProgram = function (program) {
+		$scope.deleteProgram = function (program, action) {
 			 if(!confirm("Είστε σίγουρος;"))
 				 return;
 			 $http({
 			       method : "DELETE",
 			       url : "programs/"+program.id
 			   }).then(function mySuccess(response) {
-
-			       $scope.getPrograms($scope.selectedContact);
+				   if(action=="ListAllPrograms")
+				       $scope.getAllPrograms();
+				   if(action=="ListExpiringPrograms")
+				       $scope.getExpiringPrograms();
+				   else
+					   $scope.getPrograms($scope.selectedContact);
 				
 			   }, function myError(response) {
 			 
@@ -597,10 +639,10 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			}
 			return tmpentries;
 		}	
-		$scope.createPdf  =function(contactid, program){
+		$scope.createPdf  =function(contact, program){
 			 $http({
 			       method : "POST",
-			       url : "contacts/"+contactid+"/actions",
+			       url : "contacts/"+program.contact.id+"/actions",
 			       params:{action:"create_program",programid:program.id}
 			   }).then(function mySuccess(response) {
 
@@ -609,7 +651,15 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				   //$window.open(baseUrl+'/resources/pdf/program.pdf', '_blank');
 				   //window.location.href=baseUrl+'/files/pdf/program.pdf';
 				   $scope.pdf_path=baseUrl+'/files/pdf/Go-Go Gym Program.pdf';
+
 				   $scope.openDownloadPdfModal();
+					if(!program.history&&!$scope.selState.includes("ST")) 
+						if(confirm("Θέλετε να προσθέσε αυτό το πρόγραμμα στο ιστορικό?"))
+							{
+								program.history=true;
+								 $scope.editProgram(program,true);
+								
+							}
 			      // alert(baseUrl);
 				  // http://localhost:8084/CRM/resources/pdf/PDF-XhtmlRendered1.pdf
 			   }, function myError(response) {
@@ -622,12 +672,22 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		
 		
 		$scope.sendEmail  =function(contact, program){
+			if(!program.contact.email)
+				{
+					alert("Αυτός ο πελάτης δεν έχει ορισμένο E-Mail. Ορίστε E-Mail από το πελατολόγιο και ξαναπροσπαθήστε.")
+					return;
+				}
+				else if(!program.contact.email.includes("@"))
+				{
 
+				alert("Αυτός ο πελάτης έχει λανθασμένο E-Mail ορισμένο. Ορίστε το σωστό E-Mail από το πελατολόγιο και ξαναπροσπαθήστε.")
+				return;
+				}
 			 if(!confirm("Είστε σίγουρος;"))
 				 return;
 			 $http({
 			       method : "POST",
-			       url : "contacts/"+contact.id+"/actions",
+			       url : "contacts/"+program.contact.id+"/actions",
 			       params:{action:"send_program_email",programid:program.id}
 			   }).then(function mySuccess(response) {
 
@@ -637,7 +697,16 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				 //  window.location.href=baseUrl+'/files/pdf/program.pdf';
 			      // alert(baseUrl);
 				  // http://localhost:8084/CRM/resources/pdf/PDF-XhtmlRendered1.pdf	   
-			       alert("Το E-Mail στάλθηκε στον πελάτη "+ contact.name+"!");
+			       alert("Το E-Mail στάλθηκε στον πελάτη "+ program.contact.name+"!");
+			       
+					if(!program.history) 
+						//if(confirm("Θέλετε να προσθέσε αυτό το πρόγραμμα στο ιστορικό?"))
+							{
+								program.history=true;
+								 $scope.editProgram(program,true);
+								
+							}
+			       
 			   }, function myError(response) {
 
 				   
@@ -654,10 +723,12 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			
 		}
 		
-		$scope.contactSelected = function(contact){
+		$scope.contactSelected = function(contact,showpercustomer){
 			$scope.selectedContact= contact;
 			$scope.getPrograms(contact);
 			$scope.selectedContactBack=$scope.selectedContact;
+			if(showpercustomer)
+				$scope.selState='ShowPerCustomer';
 			
 		}
 		$scope.copyProgram  =function(contact, program){
@@ -671,6 +742,10 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				   //$scope.closeCopyProgramModal();
 				   
 			       alert("Έγινε!");
+			       	if($scope.selState.includes("ST"))
+					       $scope.initMenuStandardPrograms('ShowPerCustomerST');
+			       	else
+			       		$scope.initMenuPrograms('ShowPerCustomer');
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -678,23 +753,32 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   });
 		}
 		
-		$scope.copyProgramFromOther  =function(contact, program){
-			/*$scope.openCopyProgramModal();*/
+/*		$scope.copyProgramFromOther  =function(contact, program){
+			$scope.openCopyProgramModal();
 			 $http({
 			       method : "POST",
 			       url : "contacts/"+contact.id+"/actions",
 			       params:{action:"copy_program",programid:program.id}
 			   }).then(function mySuccess(response) {
-				   //$scope.getOtherPrograms(contact);
-				   $scope.getPrograms($scope.selectedContact);
 				   //$scope.closeCopyProgramModal();
-			       alert("Έγινε!");
+
+	       		    $scope.getPrograms(contact);
+			       alert("Έγινε1!");
+			       	if($scope.selState.includes("ST"))
+			       		{
+			       			//$scope.getStandardPrograms();
+					       $scope.initMenuStandardPrograms('ShowPerCustomerST');
+			       		}
+			       	else
+			       		{
+				       		$scope.initMenuPrograms('ShowPerCustomer');
+			       		}
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
 
 			   });
-		}
+		}*/
 		
 		
 		  

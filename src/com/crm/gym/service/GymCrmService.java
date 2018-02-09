@@ -50,5 +50,9 @@ public interface GymCrmService {
 
 	Contact findByUserName(String username);
 
+	List<Program> getAllPrograms();
+
+	List<Program> getAllExpiringPrograms();
+
 	
 }

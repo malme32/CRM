@@ -1,5 +1,7 @@
 package com.crm.gym.dao;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -28,6 +30,21 @@ public class ProgramDaoImpl extends AbstractDao implements ProgramDao{
 		   List<Program> list = getSession().createQuery("FROM Program P order by P.title").list(); 
 
 		return list;
+	}
+
+	@Override
+	public List<Program> getAllExpiringPrograms() {
+		
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, 20);
+		
+		System.out.println("ExpDate = "+ cal.getTime());
+				
+		Date expdate = cal.getTime();
+		   @SuppressWarnings("unchecked")
+		   List<Program> list = getSession().createQuery("FROM Program P where P.dateend<:expdate order by P.title").setParameter("expdate", expdate).list(); 
+		 return list;
 	}
 
 

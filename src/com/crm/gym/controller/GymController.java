@@ -58,6 +58,16 @@ public class GymController {
 		return gymCrmService.getPrograms(contactid);
 	}
 	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value="/programs", method=RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Program> getAllPrograms(@RequestParam(required=false) String expiringsoon )
+	{
+		if(expiringsoon!=null)
+			return gymCrmService.getAllExpiringPrograms();
+		return gymCrmService.getAllPrograms();
+	}
+	
+
 
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value="/contacts", method=RequestMethod.GET, produces = "application/json")
@@ -72,6 +82,8 @@ public class GymController {
 	{
 		return gymCrmService.getEntries(programid);
 	}
+	
+	
 	
 /////////////////////////////////////////////////////////////////
 /////////////////////////POST/////////////////////////////////
