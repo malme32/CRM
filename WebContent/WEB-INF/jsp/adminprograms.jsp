@@ -13,8 +13,8 @@ pageEncoding="UTF-8"%>
 <button class="accordion">Προγράμματα</button>
 <div class="panel">
   <p ng-class='selectedPanel("ShowPerCustomer")' ng-click=" programs=null; initMenuPrograms('ShowPerCustomer'); getPrograms(selectedContact); ">Προγράμματα ανά πελάτη</p>
-  <p ng-class='selectedPanel("ListAllPrograms")' ng-click="allPrograms =null; initMenuPrograms('ListAllPrograms'); getAllPrograms();">'Ολα τα προγράμματα</p>
-  <p ng-class='selectedPanel("ListExpiringPrograms")' ng-click="allPrograms =null; initMenuPrograms('ListExpiringPrograms');  getExpiringPrograms();">Προγράμματα που λήγουν σύντομα</p>
+  <p ng-class='selectedPanel("ListAllPrograms")' ng-click="progfilter='all';initMenuPrograms('ListAllPrograms'); checkToGetAllPrograms()">'Ολα τα προγράμματα</p>
+  <p ng-class='selectedPanel("ListExpiringPrograms")' ng-click="progfilter='expiringsoon'; initMenuPrograms('ListExpiringPrograms');  checkToGetAllPrograms()">Προγράμματα που λήγουν σύντομα</p>
 </div>
 
 
@@ -33,7 +33,7 @@ pageEncoding="UTF-8"%>
  <p ng-class='selectedPanel("AddNewProgramST")' ng-click="initMenuStandardPrograms('AddNewProgramST');  ">Νέο</p>
   <p ng-class='selectedPanel("NewFromHistoryST")' ng-click="initMenuStandardPrograms('NewFromHistoryST'); getStandardPrograms();">Αντιγραφή από άλλο πρότυπο</p>
   <p ng-class='selectedPanel("NewFromOtherCustomerST")' ng-click="initMenuStandardPrograms('NewFromOtherCustomerST');  ">Αντιγραφή απο πελάτη</p>
-  <p ng-class='selectedPanel("ShowPerCustomerST")' ng-click="programs=null;  initMenuStandardPrograms('ShowPerCustomerST'); getPrograms(adminContact); ">Επεξεργασία πρότυπων</p>
+  <p ng-class='selectedPanel("ShowPerCustomerST")' ng-click="programs=null;  initMenuStandardPrograms('ShowPerCustomerST'); getPrograms(adminContact); ">'Ολα τα πρότυπα</p>
 <!--   <p ng-class='selectedPanel("ShowActionsST")' ng-click="initMenuStandardPrograms('ShowActionsST');  ">Ενέργειες</p>
  -->  
 
@@ -43,6 +43,9 @@ pageEncoding="UTF-8"%>
 </div>
 
 <section class='font_size_small side_nav'>
+	
+	 
+
 <div class='selectedContact' ng-show="selectedContact&&(selectedContact.id!=adminContact.id)&&!selState.includes('List')" style=''><b >Πελάτης:</b> {{selectedContact.name}}
 <br/><span ng-click=' programDays=null; selectedProgram=null; selectedContact=null;selectedContactBack=null;selectedContact1=null; programDays=null; mysearch="";showAllContacts=false'>Αλλαγή πελάτη </span>
 </div><!-- &#10006; -->
@@ -99,8 +102,11 @@ pageEncoding="UTF-8"%>
 	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('NewFromStandard')&&selectedContact" >
 	<h1>Επιλέξτε πρότυπο πρόγραμμα για αντιγραφή</h1>
 			<table>
-				<tr>
-					<th>ΠΡΟΤΥΠΑ ΠΡΟΓΡΑΜΜΑΤΑ</th>
+				<tr><!-- 
+					<th ng-hide="selState.includes('ST')">Ιστ.</th> -->
+					<th>Τίτλος</th>
+					<th>Ημερ. Αρχής</th>
+					<th>Ημερ. Τέλους</th>
 					<th></th>
 				</tr> 
 				
@@ -112,9 +118,14 @@ pageEncoding="UTF-8"%>
 				</td>
 				</tr> -->
 				<tr class='' ng-repeat="program in standardPrograms " >
-					<td >{{program.title}}</td>
+<%-- 					<td ng-hide="selState.includes('ST')"> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
+ --%>					<td >{{program.title}}</td>
+					<td >{{program.datestart | date}}</td>
+					<td >{{program.dateend | date}}</td>
 					<td>
 									<button  title='Αντιγραφή προγράμματος' class='button_flat background_black float_right' ng-click="copyProgram(selectedContact,program)">Αντιγραφή</button> 
+										<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,program,'preview')"><img ng-src="${resources}/images/eye.png"/></button> 
+					
 					<!-- <button  title='Διαγραφή' class='button_flat background_red float_right'  ng-click="deleteProgram(program)">&#10006;</button>
 					<button title='Αποθήκευση' class='button_flat background_black float_right' ng-click="showProgram(program)">&#9881;</button>  -->
 				
@@ -136,7 +147,10 @@ pageEncoding="UTF-8"%>
 	<h1>Επιλέξτε πρόγραμμα απο τον πελάτη "{{selectedContact1.name}}" για αντιγραφή</h1>
 			<table>
 				<tr>
-					<th>ΠΡΟΓΡΑΜΜΑΤΑ</th>
+						<th>Ιστ.</th>
+					<th>Τίτλος</th>
+					<th>Ημερ. Αρχής</th>
+					<th>Ημερ. Τέλους</th>
 					<th></th>
 				</tr> 
 				
@@ -148,9 +162,14 @@ pageEncoding="UTF-8"%>
 				</td>
 				</tr> -->
 				<tr class='' ng-repeat="program in otherPrograms " >
+					<td> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
 					<td >{{program.title}}</td>
+					<td >{{program.datestart | date}}</td>
+					<td >{{program.dateend | date}}</td>
 					<td>
 									<button  title='Αντιγραφή προγράμματος' class='button_flat background_black float_right' ng-click="copyProgram(selectedContact,program)">Αντιγραφή</button> 
+										<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,program,'preview')"><img ng-src="${resources}/images/eye.png"/></button> 
+					
 					<!-- <button  title='Διαγραφή' class='button_flat background_red float_right'  ng-click="deleteProgram(program)">&#10006;</button>
 					<button title='Αποθήκευση' class='button_flat background_black float_right' ng-click="showProgram(program)">&#9881;</button>  -->
 				
@@ -166,7 +185,10 @@ pageEncoding="UTF-8"%>
 	<h1>Επιλέξτε πρόγραμμα απο το ιστορικό για αντιγραφή</h1>
 			<table>
 				<tr>
-					<th>ΠΡΟΓΡΑΜΜΑΤΑ</th>
+				<th ng-hide="selState.includes('ST')">Ιστ.</th>
+					<th>Τίτλος</th>
+					<th>Ημερ. Αρχής</th>
+					<th>Ημερ. Τέλους</th>
 					<th></th>
 				</tr> 
 				
@@ -178,11 +200,15 @@ pageEncoding="UTF-8"%>
 				</td>
 				</tr> -->
 				<tr class='' ng-repeat="program in programs " >
+					<td ng-hide="selState.includes('ST')"> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
 					<td >{{program.title}}</td>
+					<td >{{program.datestart | date}}</td>
+					<td >{{program.dateend | date}}</td>
 					<td>
 									<button  title='Αντιγραφή προγράμματος' class='button_flat background_black float_right' ng-click="copyProgram(selectedContact,program)">Αντιγραφή</button> 
 					<!-- <button  title='Διαγραφή' class='button_flat background_red float_right'  ng-click="deleteProgram(program)">&#10006;</button>
 					<button title='Αποθήκευση' class='button_flat background_black float_right' ng-click="showProgram(program)">&#9881;</button>  -->
+									<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,program,'preview')"><img ng-src="${resources}/images/eye.png"/></button> 
 				
 				</td>
 				</tr>
@@ -238,7 +264,7 @@ pageEncoding="UTF-8"%>
 					<td >{{program.title}}</td>
 					<td >{{program.datestart | date}}</td>
 					<td >{{program.dateend | date}}</td>
-					<td style='min-width:230px'>
+					<td style='min-width:270px'>
 					
 					
 
@@ -247,6 +273,7 @@ pageEncoding="UTF-8"%>
 										<button ng-hide="selState.includes('ST')" title='Στείλε E-Mail στον πελάτη με αυτό το πρόγραμμα' class='button_flat background_black float_right' ng-click="sendEmail(selectedContact,program)">E-Mail</button> 
 				
 					<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,program)">PDF</button> 
+					<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,program,'preview')"><img ng-src="${resources}/images/eye.png"/></button> 
 					<button ng-hide='program.history' title='Επεξεργάσία προγραμματος' class='button_flat background_dark_yellow float_right' ng-click="showProgram(program)">Επεξ.</button> 
 
 				
@@ -281,13 +308,13 @@ pageEncoding="UTF-8"%>
 					<th></th>
 				</tr> 
 
-				<tr class='' ng-repeat="program in allPrograms  | orderBy: 'contact.name' | filter: prsearch" >
+				<tr class='' ng-repeat="program in allPrograms  |programfilter:progfilter| orderBy: 'contact.name' | filter: prsearch" >
 					<td> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
 					<td >{{program.title}}</td>
 					<td title='Κάντε κλικ για να δείτε όλα τα προγράμματα αυτού του πελάτη' class='cursor_pointer text_underline' ng-click="contactSelected(program.contact,true); ">{{program.contact.name}}</td>
 					<td >{{program.datestart | date}}</td>
 					<td >{{program.dateend | date}}</td>
-					<td style='min-width:230px'>
+					<td style='min-width:270px'>
 					
 					
 
@@ -296,6 +323,8 @@ pageEncoding="UTF-8"%>
 					<button  title='Στείλε E-Mail στον πελάτη με αυτό το πρόγραμμα' class='button_flat background_black float_right' ng-click="sendEmail(selectedContact,program)">E-Mail</button> 
 				
 					<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,program)">PDF</button> 
+					<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,program,'preview')"><img ng-src="${resources}/images/eye.png"/></button> 
+					
 					<button ng-hide='program.history' title='Επεξεργάσία προγραμματος' class='button_flat background_dark_yellow float_right' ng-click="showProgram(program)">Επεξ.</button> 
 					</div>	
 				
@@ -339,8 +368,7 @@ pageEncoding="UTF-8"%>
 			</table>
 	</div> --%>
 	
-<!-- {{pdf_path}}
-<iframe src="http://www.google.com"></iframe> -->
+
 <br/><br/><br/>
 <h1 ng-show='selectedProgram&&selState' style='text-align:center'>ΕΠΕΞΕΡΓΑΣΙΑ ΠΡΟΓΡΑΜΜΑΤΟΣ: {{selectedProgram.title}}</h1>
 
@@ -401,11 +429,13 @@ pageEncoding="UTF-8"%>
 		</table>
 		
 		</div>
+
 		
 		</div>
 		
-	</div>
+	
 		<div class='table_stylish1 div_edit_team padding_theme ' ng-show='programDays.length'>
+					<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,selectedProgram,'preview')">Προεπισκόπηση</button> 
 <!-- <h2>Πρόγραμμα:</h2> -->
 		<div ng-repeat='day in programDays | orderBy:"name"'>
 		<h2 class='text_underline' style='text-align:center'>{{day.name}}</h2>
@@ -569,6 +599,25 @@ pageEncoding="UTF-8"%>
  
 
  			 </div>
+ 			 
+ 			 
+ 			 
+ 		<div id="previewPDFModal" class="modal">
+
+			  <!-- Modal content -->
+			  <div class="modal-content">
+			  <div class='div_edit_team'> 
+			    <span  ng-click='closePreviewPdfModal()' class="close">&times;</span>
+				<img style='width:100%; height:100%'src="{{pdf_img_path}}">
+		</div>
+<br/>
+<br/>
+
+				
+				</div>
+ 
+
+ 			 </div>
 								<!-- ΠΡΟΤΥΠΑ -->
 								<!-- ////////
 								//////// -->
@@ -620,4 +669,7 @@ pageEncoding="UTF-8"%>
 				
 			</table>
 	</div>	 -->
+	
+	 
+
 </section>

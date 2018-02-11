@@ -25,7 +25,26 @@ appAdmin.config(function($routeProvider) {
     })
 });
 
-
+appAdmin.filter('programfilter', function() {
+    return function(items, filter) {
+    	  var result = []; 
+    	  if(filter=="expiringsoon")
+    		  {
+	        	  var now = new Date();  
+	        	  var expdate = new Date();
+	        	  expdate.setDate(expdate.getDate() + 5);
+	        	  for (var i=0; i<items.length; i++){
+	                  if (items[i].dateend<expdate&&items[i].dateend>now)  {
+	                      result.push(items[i]);
+	                  }
+	              }  
+    		  }
+    	  else
+    		  return items;
+          
+          return result;
+    };
+});
 
 appAdmin.run(function($rootScope, $window, $http, $timeout) {
 	
@@ -306,8 +325,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 	 ////////////////////
 	 
 		$scope.getPrograms = function (contact) {
-			 $scope.selectedProgram =null;
-			 $scope.programDays = null;
+		/*	 $scope.selectedProgram =null;
+			 $scope.programDays = null;*/
 			 $http({
 			       method : "GET",
 			       url : "contacts/"+contact.id+"/programs"
@@ -345,8 +364,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   });
 		}
 		$scope.getAllPrograms = function () {
-			 $scope.selectedProgram =null;
-			 $scope.programDays = null;
+			/* $scope.selectedProgram =null;
+			 $scope.programDays = null;*/
 			 $http({
 			       method : "GET",
 			       url : "programs"
@@ -362,6 +381,10 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			   }, function myError(response) {
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
 			   });
+		}
+		$scope.checkToGetAllPrograms = function(){
+			if(!$scope.allPrograms)
+				$scope.getAllPrograms();
 		}
 		$scope.getOtherPrograms = function (contact) {
 			// $scope.selectedProgram =null;
@@ -391,7 +414,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			       params:{title:program.title}
 			   }).then(function mySuccess(response) {
 				//   if(contactid!=19)
-					   $scope.getPrograms(contact);
+					   //$scope.getPrograms(contact);
+					   $scope.getAllPrograms();
 				  // else
 					 //  $scope.getStandardPrograms();
 					//  / 
@@ -419,9 +443,9 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			        data: program,
 			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
 			   }).then(function mySuccess(response) {
+				   $scope.getAllPrograms();
 				   if(!addtohistory)
 					   alert("Έγινε!")
-				
 			   }, function myError(response) {
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
 			   });
@@ -479,13 +503,13 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			       method : "DELETE",
 			       url : "programs/"+program.id
 			   }).then(function mySuccess(response) {
-				   if(action=="ListAllPrograms")
+			/*	   if(action=="ListAllPrograms")
 				       $scope.getAllPrograms();
 				   if(action=="ListExpiringPrograms")
 				       $scope.getExpiringPrograms();
-				   else
-					   $scope.getPrograms($scope.selectedContact);
-				
+				   else*/
+				   $scope.getAllPrograms();
+				   $scope.getPrograms($scope.selectedContact);
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -639,7 +663,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			}
 			return tmpentries;
 		}	
-		$scope.createPdf  =function(contact, program){
+		$scope.createPdf  =function(contact, program, action){
+			 $scope.pdf_img_path="";
 			 $http({
 			       method : "POST",
 			       url : "contacts/"+program.contact.id+"/actions",
@@ -651,15 +676,26 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				   //$window.open(baseUrl+'/resources/pdf/program.pdf', '_blank');
 				   //window.location.href=baseUrl+'/files/pdf/program.pdf';
 				   $scope.pdf_path=baseUrl+'/files/pdf/Go-Go Gym Program.pdf';
-
-				   $scope.openDownloadPdfModal();
-					if(!program.history&&!$scope.selState.includes("ST")) 
-						if(confirm("Θέλετε να προσθέσε αυτό το πρόγραμμα στο ιστορικό?"))
-							{
-								program.history=true;
-								 $scope.editProgram(program,true);
-								
-							}
+				   $scope.pdf_img_path=baseUrl+'/files/pdf/Go-Go Gym Program.png';
+				   
+				   //
+				   if(action=="preview")
+				   {
+					   $scope.openPreviewPdfModal();
+				   
+				   }
+				   else
+				   {
+					   $scope.openDownloadPdfModal();
+						if(!program.history&&!$scope.selState.includes("ST")) 
+							if(confirm("Θέλετε να προσθέσε αυτό το πρόγραμμα στο ιστορικό?"))
+								{
+									program.history=true;
+									 $scope.editProgram(program,true);
+									
+								}
+				  }
+		
 			      // alert(baseUrl);
 				  // http://localhost:8084/CRM/resources/pdf/PDF-XhtmlRendered1.pdf
 			   }, function myError(response) {
@@ -741,11 +777,12 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				   $scope.getPrograms(contact);
 				   //$scope.closeCopyProgramModal();
 				   
-			       alert("Έγινε!");
+			        alert("Έγινε!");
 			       	if($scope.selState.includes("ST"))
 					       $scope.initMenuStandardPrograms('ShowPerCustomerST');
 			       	else
 			       		$scope.initMenuPrograms('ShowPerCustomer');
+			       	$scope.getAllPrograms();
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -798,7 +835,21 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			  
 		  }  
 		
-		  
+		  $scope.openPreviewPdfModal = function (){
+
+				
+			  var modal = document.getElementById('previewPDFModal');
+
+		      modal.style.display = "block";
+		    
+			  
+		  }  
+		  $scope.closePreviewPdfModal = function (){
+			  
+			  var modal = document.getElementById('previewPDFModal');
+			  modal.style.display = "none";
+			  $scope.pdf_img_path="";
+		  }    
 		  
 		  $scope.openDownloadPdfModal = function (){
 

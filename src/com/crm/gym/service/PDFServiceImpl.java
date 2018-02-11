@@ -1,7 +1,9 @@
 package com.crm.gym.service;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,8 +18,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -359,6 +364,7 @@ public class PDFServiceImpl implements PDFService {
 			document.add(chunk);*/
 			
 			document.close();
+			createImageFromPDF(realPath+"/files/pdf/Go-Go Gym Program.pdf",realPath+"/files/pdf/");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -370,5 +376,43 @@ public class PDFServiceImpl implements PDFService {
 		return "/files/pdf/Go-Go Gym Program.pdf"; 
 	}
 	
+	private void createImageFromPDF(String sourceDir,String destinationDir ) throws IOException {
+		
+		
+		/*String  sourceDir= "C:/Desktop/some.pdf";
+		String destinationDir = "C:/Desktop/";*/
+		File sourceFile = new File(sourceDir);
+		File destinationFile = new File(destinationDir);
+		if (!destinationFile.exists()) {
+			destinationFile.mkdir();
+			System.out.println("Folder Created -> " + destinationFile.getAbsolutePath());
+		}
+		if (sourceFile.exists()) {
+			PDDocument document = PDDocument.load(sourceDir);
+			@SuppressWarnings("unchecked")
+			List<PDPage> list = document.getDocumentCatalog().getAllPages();
+
+			String fileName = sourceFile.getName().replace(".pdf", "");
+
+/*		    // so add 1 to make it inclusive
+			int randomNum = rand.nextInt((100000 - 1) + 1) + 1;
+
+		  	BufferedImage image = page.convertToImage();
+			File outputfile = new File(destinationDir + fileName +".png"+  "?v="+randomNum);*/
+		
+		//	int pageNumber = 1;
+			for (PDPage page : list) {
+				BufferedImage image = page.convertToImage();
+				File outputfile = new File(destinationDir + fileName +   ".png");
+				ImageIO.write(image, "png", outputfile);
+				//pageNumber++;
+			}
+			document.close();
+			System.out.println("Image saved at -> " + destinationFile.getAbsolutePath());
+		} else {
+			System.err.println(sourceFile.getName() + " File does not exist");
+		}
+
+	}
 
 }

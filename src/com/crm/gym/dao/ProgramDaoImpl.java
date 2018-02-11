@@ -38,12 +38,12 @@ public class ProgramDaoImpl extends AbstractDao implements ProgramDao{
 		
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, 20);
-		
+		Date now = new Date();
 		System.out.println("ExpDate = "+ cal.getTime());
 				
 		Date expdate = cal.getTime();
 		   @SuppressWarnings("unchecked")
-		   List<Program> list = getSession().createQuery("FROM Program P where P.dateend<:expdate order by P.title").setParameter("expdate", expdate).list(); 
+		   List<Program> list = getSession().createQuery("FROM Program P where P.dateend<:expdate AND P.dateend > :now order by P.title").setParameter("now", now).setParameter("expdate", expdate).list(); 
 		 return list;
 	}
 
