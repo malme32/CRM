@@ -179,27 +179,28 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 			       method : "GET",
 			       url : "categories/"+row.id+"/exercises"
 			   }).then(function mySuccess(response) {
-				   row.exercises = response.data;
-			       if(row.exercises.length==0)
+				  //return response.data;
+				   $scope.selectedCategoryExercises=  response.data;
+			      /* if(row.exercises.length==0)
 			    	 {
 				       alert("Αυτή η κατηγορία δεν περιέχει ασκήσεις.");
-			    	 }
+			    	 }*/
 			   }, function myError(response) {
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
 			   });
 		}
 		
-		$scope.addExercise = function (category) {
-			 if(!category.newexercise.title)
+		$scope.addExercise = function (category,exercise) {
+			 if(!exercise.title)
 				 return;
 			 $http({
 			       method : "POST",
 			       url : "categories/"+category.id+"/exercises",
-			       params:{title:category.newexercise.title}
+			       params:{title:exercise.title}
 			   }).then(function mySuccess(response) {
-				   category.exercises=[];
+				   //category.exercises=[];
 				   $scope.getExercises(category);
-				   category.newexercise.title = "";
+				   $scope.newexercise.title = "";
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.")
@@ -244,7 +245,51 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 			   });
 			 
 		};
+
+		$scope.categorySelected = function(category){
+			
+			$scope.selectedCategory=category;
+			$scope.selectedCategoryExercises = $scope.getExercises(category);
+			
+		}
 		
+		
+		
+		$scope.initMenuExercises = function(state)
+		{
+			$scope.selState=state;
+			$scope.selectedCategory=null;
+			$scope.selectedCategoryExercises = null;
+			//$scope.selectedContact=null;
+		}
+		$scope.selectedPanel = function(state){
+			
+			if($scope.selState==state)
+				return "background_red";
+			else
+				return "";
+			
+		}
+		
+		
+		///////ACCORDION////
+		
+		var acc = document.getElementsByClassName("accordion");
+		var i;
+
+		for (i = 0; i < acc.length; i++) {
+		  acc[i].addEventListener("click", function() {
+		    this.classList.toggle("active");
+		    var panel = this.nextElementSibling;
+		    if (panel.style.maxHeight){
+		      panel.style.maxHeight = null;
+		    } else {
+		      panel.style.maxHeight = panel.scrollHeight + "px";
+		    } 
+		  });
+		}
+
+		////////
 
 });
 

@@ -19,7 +19,7 @@ pageEncoding="UTF-8"%>
 
 </div>
 
-<section class='font_size_small side_nav' class="margin_botton_large">
+<section class='font_size_small side_nav margin_botton_large' >
 <!-- 	<div class='div_edit_team padding_theme'> 
 	 <div class='search-field'>
 	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε εδώ...">
