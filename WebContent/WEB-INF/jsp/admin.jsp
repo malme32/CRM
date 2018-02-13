@@ -73,6 +73,7 @@ pageEncoding="UTF-8"%>
 
 <!-- <div style='top:200px; position:fixed; z-index:	; opacity:0.2;width:100%;font-size:200%; text-align:center; color:gray'>GO-GO Gym</div>
  -->
-<div ng-view ></div>
+ <div ng-view ></div> 
+
 </body>
 </html>

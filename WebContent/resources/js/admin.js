@@ -61,9 +61,45 @@ appAdmin.filter('excludeadmin', function() {
     };
 });
 appAdmin.run(function($rootScope, $window, $http, $timeout) {
+
+    /*$timeout($rootScope.checkOnline(), 5000);*/
+    
+	$rootScope.checkOnline = function () {
 	
+		 $http({
+		       method : "GET",
+		       url : "options?action=checkonline"
+		   }).then(function mySuccess(response) {
+			   if(response.data==0)
+				   {
+				   		$window.location.href ='loginPage';
+				   }
+			   $rootScope.promise = $timeout($rootScope.checkOnline, 60000);
+			   //$timeout($rootScope.checkOnline, 5000);
+
+			/*   $rootScope.chkonline = response.data;
+		      alert( response.data);
+*/		
+			
+		   }, function myError(response) {
+/*
+			   $rootScope.chkonline = response.data;
+		       //$scope.result = response.statusText;
+
+			      alert(false);*/
+
+			    //$timeout($rootScope.checkOnline(), 5000);
+		   });
+
+
+
+	};
+
+    
 	$rootScope.adminContact={id:19,name:"Go-Go Gym"};
-    $rootScope.$on("$locationChangeStart", function(event, next, current) {   	
+    $rootScope.$on("$locationChangeStart", function(event, next, current) {  
+   $timeout.cancel($rootScope.promise);
+    	$rootScope.checkOnline();
     });
     
     
@@ -563,9 +599,9 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		
 		$scope.editProgram = function (program, addtohistory) {
 			
-			if(program.tmpdatestart)
+			//if(program.tmpdatestart)
 				program.datestart=program.tmpdatestart;
-			if(program.tmpdateend)
+			//if(program.tmpdateend)
 				program.dateend=program.tmpdateend;
 			 $http({
 			       method : "PUT",
@@ -1075,7 +1111,7 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
     		{
 		    	 if($scope.contacts[k].birthdate)
 		    		 $scope.contacts[k].tmpbirthdate=new Date($scope.contacts[k].birthdate);
-		    	 if($scope.contacts[k].registerhdate)
+		    	 if($scope.contacts[k].registerdate)
 		    		 $scope.contacts[k].tmpregisterdate=new Date($scope.contacts[k].registerdate);
 		    	
     		}
@@ -1129,9 +1165,9 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 		
 		$scope.editContact = function (contact) {
 		
-			if(contact.tmpbirthdate)
+		//	if(contact.tmpbirthdate)
 				contact.birthdate=contact.tmpbirthdate;
-			if(contact.tmpregisterdate)
+			//if(contact.tmpregisterdate)
 				contact.registerdate=contact.tmpregisterdate;
 			 $http({
 			       method : "PUT",

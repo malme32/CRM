@@ -34,9 +34,9 @@ pageEncoding="UTF-8"%>
  -->
 
 
-<div ng-show="selState.includes('ShowAllCustomers')&&!selectedContact">
+<div ng-show="selState.includes('ShowAllCustomers')&&!selectedContact" class='padding_theme'>
 
-	<div class='div_edit_team padding_theme'> 
+	<div class='div_edit_team '> 
 		<h1>Επιλέξτε πελάτη</h1>
 	 <div class='search-field'>
 	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε πελάτη εδώ...">
@@ -53,7 +53,8 @@ pageEncoding="UTF-8"%>
 
 
 
-			<div class='div_edit_team box_shadow_medium_gray padding_theme' ng-show="selectedContact" >
+			<div class='div_edit_team box_shadow_medium_gray ' ng-show="selectedContact" >
+	<div  class='padding_theme'>
 			
 			<!-- <hr> -->
 					<h2>Ρυθμίσεις Πελάτη</h2>
@@ -101,10 +102,10 @@ pageEncoding="UTF-8"%>
 				
 			</table>
 	</div>
-	
-	
-			<div class='div_edit_team box_shadow_medium_gray padding_theme' ng-show="selState.includes('AddNewCustomer')" >
+	</div>
+			<div class='div_edit_team box_shadow_medium_gray ' ng-show="selState.includes('AddNewCustomer')" >
 			
+	<div  class='padding_theme'>
 			<!-- <hr> -->
 					<h2>Εισαγωγή νέου πελάτη</h2>
 			<table class="edit_data_table">
@@ -148,7 +149,7 @@ pageEncoding="UTF-8"%>
 				
 			</table>
 	</div>
-	
+	</div>
 	
 <!-- <div class='div_edit_team padding_theme' >			
 <button ng-hide="addingcontact" title='Προσθήκη πελάτη' class='button_flat background_green' ng-click="addingcontact=true; selectedContact=false">Εισαγωγή νέου πελάτη</button>
@@ -161,7 +162,7 @@ pageEncoding="UTF-8"%>
  
 
  
-<div  class='div_edit_team padding_theme' ng-show='selState.includes("ShowAllCustomers")&&!selectedContact'>
+<div  class='div_edit_team ' ng-show='selState.includes("ShowAllCustomers")&&!selectedContact'>
 <h1>Όλοι οι πελάτες</h1>
 <h3>(κάντε κλικ στις επικεφαλίδες για στοιχιση)</h3>
 <div class='table_stylish1'>
@@ -196,5 +197,8 @@ pageEncoding="UTF-8"%>
 		</table>
 	</div>
 </div>
-
+<br/>
+	 <br/>
+<br/>
+<br/>
 </section>

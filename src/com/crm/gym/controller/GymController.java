@@ -7,6 +7,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +39,22 @@ public class GymController {
 /////////////////////////GET/////////////////////////////////
 /////////////////////////////////////////////////////////////
 
+
+/*	@Secured("ROLE_ADMIN")*/
+	@RequestMapping(value="/options", method=RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Integer getOptions(@RequestParam String action)
+	{
+		if(action.equals("checkonline"))
+		{
+			 User user =null; 
+			 try{user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();}
+			 catch(Exception e){}
+			 if(user!=null)
+				 return 1;
+			 return 0;
+		}
+		return 0;
+	}
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value="/categories", method=RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Category> getCategories()
