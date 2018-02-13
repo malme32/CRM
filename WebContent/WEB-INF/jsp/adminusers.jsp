@@ -13,13 +13,13 @@ pageEncoding="UTF-8"%>
 <button class="accordion">Πελάτες</button>
 <div class="panel">
   <p ng-class='selectedPanel("AddNewCustomer")' ng-click="initMenuCustomers('AddNewCustomer'); ">Νέος</p>
-  <p ng-class='selectedPanel("ShowAllCustomers")' ng-click="initMenuCustomers('ShowAllCustomers'); ">Λίστα πελατών & επεξεργασία</p>
+  <p ng-class='selectedPanel("ShowAllCustomers")' ng-click="initMenuCustomers('ShowAllCustomers'); ">'Ολοι οι πελάτες</p>
 </div>
 
 
 </div>
 
-<section class='font_size_small side_nav margin_botton_large' >
+<section class='font_size_small side_nav margin_botton_large' ng-init='ord="name"'>
 <!-- 	<div class='div_edit_team padding_theme'> 
 	 <div class='search-field'>
 	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε εδώ...">
@@ -53,7 +53,7 @@ pageEncoding="UTF-8"%>
 
 
 
-			<div class='div_edit_team box_shadow_medium_gray' ng-show="selectedContact" >
+			<div class='div_edit_team box_shadow_medium_gray padding_theme' ng-show="selectedContact" >
 			
 			<!-- <hr> -->
 					<h2>Ρυθμίσεις Πελάτη</h2>
@@ -76,15 +76,24 @@ pageEncoding="UTF-8"%>
 				<tr>
 					<td>Διεύθυνση<input type="text" ng-model="selectedContact.address" placeholder="Η διεύθυνση εδω.."></td>
 				</tr>
+				
+				<tr>
+				<td>
+					Ημερομηνία εγγραφής:<br/><md-datepicker ng-model="selectedContact.tmpregisterdate" md-placeholder="Ημερομηνία εγγραφής.."></md-datepicker>
+				</td>
+				</tr>
 				<tr>
 					<td >
-					Ημερομηνία γένησης:<br/><md-datepicker ng-model="selectedContact.tmpbirthdate" md-placeholder="Ημερομηνία γένησης.."></md-datepicker>
+					Ημερομηνία γέννησης:<br/><md-datepicker ng-model="selectedContact.tmpbirthdate" md-placeholder="Ημερομηνία γέννησης.."></md-datepicker>
 					</td>
 				</tr>
 				<tr>
 				<td>
+						    <button title='Τέλος' class='button_flat background_black float_left' ng-click="selectedContact=null">Τέλος</button> 
+				
 					<button title='Διαγραφή' class='button_flat background_red float_right' ng-click="deleteContact(selectedContact)">Διαγραφή</button> 
 					<button title='Αποθήκευση' class='button_flat background_dark_yellow float_right' ng-click="editContact(selectedContact)">Αποθήκευση</button> 
+				
 				</td>
 				</tr>
 				
@@ -94,7 +103,7 @@ pageEncoding="UTF-8"%>
 	</div>
 	
 	
-			<div class='div_edit_team box_shadow_medium_gray' ng-show="selState.includes('AddNewCustomer')" >
+			<div class='div_edit_team box_shadow_medium_gray padding_theme' ng-show="selState.includes('AddNewCustomer')" >
 			
 			<!-- <hr> -->
 					<h2>Εισαγωγή νέου πελάτη</h2>
@@ -119,11 +128,18 @@ pageEncoding="UTF-8"%>
 				</tr>
 				<tr>
 					<td >
-					Ημερομηνία γένησης:<br/><md-datepicker ng-model="newContact.birthdate" md-placeholder="Ημερομηνία γένησης.."></md-datepicker>
+					Ημερομηνία εγγραφής:<br/><md-datepicker ng-model="newContact.registerdate" md-placeholder="Ημερομηνία εγγραφής.."></md-datepicker>
+					</td>
+					</tr>
+					<tr>
+					<td >
+					Ημερομηνία γέννησης:<br/><md-datepicker ng-model="newContact.birthdate" md-placeholder="Ημερομηνία γέννησης.."></md-datepicker>
 					</td>
 				</tr>
 				<tr>
 				<td>
+<!-- 						    <button title='Τέλος' class='button_flat background_black float_left' ng-click="selectedContact=null">Τέλος</button> 
+ -->				
 					<button title='Εισαγωγή' class='button_flat background_green float_right' ng-click="addContact(newContact)">Εισαγωγή</button> 
 				</td>
 				</tr>
@@ -145,25 +161,29 @@ pageEncoding="UTF-8"%>
  
 
  
-<div class='div_edit_team padding_theme' ng-show='selState.includes("ShowAllCustomers")'>
+<div  class='div_edit_team padding_theme' ng-show='selState.includes("ShowAllCustomers")&&!selectedContact'>
+<h1>Όλοι οι πελάτες</h1>
+<h3>(κάντε κλικ στις επικεφαλίδες για στοιχιση)</h3>
 <div class='table_stylish1'>
 		<table>
 			<tr>
-				<th>ΟΝΟΜΑ</th>
-				<th>E-MAIL</th>
-				<th>ΤΗΛ</th>
-				<th>ΗΜ. ΓΕΝΝΗΣΗΣ</th>
-				<th>ΔΙΕΥΘΥΝΣΗ</th>
+				<th class='cursor_pointer' ng-click='ord="name"'>ΟΝΟΜΑ</th>
+				<th  class='cursor_pointer' ng-click='ord="email"'>E-MAIL</th>
+				<th  class='cursor_pointer' ng-click='ord="phonenumber"'>ΤΗΛ</th>
+				<th  class='cursor_pointer' ng-click='ord="address"'>ΔΙΕΥΘΥΝΣΗ</th>
+				<th class='cursor_pointer'  ng-click='ord="birthdate"'>ΗΜ. ΓΕΝΝΗΣΗΣ</th>
+				<th class='cursor_pointer' ng-click='ord="-registerdate"'>ΗΜ. ΕΓΓΡΑΦΗΣ</th>
 				<th></th>
 			</tr>
 			
 		
-			<tr ng-repeat="contact in contacts  |orderBy:'name' | filter:mysearch" >
+			<tr ng-repeat="contact in contacts  |orderBy:ord | filter:mysearch" ng-hide='adminContact.id==contact.id'>
 				<td>{{contact.name}}</td>
 				<td>{{contact.email}}</td>
 				<td>{{contact.phonenumber}}</td>
-				<td>{{contact.birthdate}}</td>
 				<td>{{contact.address}}</td>
+				<td>{{contact.birthdate | date}}</td>
+				<td>{{contact.registerdate | date}}</td>
 				<td>
 			
 					<button title='Επεξεργασία' class='button_flat background_dark_yellow float_right' ng-click="showContact(contact)">Επεξ.</button> 

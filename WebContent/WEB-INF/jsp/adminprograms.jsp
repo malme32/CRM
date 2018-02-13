@@ -81,7 +81,7 @@ pageEncoding="UTF-8"%>
 			</tr>
 			
 		
-			<tr ng-repeat="contact in contacts  | filter:mysearch" >
+			<tr ng-repeat="contact in contacts  | filter:mysearch" ng-hide='adminContact.id==contact.id'>
 				<td>{{contact.name}}</td>
 				<td>{{contact.email}}</td>
 				<td>{{contact.phonenumber}} </td>
@@ -308,7 +308,7 @@ pageEncoding="UTF-8"%>
 					<th></th>
 				</tr> 
 
-				<tr class='' ng-repeat="program in allPrograms  |programfilter:progfilter| orderBy: 'contact.name' | filter: prsearch" >
+				<tr class='' ng-hide='adminContact.id==program.contact.id' ng-repeat="program in allPrograms  |programfilter:progfilter| orderBy: 'contact.name' | filter: prsearch" >
 					<td> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
 					<td >{{program.title}}</td>
 					<td title='Κάντε κλικ για να δείτε όλα τα προγράμματα αυτού του πελάτη' class='cursor_pointer text_underline' ng-click="contactSelected(program.contact,true); ">{{program.contact.name}}</td>
@@ -564,7 +564,7 @@ pageEncoding="UTF-8"%>
 			<!--  {{result1}} -->
 			<!--{{selectedProgram.entries.days}} -->
 				<div class='div_edit_team'>
-					<select ng-model="selectedContact5" ng-options="contact.name for contact in contacts | orderBy:'name' |  filter:mysearch1">
+					<select ng-model="selectedContact5" ng-options="contact.name for contact in contacts | orderBy:'name' |  filter:mysearch1 | excludeadmin:adminContact">
 					<option value="">---Πελάτης---</option>
 					</select>
 				<button  title='Αντιγραφή' class='button_flat background_green float_right' ng-click="selectedContact1=selectedContact5; getOtherPrograms(selectedContact1); closeCopyProgramModal()">OK</button> 

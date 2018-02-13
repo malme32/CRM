@@ -3,11 +3,11 @@ var appAdmin = angular.module("appAdmin", ["ngRoute",'ngMaterial', 'ngMessages',
 appAdmin.config(function($routeProvider) {
     $routeProvider
 
-    .when("/admincategories", {
+/*    .when("/admincategories", {
         templateUrl : "admincategories",
         controller: "categoriesController"
 
-    })
+    })*/
     .when("/adminexercises", {
         templateUrl : "adminexercises",
         controller: "exercisesController"
@@ -45,10 +45,24 @@ appAdmin.filter('programfilter', function() {
           return result;
     };
 });
-
+appAdmin.filter('excludeadmin', function() {
+    return function(items,adminContact) {
+    	  var result = []; 
+   
+ 
+    	  for (var i=0; i<items.length; i++){
+              if (items[i].id!=adminContact.id)  {
+                  result.push(items[i]);
+              }
+          }      		  
+    
+          
+          return result;
+    };
+});
 appAdmin.run(function($rootScope, $window, $http, $timeout) {
 	
-
+	$rootScope.adminContact={id:19,name:"Go-Go Gym"};
     $rootScope.$on("$locationChangeStart", function(event, next, current) {   	
     });
     
@@ -82,7 +96,7 @@ appAdmin.controller("adminController",function($scope, $http, $location, $window
 		$location.path('adminprograms'); 
 
 });
-
+/*
 appAdmin.controller("categoriesController",function($scope, $http, $location, $window,$route){
 	
 	 $http({
@@ -150,7 +164,7 @@ appAdmin.controller("categoriesController",function($scope, $http, $location, $w
 			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
 			   }).then(function mySuccess(response) {
 
-			       alert("Έγινε!")
+			       alert("Έγινε!");
 				
 			   }, function myError(response) {
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
@@ -158,9 +172,10 @@ appAdmin.controller("categoriesController",function($scope, $http, $location, $w
 			 
 		};
 });
-
+*/
 appAdmin.controller("exercisesController",function($scope, $http, $location, $window){
-	
+
+	$scope.getCategories = function () {
 	 $http({
 	       method : "GET",
 	       url : "categories"
@@ -168,7 +183,10 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 	       $scope.categories = response.data;
 	   }, function myError(response) {
 	   });
-	 
+	};
+	
+	$scope.getCategories();
+	
 		$scope.getExercises = function (row) {
 			if(row.exercises&&row.exercises.length>0)
 			{
@@ -201,6 +219,7 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 				   //category.exercises=[];
 				   $scope.getExercises(category);
 				   $scope.newexercise.title = "";
+				   alert("Έγινε!");
 			   }, function myError(response) {
 			 
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.")
@@ -235,8 +254,8 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 			       url : "exercises/"+exercise.id
 			   }).then(function mySuccess(response) {
 
-				   category.exercises=[];
-				   $scope.getExercises(category);
+/*				   category.exercises=[];
+*/				   $scope.getExercises(category);
 				
 			   }, function myError(response) {
 			 
@@ -260,6 +279,7 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 			$scope.selState=state;
 			$scope.selectedCategory=null;
 			$scope.selectedCategoryExercises = null;
+			$scope.mysearch="";
 			//$scope.selectedContact=null;
 		}
 		$scope.selectedPanel = function(state){
@@ -290,11 +310,72 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 		}
 
 		////////
+		
+		
+		
+		 
+		 
+		$scope.addCategory = function (row) {
+			 if(!row.title)
+				 return;
+			 $http({
+			       method : "POST",
+			       url : "categories",
+			       params:{title:row.title}
+			   }).then(function mySuccess(response) {
+
+				   $scope.getCategories();
+				   alert("Έγινε!");
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.")
+
+			   });
+			 
+		};
+		 
+		$scope.deleteCategory = function (row) {
+			 if(!confirm("Είστε σίγουρος;"))
+				 return;
+			 $http({
+			       method : "DELETE",
+			       url : "categories/"+row.id
+			   }).then(function mySuccess(response) {
+
+				   $scope.getCategories();
+				
+			   }, function myError(response) {
+			 
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.")
+
+			   });
+			 
+		};
+		
+		
+		
+		
+		$scope.editCategory = function (row) {
+
+			 $http({
+			       method : "PUT",
+			       url : "categories",
+			        data: row,
+			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
+			   }).then(function mySuccess(response) {
+
+			       alert("Έγινε!");
+				
+			   }, function myError(response) {
+			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
+			   });
+			 
+		};
 
 });
 
-appAdmin.controller("programsController",function($scope, $http, $location, $window, $route){
-	$scope.adminContact={id:19,name:"Go-Go Gym"};
+appAdmin.controller("programsController",function($scope, $http, $location, $window, $route, $rootScope){
+	
 	
 	
 	
@@ -306,6 +387,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		$scope.selectedProgram=null;
 		$scope.programDays=null;
 		$scope.selectedContact1=null;
+		$scope.mysearch="";
+		$scope.showAllContacts=false;
 	}
 	
 	$scope.initMenuStandardPrograms = function(state)
@@ -313,11 +396,13 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		
 		$scope.selState=state;
 		
-		$scope.selectedContact=$scope.adminContact; 
-		$scope.getPrograms($scope.adminContact); 
+		$scope.selectedContact=$rootScope.adminContact; 
+		$scope.getPrograms($rootScope.adminContact); 
 		$scope.selectedProgram=null; 
 		$scope.programDays=null;
 		$scope.selectedContact1=null;
+		$scope.mysearch="";
+		$scope.showAllContacts=false;
 	}
 	$scope.$on('$viewContentLoaded', function() {
 	    //call it here
@@ -352,7 +437,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		$scope.getStandardPrograms = function () {
 		 $http({
 		       method : "GET",
-		       url : "contacts/"+$scope.adminContact.id+"/programs" //admin
+		       url : "contacts/"+$rootScope.adminContact.id+"/programs" //admin
 		   }).then(function mySuccess(response) {
 			   $scope.standardPrograms = response.data;
 		    	for(k=0;k<$scope.standardPrograms.length;k++)
@@ -978,6 +1063,8 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 	
 	
 
+
+	$scope.getContacts = function () {
 	 $http({
 	       method : "GET",
 	       url : "contacts"
@@ -988,6 +1075,8 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
     		{
 		    	 if($scope.contacts[k].birthdate)
 		    		 $scope.contacts[k].tmpbirthdate=new Date($scope.contacts[k].birthdate);
+		    	 if($scope.contacts[k].registerhdate)
+		    		 $scope.contacts[k].tmpregisterdate=new Date($scope.contacts[k].registerdate);
 		    	
     		}
 		
@@ -996,7 +1085,8 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 	       //$scope.result = response.statusText;
 
 	   });
-
+	}
+	$scope.getContacts();
 		$scope.addContact = function (contact) {
 			 if(!contact.name)
 				 return;
@@ -1006,8 +1096,9 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 			        data: contact,
 			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
 			   }).then(function mySuccess(response) {
-
-			       $route.reload();
+				   $scope.getContacts();
+				   alert("'Εγινε!")
+				   $scope.initMenuCustomers('ShowAllCustomers');
 				
 			   }, function myError(response) {
 			 
@@ -1024,8 +1115,9 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 			       method : "DELETE",
 			       url : "contacts/"+contact.id
 			   }).then(function mySuccess(response) {
-
-			       $route.reload();
+				   $scope.getContacts();
+				   alert("'Εγινε!")
+				   $scope.initMenuCustomers('ShowAllCustomers');
 				
 			   }, function myError(response) {
 			 
@@ -1039,6 +1131,8 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 		
 			if(contact.tmpbirthdate)
 				contact.birthdate=contact.tmpbirthdate;
+			if(contact.tmpregisterdate)
+				contact.registerdate=contact.tmpregisterdate;
 			 $http({
 			       method : "PUT",
 			       url : "contacts",

@@ -19,17 +19,14 @@ public class Contact{
 	private int id;
 
 	@Column(name="name", length=255)
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String name;
 
 
 	@Column(name="username", length=255)
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String username;
 	
 
 	@Column(name="password", length=255)
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String password;
 	
 	public String getName() {
@@ -41,20 +38,19 @@ public class Contact{
 	}
 
 	@Column(name="phonenumber", length=30)
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String phonenumber;
 
 	@Column(name="email", length=255)
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String email;
 	
 	@Column(name="address", length=300)
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String address;
 	
 	@Column(name="birthdate")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Date birthdate;
+	
+	@Column(name="registerdate")
+	private Date registerdate;
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY,mappedBy="contact",cascade = CascadeType.ALL)
@@ -134,6 +130,14 @@ public class Contact{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Date getRegisterdate() {
+		return registerdate;
+	}
+
+	public void setRegisterdate(Date registerdate) {
+		this.registerdate = registerdate;
 	}
 	
 	

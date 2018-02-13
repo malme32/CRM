@@ -16,8 +16,8 @@ pageEncoding="UTF-8"%>
 </div>
 <button class="accordion">Κατηγορίες ασκήσεων</button>
 <div class="panel">
-  <p ng-class='selectedPanel("AddNewCustomer")' ng-click="initMenuCustomers('AddNewCustomer'); ">Νέος</p>
-  <p ng-class='selectedPanel("ShowAllCustomers")' ng-click="initMenuCustomers('ShowAllCustomers'); ">Λίστα πελατών & επεξεργασία</p>
+  <p ng-class='selectedPanel("AddNewCategory")' ng-click="initMenuExercises('AddNewCategory'); ">Νέα</p>
+  <p ng-class='selectedPanel("ShowAllCategories")' ng-click="initMenuExercises('ShowAllCategories'); ">Όλες οι κατηγορίες</p>
 </div>
 
 
@@ -27,7 +27,7 @@ pageEncoding="UTF-8"%>
 <section  class="margin_botton_large side_nav margin_botton_large">
 
 <div class='font_size_small' >
-	<div class='div_edit_team padding_theme' ng-show='selectedCategory && selState.includes("ShowAllExercises")'> 
+	<div class='div_edit_team padding_theme' ng-show='(selectedCategory && selState.includes("ShowAllExercises"))|| selState.includes("ShowAllCategories")'> 
 	<h1>Αναζητήστε άσκηση</h1>
 	 <div class='search-field'>
 	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε εδώ...">
@@ -89,7 +89,7 @@ pageEncoding="UTF-8"%>
 			</tr> -->
 			<tr>
 				
-			</td>
+			
 			</tr>
 			<tr ng-repeat="exercise in selectedCategoryExercises | orderBy: 'title'" >
 				<td>{{exercise.title}}</td>
@@ -149,7 +149,7 @@ pageEncoding="UTF-8"%>
 			<tr ng-repeat="exercise in selectedCategoryExercises |filter: mysearch" >
 				<td><input type="text" ng-model="exercise.title"></td>
 				<td>
-				<button  title='Διαγραφή' class='button_flat background_red float_right'  ng-click="deleteExercise(exercise,category)">&#10006;</button>
+				<button  title='Διαγραφή' class='button_flat background_red float_right'  ng-click="deleteExercise(exercise,selectedCategory)">&#10006;</button>
 				<button title='Αποθήκευση' class='button_flat background_dark_yellow float_right' ng-click="editExercise(exercise)">&#10004;</button> 
 			
 			</td>
@@ -160,5 +160,66 @@ pageEncoding="UTF-8"%>
 		</table>
 	</div>
 </div> 
+
+
+<div class='div_edit_team' ng-show='(selState.includes("AddNewCategory")) '>
+<div  class='table_stylish1 padding_theme'>
+<h1>Προσθήκη νέας κατηγορίας ασκήσεων</h1>
+		<table >
+	<!-- 		<tr class = 'cursor_pointer' ng-click='getExercises(category)'>
+				<th >{{category.title}}</th>
+				<th style='text-align: right;' >{{category.exercises.length?"-":"+"}}</th>
+			</tr> -->
+			<tr>
+				<td><input type="text" ng-model="newcategory.title" placeholder="Το όνομα της νέας κατηγορίας ασκήσεων εδω.."></td>
+				
+			
+			<td><button  title='Προσθήκη' class='button_flat background_green float_right' ng-click="addCategory(newcategory)">Προσθήκη</button> 
+			</td>
+			</tr>
+
+			
+			
+		</table>
+	
+	<h3>Κατηγορίες ασκήσεων που υπάρχουν ήδη</h3>
+			<table>
+
+			<tr ng-repeat="category in categories | orderBy: 'title'" >
+				<td>{{category.title}}</td>
+			</tr>
+	
+		</table>
+	
+	
+	
+</div>
+</div>
+
+<div class='div_edit_team padding_theme' ng-show=' selState.includes("ShowAllCategories") '>
+<div class='table_stylish1 '>
+<h1>Λίστα κατηγοριών ασκήσεων</h1>
+		<table >
+			<tr class = ''>
+				<th >Τίτλος</th>
+				<th ></th>
+			</tr>
+			
+
+			<tr ng-repeat="category in categories |filter: mysearch" >
+				<td><input type="text" ng-model="category.title"></td>
+				<td>
+				<button  title='Διαγραφή' class='button_flat background_red float_right'  ng-click="deleteCategory(category)">&#10006;</button>
+				<button title='Αποθήκευση' class='button_flat background_dark_yellow float_right' ng-click="editCategory(category)">&#10004;</button> 
+			
+			</td>
+			</tr>
+			
+			
+			
+		</table>
+	</div>
+</div> 
+
 </div>
 </section>
