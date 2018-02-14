@@ -74,7 +74,7 @@ appAdmin.run(function($rootScope, $window, $http, $timeout) {
 				   {
 				   		$window.location.href ='loginPage';
 				   }
-			   $rootScope.promise = $timeout($rootScope.checkOnline, 60000);
+			   $rootScope.promise = $timeout($rootScope.checkOnline, 2100000);
 			   //$timeout($rootScope.checkOnline, 5000);
 
 			/*   $rootScope.chkonline = response.data;
@@ -108,7 +108,7 @@ appAdmin.run(function($rootScope, $window, $http, $timeout) {
 
 
 
-appAdmin.controller("adminController",function($scope, $http, $location, $window){
+appAdmin.controller("adminController",function($scope, $http, $location, $window, $rootScope, $timeout){
 	
 	$scope.setCurrentMenu = function (row) {
 
@@ -209,7 +209,7 @@ appAdmin.controller("categoriesController",function($scope, $http, $location, $w
 		};
 });
 */
-appAdmin.controller("exercisesController",function($scope, $http, $location, $window){
+appAdmin.controller("exercisesController",function($scope, $http, $location, $window, $rootScope, $timeout){
 
 	$scope.getCategories = function () {
 	 $http({
@@ -316,6 +316,8 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 			$scope.selectedCategory=null;
 			$scope.selectedCategoryExercises = null;
 			$scope.mysearch="";
+			$timeout.cancel($rootScope.promise);
+		    $rootScope.checkOnline();
 			//$scope.selectedContact=null;
 		}
 		$scope.selectedPanel = function(state){
@@ -410,7 +412,7 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 
 });
 
-appAdmin.controller("programsController",function($scope, $http, $location, $window, $route, $rootScope){
+appAdmin.controller("programsController",function($scope, $http, $location, $window, $route, $rootScope, $timeout){
 	
 	
 	
@@ -425,6 +427,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		$scope.selectedContact1=null;
 		$scope.mysearch="";
 		$scope.showAllContacts=false;
+		$timeout.cancel($rootScope.promise);
+	    $rootScope.checkOnline();
 	}
 	
 	$scope.initMenuStandardPrograms = function(state)
@@ -439,6 +443,8 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		$scope.selectedContact1=null;
 		$scope.mysearch="";
 		$scope.showAllContacts=false;
+		$timeout.cancel($rootScope.promise);
+	    $rootScope.checkOnline();
 	}
 	$scope.$on('$viewContentLoaded', function() {
 	    //call it here
@@ -1095,7 +1101,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		  
 });
 
-appAdmin.controller("usersController",function($scope, $http, $location, $window,$route){
+appAdmin.controller("usersController",function($scope, $http, $location, $window,$route, $rootScope, $timeout){
 	
 	
 
@@ -1193,6 +1199,8 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 		{
 			$scope.selState=state;
 			$scope.selectedContact=null;
+			$timeout.cancel($rootScope.promise);
+		    $rootScope.checkOnline();
 		}
 		$scope.selectedPanel = function(state){
 			

@@ -38,8 +38,10 @@ pageEncoding="UTF-8"%>
  -->  
 
 </div>
-
-
+<br/>
+<br/>
+<br/>
+<br/>
 </div>
 
 <section class='font_size_small side_nav'>
@@ -294,8 +296,17 @@ pageEncoding="UTF-8"%>
 	 <div class='search-field'>
 	 <input style='padding: 12px 20px 12px 40px;' ng-model='prsearch' type="text" class="search_input" placeholder="Αναζητηστε πρόγραμμα εδώ...">
 	<i class="fa fa-search"></i></div>
+	<table>
+	<tr>
+	<td>
+		<h1>Όλα τα προγράμματα</h1></td>
+	<td>
+			<button  title='Ανανέωση' class='button_flat background_black float_right' ng-click="allPrograms=null;getAllPrograms()">Ανανέωση</button> 
 	
-		<h1>Όλα τα προγράμματα</h1>
+	</td>
+	</tr>
+	</table>
+		
 		
 		
 			<table>
@@ -671,5 +682,8 @@ pageEncoding="UTF-8"%>
 	</div>	 -->
 	
 
-
+<br/>
+<br/>
+<br/>
+<br/>
 </section>

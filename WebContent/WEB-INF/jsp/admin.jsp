@@ -34,7 +34,7 @@ pageEncoding="UTF-8"%>
 	<spring:url value="/resources/admin.js" var="crunchifyJS" /> --%><%-- 
  	<spring:url value="/resources/main.css" var="maincss" /> --%>
  	<script src="${resources}/js/admin.js"></script>
-  	<link rel="stylesheet" type="text/css" href="${resources}/css/admin.css?ver=26">
+  	<link rel="stylesheet" type="text/css" href="${resources}/css/admin.css?ver=28">
  	<%-- <link rel="stylesheet" type="text/css" href="${resources}admin.css"> --%>      
 <!-- <<<<<<<<<<<<< COMMON  -->
 

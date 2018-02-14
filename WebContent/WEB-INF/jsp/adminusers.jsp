@@ -16,6 +16,10 @@ pageEncoding="UTF-8"%>
   <p ng-class='selectedPanel("ShowAllCustomers")' ng-click="initMenuCustomers('ShowAllCustomers'); ">'Ολοι οι πελάτες</p>
 </div>
 
+<br/>
+<br/>
+<br/>
+<br/>
 
 </div>
 
