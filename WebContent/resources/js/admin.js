@@ -416,7 +416,7 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 });
 
 appAdmin.controller("programsController",function($scope, $http, $location, $window, $route, $rootScope, $timeout){
-	
+/*	
 	$scope.initVars = function () {
 		
 		$scope.selectedProgram=null;
@@ -424,7 +424,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 
 
 	};
-	$timeout($scope.initVars,1000);
+	$timeout($scope.initVars,1000);*/
 	
 	$scope.initMenuPrograms = function(state)
 	{
