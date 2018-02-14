@@ -1,7 +1,10 @@
-fix name in program. -> contact name +  date
 
-fix issue in IE. selectedProgram takes initial value, replace includes with indexOf>=0
+
+DONE - fix issue in IE. selectedProgram takes initial value, replace includes with indexOf>=0
 
 add bigger font in program pdf
 
 check on edge
+
+
+fix all programs tab to not download so much info

@@ -416,7 +416,7 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 });
 
 appAdmin.controller("programsController",function($scope, $http, $location, $window, $route, $rootScope, $timeout){
-/*	
+	
 	$scope.initVars = function () {
 		
 		$scope.selectedProgram=null;
@@ -424,8 +424,15 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 
 
 	};
-	$timeout($scope.initVars,1000);*/
 	
+	$scope.$on('$viewContentLoaded', function() {
+	    //call it here
+		$timeout($scope.initVars,1000);
+	});
+	
+	
+/*	$timeout($scope.initVars,1000);
+*/	
 	$scope.initMenuPrograms = function(state)
 	{
 		
@@ -455,16 +462,13 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 		$timeout.cancel($rootScope.promise);
 	    $rootScope.checkOnline();
 	}
-	$scope.$on('$viewContentLoaded', function() {
-	    //call it here
-		$scope.selectedProgram=null;
-	});
-	
+
 	 $http({
 	       method : "GET",
 	       url : "categories"
 	   }).then(function mySuccess(response) {
 	       $scope.categories = response.data;
+	     
 	   }, function myError(response) {
 	   });
 	 
@@ -498,6 +502,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 			    	 if($scope.standardPrograms[k].dateend)
 			    		 $scope.standardPrograms[k].tmpdateend=new Date($scope.standardPrograms[k].dateend);
 	  		}
+		    	
 		   }, function myError(response) {
 		      // alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
 		   });
@@ -601,6 +606,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 					 //  $scope.getStandardPrograms();
 					//  / 
 				   $scope.showProgram(response.data);
+				   $scope.newprogram=null;
 			   }, function myError(response) {
 			       alert("Κάτι δεν πήγε καλά. Ξαναπροσπαθήστε.");
 			   });
@@ -868,7 +874,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				   else
 				   {
 					   $scope.openDownloadPdfModal();
-						if(!program.history&&!$scope.selState.includes("ST")) 
+						if(!program.history&&!($scope.selState.indexOf("ST")>=0)) 
 							if(confirm("Θέλετε να προσθέσε αυτό το πρόγραμμα στο ιστορικό?"))
 								{
 									program.history=true;
@@ -894,7 +900,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 					alert("Αυτός ο πελάτης δεν έχει ορισμένο E-Mail. Ορίστε E-Mail από το πελατολόγιο και ξαναπροσπαθήστε.")
 					return;
 				}
-				else if(!program.contact.email.includes("@"))
+				else if(!(program.contact.email.indexOf("@")>=0))
 				{
 
 				alert("Αυτός ο πελάτης έχει λανθασμένο E-Mail ορισμένο. Ορίστε το σωστό E-Mail από το πελατολόγιο και ξαναπροσπαθήστε.")
@@ -959,7 +965,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 				   //$scope.closeCopyProgramModal();
 				   
 			        alert("Έγινε!");
-			       	if($scope.selState.includes("ST"))
+			       	if($scope.selState.indexOf("ST")>=0)
 					       $scope.initMenuStandardPrograms('ShowPerCustomerST');
 			       	else
 			       		$scope.initMenuPrograms('ShowPerCustomer');
@@ -982,7 +988,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 
 	       		    $scope.getPrograms(contact);
 			       alert("Έγινε1!");
-			       	if($scope.selState.includes("ST"))
+			       	if($scope.selState.indexOf("ST"))
 			       		{
 			       			//$scope.getStandardPrograms();
 					       $scope.initMenuStandardPrograms('ShowPerCustomerST');
@@ -1112,6 +1118,19 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 
 appAdmin.controller("usersController",function($scope, $http, $location, $window,$route, $rootScope, $timeout){
 	
+	/*fix for ie 11*/
+	$scope.initVars = function () {
+		
+		$scope.selectedContact=null;
+		
+
+
+	};
+	
+	$scope.$on('$viewContentLoaded', function() {
+	    //call it here
+		$timeout($scope.initVars,1000);
+	});
 	
 
 
@@ -1139,8 +1158,14 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 	}
 	$scope.getContacts();
 		$scope.addContact = function (contact) {
+			
 			 if(!contact.name)
 				 return;
+			 if((contact.email)&&(!(contact.email.indexOf("@")>=0)))
+				 {
+				 	alert("Λανθασμένο E-mail. Εισάγετε ένα σωστό.");
+				 	return;
+				 }
 			 $http({
 			       method : "POST",
 			       url : "contacts",
@@ -1149,6 +1174,7 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 			   }).then(function mySuccess(response) {
 				   $scope.getContacts();
 				   alert("'Εγινε!")
+				   $scope.newContact=null;
 				   $scope.initMenuCustomers('ShowAllCustomers');
 				
 			   }, function myError(response) {
@@ -1180,6 +1206,13 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 		
 		$scope.editContact = function (contact) {
 		
+			 if(!contact.name)
+				 return;
+			 if((contact.email)&&(!(contact.email.indexOf("@")>=0)))
+				 {
+				 	alert("Λανθασμένο E-mail. Εισάγετε ένα σωστό.");
+				 	return;
+				 }
 		//	if(contact.tmpbirthdate)
 				contact.birthdate=contact.tmpbirthdate;
 			//if(contact.tmpregisterdate)

@@ -38,7 +38,7 @@ pageEncoding="UTF-8"%>
  -->
 
 
-<div ng-show="selState.includes('ShowAllCustomers')&&!selectedContact" class='padding_theme'>
+<div ng-show="selState.indexOf('ShowAllCustomers')>=0&&!selectedContact" class='padding_theme'>
 
 	<div class='div_edit_team '> 
 		<h1>Επιλέξτε πελάτη</h1>
@@ -72,7 +72,7 @@ pageEncoding="UTF-8"%>
 				</tr>
 							
 				<tr>
-					<td>E-mail:<input type="email" ng-model="selectedContact.email" placeholder="Το E-mail εδω.."></td>
+					<td>E-mail:<input type="text" ng-model="selectedContact.email" placeholder="Το E-mail εδω.."></td>
 				</tr>
 				
 				<tr>
@@ -107,7 +107,7 @@ pageEncoding="UTF-8"%>
 			</table>
 	</div>
 	</div>
-			<div class='div_edit_team box_shadow_medium_gray ' ng-show="selState.includes('AddNewCustomer')" >
+			<div class='div_edit_team box_shadow_medium_gray ' ng-show="selState.indexOf('AddNewCustomer')>=0" >
 			
 	<div  class='padding_theme'>
 			<!-- <hr> -->
@@ -122,7 +122,7 @@ pageEncoding="UTF-8"%>
 				</tr>
 							
 				<tr>
-					<td>E-mail:<input type="email" ng-model="newContact.email" placeholder="Το E-mail εδω.."></td>
+					<td>E-mail:<input type="text" ng-model="newContact.email" placeholder="Το E-mail εδω.."></td>
 				</tr>
 				
 				<tr>
@@ -166,7 +166,7 @@ pageEncoding="UTF-8"%>
  
 
  
-<div  class='div_edit_team ' ng-show='selState.includes("ShowAllCustomers")&&!selectedContact'>
+<div  class='div_edit_team ' ng-show='selState.indexOf("ShowAllCustomers")>=0&&!selectedContact'>
 <h1>Όλοι οι πελάτες</h1>
 <h3>(κάντε κλικ στις επικεφαλίδες για στοιχιση)</h3>
 <div class='table_stylish1'>

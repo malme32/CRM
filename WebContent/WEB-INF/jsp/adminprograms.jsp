@@ -48,10 +48,10 @@ pageEncoding="UTF-8"%>
 	
 	 
 
-<div class='selectedContact' ng-show="selectedContact&&(selectedContact.id!=adminContact.id)&&!selState.includes('List')" style=''><b >Πελάτης:</b> {{selectedContact.name}}
+<div class='selectedContact' ng-show="selectedContact&&(selectedContact.id!=adminContact.id)&&!(selState.indexOf('List')>=0)" style=''><b >Πελάτης:</b> {{selectedContact.name}}
 <br/><span ng-click=' programDays=null; selectedProgram=null; selectedContact=null;selectedContactBack=null;selectedContact1=null; programDays=null; mysearch="";showAllContacts=false'>Αλλαγή πελάτη </span>
 </div><!-- &#10006; -->
-<div ng-show="(selState)&&!selectedContact&&!selState.includes('List')">
+<div ng-show="(selState)&&!selectedContact&&!(selState.indexOf('List')>=0)">
 
 	<div class='div_edit_team padding_theme'> 
 		<h1>Επιλέξτε πελάτη</h1>
@@ -101,11 +101,11 @@ pageEncoding="UTF-8"%>
 </div>
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('NewFromStandard')&&selectedContact" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="(selState.indexOf('NewFromStandard')>=0)&&selectedContact" >
 	<h1>Επιλέξτε πρότυπο πρόγραμμα για αντιγραφή</h1>
 			<table>
 				<tr><!-- 
-					<th ng-hide="selState.includes('ST')">Ιστ.</th> -->
+					<th ng-hide="selState.indexOf('ST')">Ιστ.</th> -->
 					<th>Τίτλος</th>
 					<th>Ημερ. Αρχής</th>
 					<th>Ημερ. Τέλους</th>
@@ -120,7 +120,7 @@ pageEncoding="UTF-8"%>
 				</td>
 				</tr> -->
 				<tr class='' ng-repeat="program in standardPrograms " >
-<%-- 					<td ng-hide="selState.includes('ST')"> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
+<%-- 					<td ng-hide="selState.indexOf('ST')"> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
  --%>					<td >{{program.title}}</td>
 					<td >{{program.datestart | date}}</td>
 					<td >{{program.dateend | date}}</td>
@@ -138,14 +138,14 @@ pageEncoding="UTF-8"%>
 				
 			</table>
 	</div>
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('NewFromOtherCustomer')&&selectedContact&&!selectedContact1" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="(selState.indexOf('NewFromOtherCustomer')>=0)&&selectedContact&&!selectedContact1" >
 	<h1>Επιλέξτε άλλο πελάτη για να αντιγράψετε κάποιο πρόγραμμα</h1>
 		<button  title='Επιλογή πελάτη' class='button_flat background_black ' ng-click="openCopyProgramModal()">Επιλογή άλλου Πελάτη</button> 
 			
 	</div>
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('NewFromOtherCustomer')&&selectedContact&&selectedContact1" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="(selState.indexOf('NewFromOtherCustomer')>=0)&&selectedContact&&selectedContact1" >
 	<h1>Επιλέξτε πρόγραμμα απο τον πελάτη "{{selectedContact1.name}}" για αντιγραφή</h1>
 			<table>
 				<tr>
@@ -183,11 +183,11 @@ pageEncoding="UTF-8"%>
 			</table>
 	</div>
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('NewFromHistory')&&selectedContact" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="(selState.indexOf('NewFromHistory')>=0)&&selectedContact" >
 	<h1>Επιλέξτε πρόγραμμα απο το ιστορικό για αντιγραφή</h1>
 			<table>
 				<tr>
-				<th ng-hide="selState.includes('ST')">Ιστ.</th>
+				<th ng-hide="selState.indexOf('ST')>=0">Ιστ.</th>
 					<th>Τίτλος</th>
 					<th>Ημερ. Αρχής</th>
 					<th>Ημερ. Τέλους</th>
@@ -202,7 +202,7 @@ pageEncoding="UTF-8"%>
 				</td>
 				</tr> -->
 				<tr class='' ng-repeat="program in programs " >
-					<td ng-hide="selState.includes('ST')"> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
+					<td ng-hide="selState.indexOf('ST')>=0"> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
 					<td >{{program.title}}</td>
 					<td >{{program.datestart | date}}</td>
 					<td >{{program.dateend | date}}</td>
@@ -220,7 +220,7 @@ pageEncoding="UTF-8"%>
 			</table>
 	</div>
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('AddNewProgram')&&selectedContact&&!selectedProgram" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="(selState.indexOf('AddNewProgram')>=0)&&selectedContact&&!selectedProgram" >
 		<h1>Εισάγετε το όνομα του νέου προγράμματος</h1>
 			<table>
 				<tr>
@@ -250,11 +250,11 @@ pageEncoding="UTF-8"%>
 	</div>
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('ShowPerCustomer')&&selectedContact&&!selectedProgram" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.indexOf('ShowPerCustomer')>=0&&selectedContact&&!selectedProgram" >
 		<h1>Προγράμματα</h1>
 			<table>
 				<tr>
-				<th ng-hide="selState.includes('ST')">Ιστ.</th>
+				<th ng-hide="selState.indexOf('ST')>=0">Ιστ.</th>
 					<th>Τίτλος</th>
 					<th>Ημερ. Αρχής</th>
 					<th>Ημερ. Τέλους</th>
@@ -262,17 +262,17 @@ pageEncoding="UTF-8"%>
 				</tr> 
 
 				<tr class='' ng-repeat="program in programs  | orderBy: '-datestart'" >
-					<td ng-hide="selState.includes('ST')"> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
+					<td ng-hide="selState.indexOf('ST')>=0"> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
 					<td >{{program.title}}</td>
 					<td >{{program.datestart | date}}</td>
 					<td >{{program.dateend | date}}</td>
-					<td style='min-width:270px'>
+					<td style='min-width:300px'>
 					
 					
 
 										
 										<button  title='Διαγραφή προγράμματος' class='button_flat background_red float_right'  ng-click="deleteProgram(program)">&#10006;</button>
-										<button ng-hide="selState.includes('ST')" title='Στείλε E-Mail στον πελάτη με αυτό το πρόγραμμα' class='button_flat background_black float_right' ng-click="sendEmail(selectedContact,program)">E-Mail</button> 
+										<button ng-hide="selState.indexOf('ST')>=0" title='Στείλε E-Mail στον πελάτη με αυτό το πρόγραμμα' class='button_flat background_black float_right' ng-click="sendEmail(selectedContact,program)">E-Mail</button> 
 				
 					<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,program)">PDF</button> 
 					<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,program,'preview')"><img ng-src="${resources}/images/eye.png"/></button> 
@@ -290,7 +290,7 @@ pageEncoding="UTF-8"%>
 	</div>
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="(selState.includes('ListExpiringPrograms')||selState.includes('ListAllPrograms'))&&!selectedProgram" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="(selState.indexOf('ListExpiringPrograms')>=0||selState.indexOf('ListAllPrograms')>=0)&&!selectedProgram" >
 	
 	<h1>Αναζητήστε πρόγραμμα</h1>
 	 <div class='search-field'>
@@ -325,7 +325,7 @@ pageEncoding="UTF-8"%>
 					<td title='Κάντε κλικ για να δείτε όλα τα προγράμματα αυτού του πελάτη' class='cursor_pointer text_underline' ng-click="contactSelected(program.contact,true); ">{{program.contact.name}}</td>
 					<td >{{program.datestart | date}}</td>
 					<td >{{program.dateend | date}}</td>
-					<td style='min-width:270px'>
+					<td style='min-width:300px'>
 					
 					
 
@@ -351,7 +351,7 @@ pageEncoding="UTF-8"%>
 
 
 
-<%-- 	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('ShowActions')&&selectedContact&&!selectedProgram" >
+<%-- 	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.indexOf('ShowActions')&&selectedContact&&!selectedProgram" >
 		<h1>Ενέργειες</h1>
 			<table>
 				<tr>
@@ -681,7 +681,6 @@ pageEncoding="UTF-8"%>
 			</table>
 	</div>	 -->
 	
-
 <br/>
 <br/>
 <br/>

@@ -31,14 +31,14 @@ pageEncoding="UTF-8"%>
 <section  class="margin_botton_large side_nav margin_botton_large">
 
 <div class='font_size_small' >
-	<div class='div_edit_team padding_theme' ng-show='(selectedCategory && selState.includes("ShowAllExercises"))|| selState.includes("ShowAllCategories")'> 
+	<div class='div_edit_team padding_theme' ng-show='(selectedCategory && (selState.indexOf("ShowAllExercises")>=0))|| (selState.indexOf("ShowAllCategories")>=0)'> 
 	<h1>Αναζητήστε άσκηση</h1>
 	 <div class='search-field'>
 	 <input style='padding: 12px 20px 12px 40px;' ng-model='mysearch' type="text" class="search_input" placeholder="Αναζητηστε εδώ...">
 	<i class="fa fa-search"></i></div>
 	</div>
 
-<div ng-show = '(selState.includes("AddNewExercise")  || selState.includes("ShowAllExercises"))&&!selectedCategory ' class='div_edit_team padding_theme'>		
+<div ng-show = '(selState.indexOf("AddNewExercise")>=0  || selState.indexOf("ShowAllExercises")>=0)&&!selectedCategory ' class='div_edit_team padding_theme'>		
 <div class='table_stylish1'>
 <h1>Επιλέξτε κατηγορία</h1>
 <table>
@@ -61,7 +61,7 @@ pageEncoding="UTF-8"%>
 </div>
 
 
-<div class='div_edit_team' ng-show='selectedCategory && (selState.includes("AddNewExercise")) '>
+<div class='div_edit_team' ng-show='selectedCategory && (selState.indexOf("AddNewExercise")>=0) '>
 <div  class='table_stylish1 padding_theme'>
 <h1>Προσθήκη 'Ασκησης στην κατηγορία {{selectedCategory.title}}</h1>
 		<table >
@@ -140,7 +140,7 @@ pageEncoding="UTF-8"%>
 </div>  -->
 
 
-<div class='div_edit_team padding_theme' ng-show='selectedCategory && selState.includes("ShowAllExercises") '>
+<div class='div_edit_team padding_theme' ng-show='selectedCategory && selState.indexOf("ShowAllExercises")>=0 '>
 <div class='table_stylish1 '>
 <h1>Λίστα ασκήσεων στην κατηγορία {{selectedCategory.title}}</h1>
 		<table >
@@ -166,7 +166,7 @@ pageEncoding="UTF-8"%>
 </div> 
 
 
-<div class='div_edit_team' ng-show='(selState.includes("AddNewCategory")) '>
+<div class='div_edit_team' ng-show='(selState.indexOf("AddNewCategory")>=0) '>
 <div  class='table_stylish1 padding_theme'>
 <h1>Προσθήκη νέας κατηγορίας ασκήσεων</h1>
 		<table >
@@ -200,7 +200,7 @@ pageEncoding="UTF-8"%>
 </div>
 </div>
 
-<div class='div_edit_team padding_theme' ng-show=' selState.includes("ShowAllCategories") '>
+<div class='div_edit_team padding_theme' ng-show=' selState.indexOf("ShowAllCategories")>=0 '>
 <div class='table_stylish1 '>
 <h1>Λίστα κατηγοριών ασκήσεων</h1>
 		<table >
