@@ -1,3 +1,7 @@
 fix name in program. -> contact name +  date
 
 fix issue in IE. selectedProgram takes initial value
+
+add bigger font in program pdf
+
+check on edge

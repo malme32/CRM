@@ -250,7 +250,7 @@ pageEncoding="UTF-8"%>
 	</div>
 
 
-	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.includes('ShowPerCustomer')&&selectedContact&&!selectedProgram" >
+	<div class='div_edit_team padding_theme table_stylish1' ng-show="selState.indexOf('ShowPerCustomer')>=0&&selectedContact&&!selectedProgram" >
 		<h1>Προγράμματα</h1>
 			<table>
 				<tr>
@@ -681,7 +681,7 @@ pageEncoding="UTF-8"%>
 			</table>
 	</div>	 -->
 	
-
+{{selState}}
 <br/>
 <br/>
 <br/>

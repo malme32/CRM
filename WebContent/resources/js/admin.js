@@ -95,11 +95,14 @@ appAdmin.run(function($rootScope, $window, $http, $timeout) {
 
 	};
 
-    
+
 	$rootScope.adminContact={id:19,name:"Go-Go Gym"};
     $rootScope.$on("$locationChangeStart", function(event, next, current) {  
    $timeout.cancel($rootScope.promise);
     	$rootScope.checkOnline();
+    	
+    	
+    	
     });
     
     
@@ -414,8 +417,14 @@ appAdmin.controller("exercisesController",function($scope, $http, $location, $wi
 
 appAdmin.controller("programsController",function($scope, $http, $location, $window, $route, $rootScope, $timeout){
 	
-	
-	
+	$scope.initVars = function () {
+		
+		$scope.selectedProgram=null;
+		
+
+
+	};
+	$timeout($scope.initVars,1000);
 	
 	$scope.initMenuPrograms = function(state)
 	{
