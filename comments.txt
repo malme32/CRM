@@ -1,6 +1,6 @@
 fix name in program. -> contact name +  date
 
-fix issue in IE. selectedProgram takes initial value
+fix issue in IE. selectedProgram takes initial value, replace includes with indexOf>=0
 
 add bigger font in program pdf
 
