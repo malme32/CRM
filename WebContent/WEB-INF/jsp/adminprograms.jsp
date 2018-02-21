@@ -446,6 +446,8 @@ pageEncoding="UTF-8"%>
 		
 	
 		<div class='table_stylish1 div_edit_team padding_theme ' ng-show='programDays.length'>
+							<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,selectedProgram)">PDF</button> 
+		
 					<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,selectedProgram,'preview')">Προεπισκόπηση</button> 
 <!-- <h2>Πρόγραμμα:</h2> -->
 		<div ng-repeat='day in programDays | orderBy:"name"'>
