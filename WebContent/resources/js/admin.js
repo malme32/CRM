@@ -871,6 +871,17 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 					   $scope.openPreviewPdfModal();
 				   
 				   }
+				   else if(action=="print")
+					   {
+						if(!program.history&&!($scope.selState.indexOf("ST")>=0)) 
+							if(confirm("Θέλετε να προσθέσε αυτό το πρόγραμμα στο ιστορικό?"))
+								{
+									program.history=true;
+									 $scope.editProgram(program,true);
+									
+								}
+					   window.location.href=baseUrl+'/files/pdf/Go-Go Gym Program.pdf';
+					   }
 				   else
 				   {
 					   $scope.openDownloadPdfModal();

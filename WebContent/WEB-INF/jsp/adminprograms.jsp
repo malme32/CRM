@@ -273,6 +273,8 @@ pageEncoding="UTF-8"%>
 										
 										<button  title='Διαγραφή προγράμματος' class='button_flat background_red float_right'  ng-click="deleteProgram(program)">&#10006;</button>
 										<button ng-hide="selState.indexOf('ST')>=0" title='Στείλε E-Mail στον πελάτη με αυτό το πρόγραμμα' class='button_flat background_black float_right' ng-click="sendEmail(selectedContact,program)">E-Mail</button> 
+		
+					<button  title='Εκτύπωση' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,program,'print')"><img ng-src="${resources}/images/print.png"/></button> 
 				
 					<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,program)">PDF</button> 
 					<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,program,'preview')"><img ng-src="${resources}/images/eye.png"/></button> 
@@ -332,6 +334,7 @@ pageEncoding="UTF-8"%>
 						<div >			
 					<button  title='Διαγραφή προγράμματος' class='button_flat background_red float_right'  ng-click="deleteProgram(program,selState)">&#10006;</button>
 					<button  title='Στείλε E-Mail στον πελάτη με αυτό το πρόγραμμα' class='button_flat background_black float_right' ng-click="sendEmail(selectedContact,program)">E-Mail</button> 
+									<button  title='Εκτύπωση' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,program,'print')"><img ng-src="${resources}/images/print.png"/></button> 
 				
 					<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,program)">PDF</button> 
 					<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,program,'preview')"><img ng-src="${resources}/images/eye.png"/></button> 
@@ -447,6 +450,7 @@ pageEncoding="UTF-8"%>
 	
 		<div class='table_stylish1 div_edit_team padding_theme ' ng-show='programDays.length'>
 							<button  title='Δημιουργία PDF αρχείου με το πρόγραμμα' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,selectedProgram)">PDF</button> 
+							<button  title='Εκτύπωση' class='button_flat background_green float_right' ng-click="createPdf(selectedContact,selectedProgram,'print')">Εκτύπωση</button> 
 		
 					<button  title='Προεπισκόπηση προγράμματος' class='button_flat background_blue float_right' ng-click="createPdf(selectedContact,selectedProgram,'preview')">Προεπισκόπηση</button> 
 <!-- <h2>Πρόγραμμα:</h2> -->

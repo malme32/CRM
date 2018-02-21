@@ -219,13 +219,13 @@ public class PDFServiceImpl implements PDFService {
 			 
 			document.open();
 				BaseFont fonty = BaseFont.createFont(realPath+"/resources/fonts/ClearSans-Light.ttf", BaseFont.IDENTITY_H,       BaseFont.NOT_EMBEDDED);
-				Font times = new Font(fonty, 9, Font.NORMAL);
+				Font times = new Font(fonty, 10, Font.NORMAL);
 				Font daysFont = new Font(fonty, 12, Font.BOLD);
 				daysFont.setColor(BaseColor.WHITE);
 				Font categFont = new Font(fonty, 9, Font.BOLD);
 				Font nameFont = new Font(fonty, 11, Font.ITALIC);
-				Font dateFont = new Font(fonty, 9, Font.ITALIC);
-				Font setFont = new Font(fonty, 8, Font.ITALIC);
+				Font dateFont = new Font(fonty, 10, Font.ITALIC);
+				Font setFont = new Font(fonty, 9, Font.ITALIC);
 				Font commentFont = new Font(fonty, 10, Font.UNDERLINE);
 				Font commentTextFont = new Font(fonty, 10, Font.NORMAL);
 			//Font font = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.RED);
@@ -234,8 +234,8 @@ public class PDFServiceImpl implements PDFService {
 		        PdfContentByte canvas = writer.getDirectContentUnder();
 		        Image image = Image.getInstance(IMAGE);
 		        //image.scaleAbsolute(PageSize.A4.rotate());
-		        image.setAbsolutePosition((PageSize.A4.getWidth()-PageSize.A4.getWidth()/2)-50, PageSize.A4.getHeight()-45);
-		        image.scaleAbsolute(100, 40	);
+		        image.setAbsolutePosition((PageSize.A4.getWidth()-PageSize.A4.getWidth()/2)-45, PageSize.A4.getHeight()-45);
+		        image.scalePercent(25f);//scaleAbsoluteWidth(100);//scaleAbsolute(100, 36	);
 		        canvas.addImage(image);
 				
 		   // Paragraph name=new Paragraph(contact.getName(),times);
@@ -307,6 +307,7 @@ public class PDFServiceImpl implements PDFService {
 							 table0.addCell(getCell(cat.getTitle().toUpperCase(), PdfPCell.ALIGN_LEFT,categFont));
 							// table1.addCell(getCell("Σετ "+entry.getSets(), PdfPCell.ALIGN_CENTER,times));
 							 table0.addCell(getCell("", PdfPCell.ALIGN_RIGHT,categFont));
+							 table0.setSpacingAfter(-2);
 							 document.add(table0);
 							for(Entry entry:getDayCategoryEntries(program,day,cat))
 							{
@@ -327,6 +328,9 @@ public class PDFServiceImpl implements PDFService {
 										 repeats = "/"+repeats;
 								 }
 								 table1.addCell(getCell(sets+repeats, PdfPCell.ALIGN_RIGHT,setFont));
+								 
+								 //table1.setSpacingBefore(0);
+								 table1.setSpacingAfter(-2);
 								 document.add(table1);
 								 
 							
