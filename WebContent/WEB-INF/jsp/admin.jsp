@@ -14,23 +14,37 @@ pageEncoding="UTF-8"%>
 <meta name="author" content="" />
 
 <title>Admin</title>
+<spring:url value="/resources" var="resources" />
 
 
 <!-- COMMON >>>>>>>>>>>>> -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+
+	<script src="${resources}/libs/angular.min.js"></script>
+<script src="${resources}/libs/angular-route.js"></script>
+	<script src="${resources}/libs/angular-animate.js"></script>
+		<!-- ANGULAR MATERIAL >>>>> -->
+ <script src="${resources}/libs/angular-aria.min.js"></script>
+<script src="${resources}/libs/angular-messages.min.js"></script>
+<script src="${resources}/libs/svg-assets-cache.js"></script>
+<script src="${resources}/libs/angular-material.js"></script>
+<link rel="stylesheet" href="${resources}/libs/css.css?family=Roboto:300,400,500,700,400italic">
+<link rel='stylesheet' href='${resources}/libs/angular-material.css'>
+
+
+<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-route.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-animate.js"></script>
-		<!-- ANGULAR MATERIAL >>>>> -->
+	
  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-aria.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-messages.min.js"></script>
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js"></script>
 <script src="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.5/angular-material.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-<link rel='stylesheet' href='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.5/angular-material.css'>
+<link rel='stylesheet' href='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.5/angular-material.css'> -->
 <!--<link rel='stylesheet' href='https://material.angularjs.org/1.1.5/docs.css'> -->
 		<!-- <<<<< ANGULAR MATERIAL -->	
 	
-	<spring:url value="/resources" var="resources" /><%-- 
+	<%-- 
 	<spring:url value="/resources/admin.js" var="crunchifyJS" /> --%><%-- 
  	<spring:url value="/resources/main.css" var="maincss" /> --%>
  	<script src="${resources}/js/admin.js?ver=31"></script>
