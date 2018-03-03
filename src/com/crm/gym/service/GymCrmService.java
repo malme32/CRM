@@ -7,6 +7,7 @@ import com.crm.gym.model.Contact;
 import com.crm.gym.model.Entry;
 import com.crm.gym.model.Exercise;
 import com.crm.gym.model.Program;
+import com.crm.gym.model.Userrole;
 
 public interface GymCrmService {
 
@@ -53,6 +54,8 @@ public interface GymCrmService {
 	List<Program> getAllPrograms();
 
 	List<Program> getAllExpiringPrograms();
+
+	List<Userrole> getRoles(Integer contactid);
 
 	
 }

@@ -45,6 +45,11 @@ public class Program{
 	@Column(name="history")
 	private Boolean history;
 
+	
+	@ManyToOne
+	@JoinColumn(name = "admincontact")
+	private Contact adminContact;
+	
 	public int getId() {
 		return id;
 	}
@@ -115,6 +120,14 @@ public class Program{
 
 	public void setHistory(Boolean history) {
 		this.history = history;
+	}
+
+	public Contact getAdminContact() {
+		return adminContact;
+	}
+
+	public void setAdminContact(Contact adminContact) {
+		this.adminContact = adminContact;
 	}
 
 	@Override

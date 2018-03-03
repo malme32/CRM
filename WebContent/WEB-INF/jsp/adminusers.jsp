@@ -12,7 +12,7 @@ pageEncoding="UTF-8"%>
 <p></p>
 <button class="accordion">Πελάτες</button>
 <div class="panel">
-  <p ng-class='selectedPanel("AddNewCustomer")' ng-click="initMenuCustomers('AddNewCustomer'); ">Νέος</p>
+  <p ng-class='selectedPanel("AddNewCustomer")' ng-click="initMenuCustomers('AddNewCustomer'); newContact.role = 'ROLE_CUSTOMER';">Νέος</p>
   <p ng-class='selectedPanel("ShowAllCustomers")' ng-click="initMenuCustomers('ShowAllCustomers'); ">'Ολοι οι πελάτες</p>
 </div>
 
@@ -92,6 +92,21 @@ pageEncoding="UTF-8"%>
 					Ημερομηνία γέννησης:<br/><md-datepicker ng-model="selectedContact.tmpbirthdate" md-placeholder="Ημερομηνία γέννησης.."></md-datepicker>
 					</td>
 				</tr>
+						<tr ng-show='loggedin.role=="ROLE_ADMIN"'>
+<!-- 					<td>Ρολος<input type="text" ng-model="selectedContact.role" placeholder="ο ρολος εδω.."></td>
+ -->									 		<td>Ρολος:<select ng-model="selectedContact.role">
+						  <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+						  <option  value="ROLE_TRAINER">ROLE_TRAINER</option>
+						  <option value="ROLE_ADMIN">ROLE_ADMIN</option> 
+						</select></td>
+				</tr>
+					<tr ng-show='selectedContact.role!="ROLE_CUSTOMER"&&loggedin.role=="ROLE_ADMIN"'>
+					<td >Username<input type="text" ng-model="selectedContact.username" placeholder="Το username εδω.."></td>
+				</tr>
+						<tr ng-show='selectedContact.role!="ROLE_CUSTOMER"&&loggedin.role=="ROLE_ADMIN"'>
+					<td >Password<input type="password" ng-model="selectedContact.password" placeholder="Το password εδω.."></td>
+				</tr>
+
 				<tr>
 				<td>
 						    <button title='Τέλος' class='button_flat background_black float_left' ng-click="selectedContact=null">Τέλος</button> 
@@ -140,7 +155,22 @@ pageEncoding="UTF-8"%>
 					<td >
 					Ημερομηνία γέννησης:<br/><md-datepicker ng-model="newContact.birthdate" md-placeholder="Ημερομηνία γέννησης.."></md-datepicker>
 					</td>
+				</tr >
+								<tr ng-show='loggedin.role=="ROLE_ADMIN"'> <!-- 
+					<td>Ρολος<input type="text" ng-model="newContact.role" placeholder="ο ρολος εδω.."></td>  -->
+				 		<td>Ρολος:<select ng-model="newContact.role">
+						  <option value="ROLE_CUSTOMER">ROLE_CUSTOMER</option>
+						  <option value="ROLE_TRAINER">ROLE_TRAINER</option>
+						  <option value="ROLE_ADMIN">ROLE_ADMIN</option> 
+						</select></td>
 				</tr>
+						<tr ng-show='newContact.role!="ROLE_CUSTOMER"&&loggedin.role=="ROLE_ADMIN"'>
+					<td >Username<input type="text" ng-model="newContact.username" placeholder="Το username εδω.."></td>
+				</tr>
+						<tr ng-show='newContact.role!="ROLE_CUSTOMER"&&loggedin.role=="ROLE_ADMIN"'>
+					<td >Password<input type="password" ng-model="newContact.password" placeholder="Το password εδω.."></td>
+				</tr>
+		
 				<tr>
 				<td>
 <!-- 						    <button title='Τέλος' class='button_flat background_black float_left' ng-click="selectedContact=null">Τέλος</button> 
@@ -178,17 +208,21 @@ pageEncoding="UTF-8"%>
 				<th  class='cursor_pointer' ng-click='ord="address"'>ΔΙΕΥΘΥΝΣΗ</th>
 				<th class='cursor_pointer'  ng-click='ord="birthdate"'>ΗΜ. ΓΕΝΝΗΣΗΣ</th>
 				<th class='cursor_pointer' ng-click='ord="-registerdate"'>ΗΜ. ΕΓΓΡΑΦΗΣ</th>
+				<th class='cursor_pointer' ng-click='ord="role"'>ΡΟΛΟΣ</th>
+				<th class='cursor_pointer' ng-click='ord="username"'>Username</th>
 				<th></th>
 			</tr>
 			
 		
-			<tr ng-repeat="contact in contacts  |orderBy:ord | filter:mysearch" ng-hide='adminContact.id==contact.id'>
+			<tr ng-repeat="contact in contacts  |orderBy:ord | filter:mysearch" ng-hide='loggedin.role!="ROLE_ADMIN"&&contact.role!="ROLE_CUSTOMER"'>
 				<td>{{contact.name}}</td>
 				<td>{{contact.email}}</td>
 				<td>{{contact.phonenumber}}</td>
 				<td>{{contact.address}}</td>
 				<td>{{contact.birthdate | date}}</td>
 				<td>{{contact.registerdate | date}}</td>
+				<td>{{contact.role}}</td>
+				<td>{{contact.username}}</td>
 				<td>
 			
 					<button title='Επεξεργασία' class='button_flat background_dark_yellow float_right' ng-click="showContact(contact)">Επεξ.</button> 

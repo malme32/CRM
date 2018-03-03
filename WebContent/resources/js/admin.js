@@ -60,10 +60,40 @@ appAdmin.filter('excludeadmin', function() {
           return result;
     };
 });
+
+appAdmin.filter('onlycustomers', function() {
+    return function(items) {
+    	  var result = []; 
+   
+ 
+    	  for (var i=0; i<items.length; i++){
+              if (items[i].role=="ROLE_CUSTOMER")  {
+                  result.push(items[i]);
+              }
+          }      		  
+    
+          
+          return result;
+    };
+});
 appAdmin.run(function($rootScope, $window, $http, $timeout) {
 
     /*$timeout($rootScope.checkOnline(), 5000);*/
-    
+	$rootScope.getLoggedInContact = function () {
+		 $http({
+		       method : "GET",
+		       url : "contacts?action=loggedin"
+		   }).then(function mySuccess(response) {
+
+			   $rootScope.loggedin = response.data[0];
+			/*   alert(response.data[0].name);*/
+			
+		   }, function myError(response) {
+
+		   });
+
+	}
+	$rootScope.getLoggedInContact();
 	$rootScope.checkOnline = function () {
 	
 		 $http({
@@ -1128,7 +1158,7 @@ appAdmin.controller("programsController",function($scope, $http, $location, $win
 });
 
 appAdmin.controller("usersController",function($scope, $http, $location, $window,$route, $rootScope, $timeout){
-	
+/*	$scope.newContact.role = "ROLE_CUSTOMER";*/
 	/*fix for ie 11*/
 	$scope.initVars = function () {
 		
@@ -1180,7 +1210,7 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 			 $http({
 			       method : "POST",
 			       url : "contacts",
-			        data: contact,
+			        data: contact, params:{password:contact.password},
 			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
 			   }).then(function mySuccess(response) {
 				   $scope.getContacts();
@@ -1231,7 +1261,7 @@ appAdmin.controller("usersController",function($scope, $http, $location, $window
 			 $http({
 			       method : "PUT",
 			       url : "contacts",
-			        data: contact,
+			        data: contact,params:{password:contact.password},
 			        headers: {'Content-Type': 'application/json; charset=utf-8'} 
 			   }).then(function mySuccess(response) {
 

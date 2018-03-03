@@ -48,7 +48,7 @@ pageEncoding="UTF-8"%>
 	
 	 
 
-<div class='selectedContact' ng-show="selectedContact&&(selectedContact.id!=adminContact.id)&&!(selState.indexOf('List')>=0)" style=''><b >Πελάτης:</b> {{selectedContact.name}}
+<div class='selectedContact' ng-show="selectedContact&&(selectedContact.role=='ROLE_CUSTOMER')&&!(selState.indexOf('List')>=0)" style=''><b >Πελάτης:</b> {{selectedContact.name}}
 <br/><span ng-click=' programDays=null; selectedProgram=null; selectedContact=null;selectedContactBack=null;selectedContact1=null; programDays=null; mysearch="";showAllContacts=false'>Αλλαγή πελάτη </span>
 </div><!-- &#10006; -->
 <div ng-show="(selState)&&!selectedContact&&!(selState.indexOf('List')>=0)">
@@ -82,8 +82,8 @@ pageEncoding="UTF-8"%>
 				<th></th>
 			</tr>
 			
-		
-			<tr ng-repeat="contact in contacts  | filter:mysearch" ng-hide='adminContact.id==contact.id'>
+	<!-- 	ng-hide='adminContact.id==contact.id' -->
+			<tr ng-repeat="contact in contacts  | filter:mysearch" ng-show='contact.role=="ROLE_CUSTOMER"'>
 				<td>{{contact.name}}</td>
 				<td>{{contact.email}}</td>
 				<td>{{contact.phonenumber}} </td>
@@ -258,6 +258,7 @@ pageEncoding="UTF-8"%>
 					<th>Τίτλος</th>
 					<th>Ημερ. Αρχής</th>
 					<th>Ημερ. Τέλους</th>
+					<th>Δημιουργός</th>
 					<th></th>
 				</tr> 
 
@@ -266,6 +267,7 @@ pageEncoding="UTF-8"%>
 					<td >{{program.title}}</td>
 					<td >{{program.datestart | date}}</td>
 					<td >{{program.dateend | date}}</td>
+					<td >{{program.adminContact.name}}</td>
 					<td style='min-width:300px'>
 					
 					
@@ -318,15 +320,17 @@ pageEncoding="UTF-8"%>
 					<th>Πελάτης</th>
 					<th>Ημερ. Αρχής</th>
 					<th>Ημερ. Τέλους</th>
+					<th>Δημιουργός</th>
 					<th></th>
 				</tr> 
-
-				<tr class='' ng-hide='adminContact.id==program.contact.id' ng-repeat="program in allPrograms  |programfilter:progfilter| orderBy: 'contact.name' | filter: prsearch" >
+<!-- ng-hide='adminContact.id==program.contact.id' -->
+				<tr class=''  ng-show='program.contact.role=="ROLE_CUSTOMER"' ng-repeat="program in allPrograms  |programfilter:progfilter| orderBy: 'contact.name' | filter: prsearch" >
 					<td> <img style='width:30px; heigth:30px' ng-src='${resources}/images/{{program.history?"ok.png":"edit.png"}}'/></td>
 					<td >{{program.title}}</td>
 					<td title='Κάντε κλικ για να δείτε όλα τα προγράμματα αυτού του πελάτη' class='cursor_pointer text_underline' ng-click="contactSelected(program.contact,true); ">{{program.contact.name}}</td>
 					<td >{{program.datestart | date}}</td>
-					<td >{{program.dateend | date}}</td>
+						<td >{{program.dateend | date}}</td>
+						<td >{{program.adminContact.name}}</td>
 					<td style='min-width:300px'>
 					
 					
@@ -581,7 +585,7 @@ pageEncoding="UTF-8"%>
 			<!--  {{result1}} -->
 			<!--{{selectedProgram.entries.days}} -->
 				<div class='div_edit_team'>
-					<select ng-model="selectedContact5" ng-options="contact.name for contact in contacts | orderBy:'name' |  filter:mysearch1 | excludeadmin:adminContact">
+					<select ng-model="selectedContact5" ng-options="contact.name for contact in contacts | orderBy:'name' |  filter:mysearch1 |onlycustomers">
 					<option value="">---Πελάτης---</option>
 					</select>
 				<button  title='Αντιγραφή' class='button_flat background_green float_right' ng-click="selectedContact1=selectedContact5; getOtherPrograms(selectedContact1); closeCopyProgramModal()">OK</button> 

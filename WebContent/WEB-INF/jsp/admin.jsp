@@ -62,7 +62,7 @@ pageEncoding="UTF-8"%>
 	<ul>
 	
 		<li><a  ng-href='#!adminprograms' ng-click="setCurrentMenu('programs')" ng-class="cssLiMenuClass('programs')">ΠΡΟΓΡΑΜΜΑΤΑ</a></li>
-		<li><a  ng-href='#!adminexercises' ng-click="setCurrentMenu('exercises')" ng-class="cssLiMenuClass('exercises')">ΑΣΚΗΣΕΙΣ</a></li>
+		<li ng-show='loggedin.role=="ROLE_ADMIN"'><a  ng-href='#!adminexercises' ng-click="setCurrentMenu('exercises')" ng-class="cssLiMenuClass('exercises')">ΑΣΚΗΣΕΙΣ</a></li>
 	
 		<li><a  ng-href='#!adminusers' ng-click="setCurrentMenu('users')" ng-class="cssLiMenuClass('users')">ΠΕΛΑΤΟΛΟΓΙΟ</a></li>
 	
@@ -82,7 +82,10 @@ pageEncoding="UTF-8"%>
 						<a style='' href="javascript:document.getElementById('logout').submit()"> Logout</a>
 					</c:if>
 				</li>
+					
+				
 					</ul>
+						<span style='position:fixed;top:10px;right:10px;float:fight;color: #cf695a'>{{loggedin.name}}, {{loggedin.role}}</span>
 </div>
 
 <!-- <div style='top:200px; position:fixed; z-index:	; opacity:0.2;width:100%;font-size:200%; text-align:center; color:gray'>GO-GO Gym</div>

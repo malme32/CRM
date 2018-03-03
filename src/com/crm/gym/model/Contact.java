@@ -25,7 +25,7 @@ public class Contact{
 	@Column(name="username", length=255)
 	private String username;
 	
-
+	@JsonIgnore
 	@Column(name="password", length=255)
 	private String password;
 	
@@ -60,6 +60,9 @@ public class Contact{
 	@OneToMany(fetch = FetchType.LAZY,mappedBy="contact",cascade = CascadeType.ALL)
 	private List<Program> programs;
 
+	@Column(name="role", length=30)
+	private String role;
+	
 	public int getId() {
 		return id;
 	}
@@ -125,6 +128,8 @@ public class Contact{
 	}
 
 	public String getPassword() {
+	/*	if(password==null)
+			return "";*/
 		return password;
 	}
 
@@ -138,6 +143,14 @@ public class Contact{
 
 	public void setRegisterdate(Date registerdate) {
 		this.registerdate = registerdate;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 	

@@ -1,6 +1,7 @@
 package com.crm.gym.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,7 @@ import com.crm.gym.model.Contact;
 import com.crm.gym.model.Entry;
 import com.crm.gym.model.Exercise;
 import com.crm.gym.model.Program;
+import com.crm.gym.model.Userrole;
 import com.crm.gym.service.GeneralDaoService;
 import com.crm.gym.service.GymCrmService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,12 +38,15 @@ public class GymController {
 
 @Autowired private GeneralDaoService generalDaoService;
 
+@Autowired
+PasswordEncoder passwordEncoder;	
+
 /////////////////////////////////////////////////////////////////
 /////////////////////////GET/////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 
-/*	@Secured("ROLE_ADMIN")*/
+/*	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})*/
 	@RequestMapping(value="/options", method=RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Integer getOptions(@RequestParam String action)
 	{
@@ -53,30 +59,34 @@ public class GymController {
 				 return 1;
 			 return 0;
 		}
+		
+		
 		return 0;
 	}
-	@Secured("ROLE_ADMIN")
+	
+
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/categories", method=RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Category> getCategories()
 	{
 		return gymCrmService.getAllExerciseCategories();
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/categories/{categoryid}/exercises", method=RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Exercise> getExercises(@PathVariable Integer categoryid)
 	{
 		return gymCrmService.getExercises(categoryid);
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/contacts/{contactid}/programs", method=RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Program> getPrograms(@PathVariable Integer contactid)
 	{
 		return gymCrmService.getPrograms(contactid);
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/programs", method=RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Program> getAllPrograms(@RequestParam(required=false) String expiringsoon )
 	{
@@ -87,14 +97,36 @@ public class GymController {
 	
 
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/contacts", method=RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<Contact> getContacts()
+	public @ResponseBody List<Contact> getContacts(@RequestParam(required=false) String action)
 	{
+		
+		if(action!=null)
+		{
+			if(action.equals("loggedin"))
+			{
+				 User user =null; 
+				 try{user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();}
+				 catch(Exception e){}
+				 if(user!=null)
+				 {
+						String username = user.getUsername();
+					 	 Contact contact = gymCrmService.findByUserName(username);
+					 	 List<Contact> list = new ArrayList<Contact>();
+					 	 list.add(contact);
+					 	 return list;
+				 }
+					
+				 return null;
+			}
+
+		}
+		
 		return gymCrmService.getContacts();
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/programs/{programid}/entries", method=RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Entry> getEntries(@PathVariable Integer programid)
 	{
@@ -102,12 +134,17 @@ public class GymController {
 	}
 	
 	
-	
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
+	@RequestMapping(value="/contacts/{contactid}/roles", method=RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Userrole> getRoles(@PathVariable Integer contactid)
+	{
+		return gymCrmService.getRoles(contactid);
+	}
 /////////////////////////////////////////////////////////////////
 /////////////////////////POST/////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/categories", method=RequestMethod.POST, produces = "application/json")
 	public @ResponseBody void addCategory(@ModelAttribute Category category)
 	{
@@ -116,7 +153,7 @@ public class GymController {
 	}
 	
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value="/categories/{categoryid}/exercises", method=RequestMethod.POST, produces = "application/json")
 	public @ResponseBody void addExercise(@ModelAttribute Exercise exercise,@PathVariable Integer categoryid)
 	{
@@ -124,7 +161,7 @@ public class GymController {
 		return;
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/contacts/{contactid}/programs", method=RequestMethod.POST, produces = "application/json")
 	public @ResponseBody Program addProgram(@ModelAttribute Program program,@PathVariable Integer contactid)
 	{
@@ -132,7 +169,7 @@ public class GymController {
 		return program;
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/programs/{programid}/entries", method=RequestMethod.POST, produces = "application/json")
 	public @ResponseBody void addEntry(@ModelAttribute Entry entry,@PathVariable Integer programid, @RequestParam Integer exerciseid)
 	{
@@ -140,7 +177,7 @@ public class GymController {
 		return;
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/contacts/{contactid}/actions", method=RequestMethod.POST, produces = "application/json")
 	public @ResponseBody void contactAction(HttpSession session, @RequestParam String action,@PathVariable Integer contactid,@RequestParam(required=false) Integer programid)
 	{
@@ -156,11 +193,18 @@ public class GymController {
 		return ;
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/contacts", method=RequestMethod.POST, produces = "application/json")
-	public @ResponseBody void addContact(@RequestBody Contact contact)
+	public @ResponseBody void addContact(@RequestBody Contact contact, @RequestParam(required = false) String password)
 	{
+		System.out.println("PASSWORD :"+password);
+		if(password!=null&&!password.equals(""))
+			contact.setPassword(passwordEncoder.encode(password));
 		generalDaoService.persist(contact);
+/*		Userrole userrole = new Userrole();
+		userrole.setRole(role);
+		userrole.setContact(contact);
+		generalDaoService.persist(userrole);*/
 		return;
 	}
 	
@@ -169,7 +213,7 @@ public class GymController {
 /////////////////////////////////////////////////////////////
 	
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value="/categories", method=RequestMethod.PUT, produces = "application/json")
 	public @ResponseBody void editCategory(@RequestBody Category category)
 	{
@@ -177,7 +221,7 @@ public class GymController {
 		return;
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value="/exercises", method=RequestMethod.PUT, produces = "application/json")
 	public @ResponseBody void editExercise(@RequestBody Exercise exercise)
 	{
@@ -186,7 +230,7 @@ public class GymController {
 		return;
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/programs", method=RequestMethod.PUT, produces = "application/json")
 	public @ResponseBody void editProgram(@RequestBody Program program)
 	{
@@ -196,7 +240,7 @@ public class GymController {
 	}
 
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/entries", method=RequestMethod.PUT, produces = "application/json")
 	public @ResponseBody void editEntry(@ModelAttribute Entry entry)
 	{
@@ -205,11 +249,11 @@ public class GymController {
 		return;
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/contacts", method=RequestMethod.PUT, produces = "application/json")
-	public @ResponseBody void editContact(@RequestBody Contact contact)
+	public @ResponseBody void editContact(@RequestBody Contact contact, @RequestParam(required = false) String password)
 	{
-		
+		contact.setPassword(password);
 		gymCrmService.editContact(contact);
 		return;
 	}
@@ -219,7 +263,7 @@ public class GymController {
 /////////////////////////DELETE/////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value="/categories/{id}", method=RequestMethod.DELETE, produces = "application/json")
 	public @ResponseBody void deleteCategory(@PathVariable int id)
 	{
@@ -227,7 +271,7 @@ public class GymController {
 		return;
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN"})
 	@RequestMapping(value="/exercises/{exerciseid}", method=RequestMethod.DELETE, produces = "application/json")
 	public @ResponseBody void deleteExercise(@PathVariable int exerciseid)
 	{
@@ -236,7 +280,7 @@ public class GymController {
 		return;
 	}
 
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/programs/{programid}", method=RequestMethod.DELETE, produces = "application/json")
 	public @ResponseBody void deleteProgram(@PathVariable int programid)
 	{
@@ -245,7 +289,7 @@ public class GymController {
 		return;
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/contacts/{contactid}", method=RequestMethod.DELETE, produces = "application/json")
 	public @ResponseBody void deleteContact(@PathVariable int contactid)
 	{
@@ -254,7 +298,7 @@ public class GymController {
 		return;
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN", "ROLE_TRAINER"})
 	@RequestMapping(value="/entries/{entryid}", method=RequestMethod.DELETE, produces = "application/json")
 	public @ResponseBody void deleteEntry(@PathVariable int entryid)
 	{

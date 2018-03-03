@@ -6,6 +6,9 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.crm.gym.dao.CategoryDao;
@@ -13,11 +16,13 @@ import com.crm.gym.dao.ContactDao;
 import com.crm.gym.dao.EntryDao;
 import com.crm.gym.dao.ExerciseDao;
 import com.crm.gym.dao.ProgramDao;
+import com.crm.gym.dao.UserroleDao;
 import com.crm.gym.model.Category;
 import com.crm.gym.model.Contact;
 import com.crm.gym.model.Entry;
 import com.crm.gym.model.Exercise;
 import com.crm.gym.model.Program;
+import com.crm.gym.model.Userrole;
 
 @Service("gymCrmService")
 @Transactional
@@ -40,9 +45,15 @@ public class GynCrmServiceImpl implements GymCrmService {
 
 	@Autowired 
 	PDFService pDFService;
-	
+
+	@Autowired 
+	UserroleDao userroleDao;
+
 	@Autowired private GeneralDaoService generalDaoService;
 	@Autowired MailService mailService;
+	@Autowired
+	PasswordEncoder passwordEncoder;	
+	
 	@Override
 	public List<Category> getAllExerciseCategories() {
 		// TODO Auto-generated method stub
@@ -108,6 +119,20 @@ public class GynCrmServiceImpl implements GymCrmService {
 
 		Contact contact = contactDao.findById(contactid);
 		program.setContact(contact);
+		 User user =null; 
+		 try{user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();}
+		 catch(Exception e){
+		 	 System.out.println("***ADMINCONTACT_ERROR: "+e.getMessage());}
+		 if(user!=null)
+		 {
+				String username = user.getUsername();
+			 	 Contact contact1 = findByUserName(username);
+			 	 program.setAdminContact(contact1);
+			 	 System.out.println("***ADMINCONTACT: "+contact1.getName());
+		 }
+		 else System.out.println("***ADMINCONTACT_NULL: ");
+		
+		
 		generalDaoService.persist(program);
 	}
 	@Override
@@ -192,6 +217,11 @@ public class GynCrmServiceImpl implements GymCrmService {
 		contact1.setEmail(contact.getEmail());
 		contact1.setName(contact.getName());
 		contact1.setPhonenumber(contact.getPhonenumber());
+		contact1.setUsername(contact.getUsername());
+		contact1.setRole(contact.getRole());
+		
+		if(contact.getPassword()!=null&&!contact.getPassword().equals(""))
+			contact1.setPassword(passwordEncoder.encode(contact.getPassword()));
 		generalDaoService.update(contact1);
 	}
 	@Override
@@ -208,6 +238,19 @@ public class GynCrmServiceImpl implements GymCrmService {
 		program1.setDateend(program.getDateend());
 		program1.setComment(program.getComment());
 		program1.setTitle("Αντίγραφο από "+program.getTitle());
+		
+		 User user =null; 
+		 try{user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();}
+		 catch(Exception e){
+		 	 System.out.println("***ADMINCONTACT_ERROR: "+e.getMessage());}
+		 if(user!=null)
+		 {
+				String username = user.getUsername();
+			 	 Contact contact1 = findByUserName(username);
+			 	 program1.setAdminContact(contact1);
+			 	 System.out.println("***ADMINCONTACT: "+contact1.getName());
+		 }
+		
 		System.out.println("SETTING COPY COMMENT: "+program.getComment());
 		generalDaoService.persist(program1);
 		Hibernate.initialize(program.getEntries());
@@ -241,6 +284,14 @@ public class GynCrmServiceImpl implements GymCrmService {
 	public List<Program> getAllExpiringPrograms() {
 		// TODO Auto-generated method stub
 		return programDao.getAllExpiringPrograms();
+	}
+	@Override
+	public List<Userrole> getRoles(Integer contactid) {
+		// TODO Auto-generated method stub
+		Contact contact = contactDao.findById(contactid);
+		Hibernate.initialize(contact.getUserroles());
+		return contact.getUserroles();
+		
 	}
 
 }

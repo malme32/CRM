@@ -58,7 +58,7 @@ public class MyUserDetailsService implements UserDetailsService  {
 		//Contact contact = new Contact();
 		Hibernate.initialize(contact.getUserroles());
 		List<GrantedAuthority> authorities =
-                                      buildUserAuthority(contact.getUserroles());
+                                      buildUserAuthority(contact.getRole());
 
 		return buildUserForAuthentication(contact, authorities);
 
@@ -72,16 +72,17 @@ public class MyUserDetailsService implements UserDetailsService  {
 			true, true, true, true, authorities);
 	}
 
-	private List<GrantedAuthority> buildUserAuthority(List<Userrole> userRoles) {
+	private List<GrantedAuthority> buildUserAuthority(String role) {
 
 		Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
 		//setAuths.add(new SimpleGrantedAuthority(userRoles.getRole()));
 		// Build user's authorities
 		
-		for (Userrole userRole : userRoles) {
+	/*	for (Userrole userRole : userRoles) {
 			setAuths.add(new SimpleGrantedAuthority(userRole.getRole()));
-		}
+		}*/
 
+		setAuths.add(new SimpleGrantedAuthority(role));
 		List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
 
 		return Result;
