@@ -389,6 +389,7 @@ pageEncoding="UTF-8"%>
 
 <br/><br/><br/>
 <h1 ng-show='selectedProgram&&selState' style='text-align:center'>ΕΠΕΞΕΡΓΑΣΙΑ ΠΡΟΓΡΑΜΜΑΤΟΣ: {{selectedProgram.title}}</h1>
+<h3 ng-show='selectedProgram&&selState' style='text-align:center'>Δημιουργός: {{selectedProgram.adminContact.name}}</h3>
 
 <div class=' div_edit_team padding_theme box_shadow_medium_gray' ng-show='selectedProgram&&selState'>
 
